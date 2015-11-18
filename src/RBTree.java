@@ -9,7 +9,7 @@
 public class RBTree {
 	// For DEBUGGING use only
 	public static void main(String[] args) {
-	}
+	} // Remove me before submission
 
 	/**
 	* public class RBNode
@@ -27,7 +27,41 @@ public class RBTree {
 		RBNode getRight() {return null;}
 		int getValue() {return 42;}
 	}
+/*
+##############################################################
+#####	Those function are from the .ppt presentation	######
+##############################################################
+	private static void leftChild(RBNode x, RBNode y) {
+		x.left = y;
+		y.parent = x;
+	}
 
+	private static void rightChild(RBNode x, RBNode y) {
+		x.right = y;
+		y.parent = x;
+	}
+
+	private static void transplant(RBNode x, RBNode y) {
+		if(x.parent.left == x) {
+			leftChild(x.parent,y);
+		} else {
+			rightChild(x.parent,y);
+		}
+	}
+
+	private static void replace(RBNode x, RBNode y) {
+		transplant(x,y);
+		leftChild(y,x.left);
+		rightChild(y,x.right);
+	}
+
+	private static void leftRotate(RBNode x) {
+		y = x.right;
+		transplant(x,y);
+		leftChild(x,y.left);
+		rightChild(y,x);
+	}
+*/
  	/**
 	* public RBNode getRoot()
 	*
