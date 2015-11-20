@@ -9,12 +9,13 @@
 public class RBTree {
 	// For DEBUGGING use only
 	public static void main(String[] args) {
+		// Do Some tests
 	} // Remove me before submission
 
 	/**
 	* public class RBNode
 	*/
-	public class RBNode {
+	public static class RBNode {
 		private RBNode leftT;
 		private RBNode parentT;
 		private RBNode rightT;
@@ -22,10 +23,19 @@ public class RBTree {
 		private String key;
 		private String color;
 
-		boolean isRed() {return true;}
-		RBNode getLeft() {return null;}
-		RBNode getRight() {return null;}
-		int getValue() {return 42;}
+		// Define SET and GET functions
+		public boolean isRed() {
+			return true;
+		}
+		public RBNode getLeft() {
+			return null;
+		}
+		public RBNode getRight() {
+			return null;
+		}
+		public int getValue() {
+			return 42;
+		}
 	}
 /*
 ##############################################################
@@ -170,11 +180,6 @@ public class RBTree {
 	public int size() {
 		return 42; // to be replaced by student code
 	}
-	
-//	public RBNode getRoot {
-//		return null;
-//	}
-
 
  	/**
 	* If you wish to implement classes, other than RBTree and RBNode, do it in this file, not in 
