@@ -1,15 +1,15 @@
 /**
 *
 * RBTree
-*
+* is it working?
 * An implementation of a Red Black Tree with
 * non-negative, distinct integer keys and values
 *
 */
 public class RBTree {
-	// For DEBUGGING use only
+
 	public static void main(String[] args) {
-	} // Remove me before submission
+	}
 
 	/**
 	* public class RBNode
