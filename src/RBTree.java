@@ -9,6 +9,7 @@
 public class RBTree {
 	// For DEBUGGING use only
 	public static void main(String[] args) {
+		system.out.println({"hello");
 	} // Remove me before submission
 
 	/**
@@ -69,7 +70,10 @@ public class RBTree {
 	*
 	*/
 	public RBNode getRoot() {
-		return null; // to be replaced by student code
+		if(self.parent() = null){ // recursive find Root- WC: O(log(n))?
+			return self;
+		}
+		else{(self.parent()).getRoot()}
 	}
 
 	/**
@@ -78,8 +82,13 @@ public class RBTree {
 	* returns true if and only if the tree is empty
 	*
 	*/
-	public boolean empty() {
-		return false; // to be replaced by student code
+	public boolean empty() { // same as get root- log(n)
+		Boolean ans = false;
+		if (!self.getRoot()){
+			ans = true;
+		}
+		return ans; 
+
 	}
 
  	/**
@@ -89,6 +98,8 @@ public class RBTree {
 	* otherwise, returns null
 	*/
 	public String search(int k) {
+		if (self.key()< k){}
+	}
 		return "42";	// to be replaced by student code
 	}
 
