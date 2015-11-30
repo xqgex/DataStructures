@@ -13,7 +13,7 @@ public class RBTree {
 	/**
 	* public class RBNode
 	*/
-	public static class RBNode {
+	public static class RBNode { // is it alive?
 		private RBNode leftT;
 		private RBNode parentT;
 		private RBNode rightT;
