@@ -15,9 +15,11 @@ public class RBTree {
 	*/
 	public class Color {
 		private String myColor;
-		public static final String red = "red";
-		public static final String balck = "balck";
-		public static final String yellow = "yellow";
+		public static final Color red;// = "red";
+		public static final Color balck;// = "balck";
+		public static final Color yellow;// = "yellow";
+		public Color() {
+		}
 	}
 	
 	/**
