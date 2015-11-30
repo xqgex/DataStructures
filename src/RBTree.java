@@ -1,5 +1,6 @@
 import java.util.Arrays;
 
+
 public class RBTree {
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
 	private RBNode min;
@@ -7,9 +8,18 @@ public class RBTree {
 	protected int size;
 
 	public static void main(String[] args) {
-		int a = 0;
 	}
 
+	/**
+	* public class Color
+	*/
+	public class Color {
+		private String myColor;
+		public static final String red = "red";
+		public static final String balck = "balck";
+		public static final String yellow = "yellow";
+	}
+	
 	/**
 	* public class RBNode
 	*/
@@ -19,35 +29,32 @@ public class RBTree {
 		private RBNode rightT;
 		protected String info;
 		private String key;
-		private String color;
+		private Color color;
 
-		public class color{
-			private color red;
-			private color balck;
-			private color yello;
-		}
-		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, String color){
+		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, Color color){
 			this.leftT = leftT;
 			this.parentT = parentT;
 			this.rightT = rightT;
 			this.info = info;
 			this.key = key;
 			this.color = color;
-	}
+		}
 
-			public boolean isRed() {
-			 boolean ans = false;
-			 if (this.color == "red"){
-				 ans = true;
-				 }
-			 return ans;
+		public boolean isRed() {
+			 if (this.color == Color.red) {
+				 return true;
 			 }
+			 return false;
+		}
 		public RBNode getLeft() {
-			return this.leftT;}
+			return this.leftT;
+		}
 		public RBNode getRight() {
-			return this.rightT;}
+			return this.rightT;
+		}
 		public int getValue() { // does this means the key or the value?
-			return Integer.parseInt(this.info);}
+			return Integer.parseInt(this.info);
+		}
 	}
 /*
 ##############################################################
@@ -102,11 +109,10 @@ public class RBTree {
 	*
 	*/
 	public boolean empty() {
-		Boolean ans = false;
-		if (this.root == null){
-			ans = true;
+		if (this.root == null) {
+			return true;
 		}
-		return ans; 
+		return false;
 	}
 
  	/**
@@ -121,23 +127,21 @@ public class RBTree {
 		RBNode ansNode = null;
 		RBNode node = binSearch(root,k,ansNode);
 		if(node != null){
-		ans = node.info;
+			ans = node.info;
 		}
-		return ans;	
+		return ans;
 	}
-	public RBNode binSearch(RBNode root, int k,RBNode ansNode){ // an added recursive function
-		if (Integer.parseInt(root.key) == k){
+
+	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
+		if (Integer.parseInt(root.key) == k) {
 			ansNode = root;
-		}
-		else if(Integer.parseInt(root.key) < k && root.leftT != null){
+		} else if (Integer.parseInt(root.key) < k && root.leftT != null) {
 			root = root.leftT;
 			binSearch(root, k,ansNode);
-		}
-		else if(Integer.parseInt(root.key) > k && root.rightT != null){
+		} else if (Integer.parseInt(root.key) > k && root.rightT != null) {
 			root = root.rightT;
 			binSearch(root, k,ansNode);
-		}
-		else{
+		} else {
 			ansNode = null;
 		}
 		return ansNode;
@@ -197,27 +201,27 @@ public class RBTree {
 		int[] arr = new int[this.size]; 
 		int cnt = 0;
 		makeArrkey(arr,this.root, cnt);
-		Arrays.sort(arr); // in case were arr is empty will it work?
-		return arr;						
+		Arrays.sort(arr); // in case that arr is empty will it work?
+		return arr;
 	}
+
 	// this can also by made by calling the subfunction of valuesToArray(), and then sorted by key.
 	private int[] makeArrkey(int[] arr, RBNode root,int cnt) { // recursive subfunction
-		if(root.rightT == null && root.leftT == null){ // 
+		if(root.rightT == null && root.leftT == null) {
+			arr[cnt] = Integer.parseInt(root.key); // info or key?
+			cnt++;
 			return null; // is this a good stopping action?
-		}
-		else if(root.rightT == null){
+		} else if(root.rightT == null) {
 			arr[cnt] = Integer.parseInt(root.key); // info or key?
 			cnt++;
 			root = root.leftT;
 			makeArrkey(arr,root,cnt);
-		}
-		else if(root.leftT == null){
+		} else if(root.leftT == null) {
 			arr[cnt] = Integer.parseInt(root.key); // info or key?
 			cnt++;
 			root = root.rightT;
 			makeArrkey(arr,root,cnt);
-		}
-		else{
+		} else {
 			arr[cnt] = Integer.parseInt(root.key); // info or key?
 			cnt++;
 			makeArrkey(arr,root.leftT,cnt);
