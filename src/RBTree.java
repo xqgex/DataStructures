@@ -1,5 +1,5 @@
 import java.util.Arrays;
-
+import java.awt.Color;
 
 public class RBTree {
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
@@ -8,18 +8,6 @@ public class RBTree {
 	protected int size;
 
 	public static void main(String[] args) {
-	}
-
-	/**
-	* public class Color
-	*/
-	public class Color {
-		private String myColor;
-		public static final Color red;// = "red";
-		public static final Color balck;// = "balck";
-		public static final Color yellow;// = "yellow";
-		public Color() {
-		}
 	}
 	
 	/**
@@ -43,17 +31,20 @@ public class RBTree {
 		}
 
 		public boolean isRed() {
-			 if (this.color == Color.red) {
+			 if (this.color == Color.RED) {
 				 return true;
 			 }
 			 return false;
 		}
+
 		public RBNode getLeft() {
 			return this.leftT;
 		}
+
 		public RBNode getRight() {
 			return this.rightT;
 		}
+
 		public int getValue() { // does this means the key or the value?
 			return Integer.parseInt(this.info);
 		}
@@ -283,10 +274,5 @@ public class RBTree {
 	public int size() {
 		return this.size; // to be replaced by student code
 	}
-
- 	/**
-	* If you wish to implement classes, other than RBTree and RBNode, do it in this file, not in 
-	* another file.
-	*/
 }
 
