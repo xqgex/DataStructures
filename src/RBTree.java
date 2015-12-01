@@ -46,8 +46,12 @@ public class RBTree {
 			return this.rightT;
 		}
 
-		public int getValue() { // does this means the key or the value?
+		public int getValue() {
 			return Integer.parseInt(this.info);
+		}
+
+		public String getKey() {
+			return this.key;
 		}
 	}
 	public RBTree() {

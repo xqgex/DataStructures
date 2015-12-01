@@ -3,7 +3,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Random;
 import java.util.Collections;
-
+import java.awt.Color;
 
 class MyTree {
 	private TreeSet<Integer> set;
@@ -95,6 +95,7 @@ class TestRun implements Runnable {
 
 public class Tester {
 	public static final int SIZE = 2048;
+	private static final int INDENT_STEP = 4;
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -358,6 +359,27 @@ public class Tester {
 		return test_num;
 	}
 
+	// Print RedBlackTree
+	private static void printHelper(RBTree.RBNode n, int indent) {
+		if (n == null) {
+	        System.out.print("<empty tree>");
+	        return;
+	    }
+	    if (n.getRight() != null) {
+	        printHelper(n.getRight(), indent + INDENT_STEP);
+	    }
+	    for (int i = 0; i < indent; i++)
+	        System.out.print(" ");
+	    if (n.isRed()) {
+	    	System.out.println("<" + n.getKey() + ">");
+	    } else {
+	    	System.out.println(n.getKey());
+	    }
+	    if (n.getLeft() != null) {
+	        printHelper(n.getLeft(), indent + INDENT_STEP);
+	    }
+	}
+	
 	public static void main(String[] args) {
 		int test_num = parseArgs(args);
 		if (test_num == -1) {
