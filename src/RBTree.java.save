@@ -1,28 +1,35 @@
-import java.awt.Color;
+
+package DataStructures.src;
+
+import java.util.Arrays;
 
 public class RBTree {
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
 	private RBNode min;
 	private RBNode max;
-	private RBNode[] tree_array;
-	private boolean array_status;
 	protected int size;
 
 	public static void main(String[] args) {
 	}
-	
+
 	/**
 	* public class RBNode
 	*/
-	public static class RBNode { // is it alive?
+	public static class RBNode {
 		private RBNode leftT;
 		private RBNode parentT;
 		private RBNode rightT;
 		protected String info;
 		private String key;
-		private Color color;
+		private String color;
 
-		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, Color color){
+		public class color{
+			private color red;
+			private color balck;
+			private color yello;
+		}
+
+		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, String color){
 			this.leftT = leftT;
 			this.parentT = parentT;
 			this.rightT = rightT;
@@ -32,31 +39,21 @@ public class RBTree {
 		}
 
 		public boolean isRed() {
-			 if (this.color == Color.RED) {
-				 return true;
+			 boolean ans = false;
+			 if (this.color == "red"){
+				 ans = true;
+				 }
+			 return ans;
 			 }
-			 return false;
-		}
 
 		public RBNode getLeft() {
-			return this.leftT;
-		}
+			return this.leftT;}
 
 		public RBNode getRight() {
-			return this.rightT;
-		}
+			return this.rightT;}
 
 		public int getValue() { // does this means the key or the value?
-			return Integer.parseInt(this.info);
-		}
-	}
-	public RBTree() {
-		this.root = null;
-		this.min = null;
-		this.max = null;
-		this.tree_array = null;
-		this.array_status = false;
-		this.size = 0;
+			return Integer.parseInt(this.info);}
 	}
 /*
 ##############################################################
@@ -101,8 +98,8 @@ public class RBTree {
 	*
 	*/
 	public RBNode getRoot() {
-			return this.root;
-		}
+		return this.root;
+	}
 
 	/**
 	* public boolean empty()
@@ -111,10 +108,11 @@ public class RBTree {
 	*
 	*/
 	public boolean empty() {
-		if (this.root == null) {
-			return true;
+		Boolean ans = false;
+		if (this.root == null){
+			ans = true;
 		}
-		return false;
+		return ans;
 	}
 
  	/**
@@ -129,21 +127,24 @@ public class RBTree {
 		RBNode ansNode = null;
 		RBNode node = binSearch(root,k,ansNode);
 		if(node != null){
-			ans = node.info;
+		ans = node.info;
 		}
 		return ans;
 	}
 
-	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
-		if (Integer.parseInt(root.key) == k) {
+	public RBNode binSearch(RBNode root, int k,RBNode ansNode){ // an added recursive function
+		if (Integer.parseInt(root.key) == k){
 			ansNode = root;
-		} else if (Integer.parseInt(root.key) < k && root.leftT != null) {
+		}
+		else if(Integer.parseInt(root.key) < k && root.leftT != null){
 			root = root.leftT;
 			binSearch(root, k,ansNode);
-		} else if (Integer.parseInt(root.key) > k && root.rightT != null) {
+		}
+		else if(Integer.parseInt(root.key) > k && root.rightT != null){
 			root = root.rightT;
 			binSearch(root, k,ansNode);
-		} else {
+		}
+		else{
 			ansNode = null;
 		}
 		return ansNode;
@@ -190,7 +191,7 @@ public class RBTree {
 	* or null if the tree is empty
 	*/
 	public String max() {
-		return (this.max).key; // do i need to return key or info?
+		return (this.max).key; // do i need to return key or info 
 	}
 
 	/**
@@ -200,16 +201,37 @@ public class RBTree {
 	* or an empty array if the tree is empty.
 	*/
 	public int[] keysToArray() { // envelope function
-		if (!this.array_status) {
-			RBNode[] arr = new RBNode[this.size]; // new array of nodes
-			this.tree_array = updateArray(arr, this.root, 0);
-			this.array_status = true;
+		int[] arr = new int[this.size]; 
+		int cnt = 0;
+		makeArrkey(arr,this.root, cnt);
+		Arrays.sort(arr); // in case were arr is empty will it work?
+		return arr;						
+	}
+	// this can also by made by calling the subfunction of valuesToArray(), and then sorted by key.
+	private int[] makeArrkey(int[] arr, RBNode root,int cnt) { // recursive subfunction
+		if(root.rightT == null && root.leftT == null){ // 
+			return null; // is this a good stopping action?
 		}
-		int[] retArray = new int[this.tree_array.length];
-		for (int i=0;i<this.tree_array.length;i++) {
-			retArray[i] = Integer.parseInt(this.tree_array[i].key);
+		else if(root.rightT == null){
+			arr[cnt] = Integer.parseInt(root.key); // info or key?
+			cnt++;
+			root = root.leftT;
+			makeArrkey(arr,root,cnt);
 		}
-		return retArray;
+		else if(root.leftT == null){
+			arr[cnt] = Integer.parseInt(root.key); // info or key?
+			cnt++;
+			root = root.rightT;
+			makeArrkey(arr,root,cnt);
+		}
+		else{
+			arr[cnt] = Integer.parseInt(root.key); // info or key?
+			cnt++;
+			makeArrkey(arr,root.leftT,cnt);
+			makeArrkey(arr,root.rightT,cnt);
+		}
+		return arr;
+		
 	}
 
 	/**
@@ -220,40 +242,36 @@ public class RBTree {
 	* or an empty array if the tree is empty.
 	*/
 	public String[] valuesToArray() {
-		if (!this.array_status) {
-			RBNode[] arr = new RBNode[this.size]; // new array of nodes
-			this.tree_array = updateArray(arr, this.root, 0);
-			this.array_status = true;
-		}
-		String[] retArray = new String[this.tree_array.length];
-		for (int i=0;i<this.tree_array.length;i++) {
-			retArray[i] = this.tree_array[i].info;
-		}
-		return retArray;				
+		RBNode[] arr = new RBNode[this.size]; // new array of nodes
+		int cnt = 0;
+		makeArr(arr,this.root, cnt);//creates an array of all the nodes
+		return arr;	// now we need to sort this array of nodes by their keys, and return a string[] of values. 					
 	}
 
-	private RBNode[] updateArray(RBNode[] arr, RBNode root,int cnt) {
-		if(root.rightT == null && root.leftT == null) {
-			arr[cnt] = root; // info or key?
-			cnt++;
+	private RBNode[] makeArr(RBNode[] arr, RBNode root,int cnt) {
+		if(root.rightT == null && root.leftT == null){ // 
 			return null; // is this a good stopping action?
-		} else if(root.rightT == null) {
+		}
+		else if(root.rightT == null){
 			arr[cnt] = root; // info or key?
 			cnt++;
 			root = root.leftT;
-			updateArray(arr,root,cnt);
-		} else if(root.leftT == null) {
+			makeArr(arr,root,cnt);
+		}
+		else if(root.leftT == null){
 			arr[cnt] = root; // info or key?
 			cnt++;
 			root = root.rightT;
-			updateArray(arr,root,cnt);
-		} else {
+			makeArr(arr,root,cnt);
+		}
+		else{
 			arr[cnt] = root; // info or key?
 			cnt++;
-			updateArray(arr,root.leftT,cnt);
-			updateArray(arr,root.rightT,cnt);
+			makeArr(arr,root.leftT,cnt);
+			makeArr(arr,root.rightT,cnt);
 		}
 		return arr;
+		
 	}
 
 	/**
@@ -267,5 +285,14 @@ public class RBTree {
 	public int size() {
 		return this.size; // to be replaced by student code
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 7a0aae6074d1c0dba1a1267909d0fb55d3c271ef
+
+ 	/**
+	* If you wish to implement classes, other than RBTree and RBNode, do it in this file, not in 
+	* another file.
+	*/
 }
 
