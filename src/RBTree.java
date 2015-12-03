@@ -7,6 +7,7 @@ public class RBTree {
 	private RBNode[] tree_array;
 	private boolean array_status;
 	protected int size;
+	private static final int INDENT_STEP = 4;
 
 	public static void main(String[] args) {
 	}
@@ -270,6 +271,31 @@ public class RBTree {
 	*/
 	public int size() {
 		return this.size; // to be replaced by student code
+	}
+
+	public void print() {
+		RBTree.printHelper(this.root, 0);
+	}
+
+	// Print RedBlackTree
+	private static void printHelper(RBTree.RBNode n, int indent) {
+		if (n == null) {
+	        System.out.print("<empty tree>");
+	        return;
+	    }
+	    if (n.getRight() != null) {
+	        printHelper(n.getRight(), indent + INDENT_STEP);
+	    }
+	    for (int i = 0; i < indent; i++)
+	        System.out.print(" ");
+	    if (n.isRed()) {
+	    	System.out.println("<" + n.getKey() + ">");
+	    } else {
+	    	System.out.println(n.getKey());
+	    }
+	    if (n.getLeft() != null) {
+	        printHelper(n.getLeft(), indent + INDENT_STEP);
+	    }
 	}
 }
 
