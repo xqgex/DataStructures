@@ -163,6 +163,16 @@ public class RBTree {
 	* returns -1 if an item with key k already exists in the tree.
 	*/
 	public int insert(int k, String v) {
+		// Insert: Case 1a: z’s uncle w is red, z is a right child
+		// Insert: Case 1b: z’s uncle w is red, z is a left child
+		// Insert: Case 2:  z’s uncle w is black, z is a right child
+		// Insert: Case 3:  z’s uncle w is black, z is a left child
+		/* Abstract data type code:
+		 * 	Insert as RED (always leaf)
+		 * 	Too much RED is extra weight – must be reduced
+		 * 		If imbalanced with brother – solve by re-balancing
+		 * 		Else – push problem upwards
+		 */
 		return 42;	// to be replaced by student code
 	}
 
@@ -175,6 +185,14 @@ public class RBTree {
 	* returns -1 if an item with key k was not found in the tree.
 	*/
 	public int delete(int k) {
+		// Delete: Case 1: x’s sibling w is red
+		// Delete: Case 2: x’s sibling w is black, and both children of w are black
+		// Delete: Case 3: x’s sibling w is black, w’s left child is red, and w’s right child is black
+		// Delete: Case 4: x’s sibling w is black, and w’s right child is red
+		/*
+		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
+		 *		Deleted node has at most one child!!!
+		 */
 		return 42;	// to be replaced by student code
 	}
 
