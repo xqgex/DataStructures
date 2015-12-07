@@ -59,6 +59,14 @@ public class RBTree {
 		public void setParent(RBNode parentT) {
 			this.parentT = parentT;
 		}
+
+		public void setLeft(RBNode node) {
+			this.rightT = node;
+		}
+
+		public void setRight(RBNode node) {
+			this.rightT = node;
+		}
 	}
 	public RBTree() {
 		this.root = null;
@@ -179,10 +187,15 @@ public class RBTree {
 		 * 		Else – push problem upwards
 		 */
 		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
+		if (root == null) {
+			this.root = newBaby;
+			return 0;
+		} else {
 		RBNode father = whereToInsert(this.root, newBaby);
 		newBaby.setParent(father);
 		
 		return 0;	// to be replaced by student code
+		}
 	}
 
 	public RBNode whereToInsert(RBNode root ,RBNode node) {
