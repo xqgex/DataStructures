@@ -173,9 +173,28 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
+		
 		return 42;	// to be replaced by student code
 	}
-
+	public RBNode wereToInsert(RBNode root , RBNode node){
+		if(Integer.parseInt(node.key) < Integer.parseInt(root.key) ){
+			if(root.leftT == null){
+				return root; 
+			}
+			else{
+				wereToInsert(root.leftT, node);
+			}
+		
+		}
+		else{
+			if(root.rightT == null){
+				return root; 
+			}
+			else{
+				wereToInsert(root.rightT, node);
+				}
+			}
+		}
 	/**
 	* public int delete(int k)
 	*
