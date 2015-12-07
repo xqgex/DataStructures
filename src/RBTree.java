@@ -191,16 +191,14 @@ public class RBTree {
 			this.root = newBaby;
 			return 0;
 		} else {
-		RBNode father = whereToInsert(this.root, newBaby);
-		newBaby.setParent(father);
-		if(Integer.parseInt(newBaby.key) < Integer.parseInt(father.key)){
-			father.setRight(newBaby);
-		}
-		else{
-			father.setLeft(newBaby);
-		}
-		
-		return 0;	// to be replaced by student code
+			RBNode father = whereToInsert(this.root, newBaby);
+			newBaby.setParent(father);
+			if (Integer.parseInt(newBaby.key) < Integer.parseInt(father.key)) {
+				father.setRight(newBaby);
+			} else {
+				father.setLeft(newBaby);
+			}
+			return 0;	// to be replaced by student code
 		}
 	}
 
