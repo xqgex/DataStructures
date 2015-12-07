@@ -181,6 +181,12 @@ public class RBTree {
 		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
 		RBNode father = whereToInsert(this.root, newBaby);
 		newBaby.setParent(father);
+		if(Integer.parseInt(newBaby.key) < Integer.parseInt(father.key)){
+			father.setRight(newBaby);
+		}
+		else{
+			father.setLeft(newBaby);
+		}
 		
 		return 0;	// to be replaced by student code
 	}
