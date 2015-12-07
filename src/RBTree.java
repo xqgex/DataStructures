@@ -185,7 +185,7 @@ public class RBTree {
 		return 0;	// to be replaced by student code
 	}
 
-	public RBNode whereToInsert(RBNode root , RBNode node) {
+	public RBNode whereToInsert(RBNode root ,RBNode node) {
 		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
 			if(root.leftT != null) {
 				whereToInsert(root.leftT, node);
@@ -197,6 +197,7 @@ public class RBTree {
 		}
 		return root;
 	}
+
 	/**
 	* public int delete(int k)
 	*

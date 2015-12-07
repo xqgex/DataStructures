@@ -359,7 +359,7 @@ public class Tester {
 	}
 	
 	public static void main(String[] args) {
-		int test_num = parseArgs(args);
+		/*int test_num = parseArgs(args);
 		if (test_num == -1) {
 			System.out.println("USAGE: java Tester <test_num>");
 			System.exit(1);
@@ -376,6 +376,12 @@ public class Tester {
 			System.out.println("Exception on Test " + test_num + " : " + e);
 		}
 		System.out.println("Result #" + test_num + ": " + test_runner.success);
-		System.exit(0);
+		System.exit(0);*/
+		RBTree tree = new RBTree();
+		tree.insert(1, "f");
+		tree.insert(5, "s");
+		tree.insert(2, "h");
+		tree.insert(0, "j");
+		tree.print();
 	}
 }
