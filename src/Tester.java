@@ -380,6 +380,8 @@ public class Tester {
 		tree.insert(1, "f");
 		tree.insert(5, "s");
 		tree.insert(2, "h");
+		tree.insert(3, "j");
+		tree.insert(6, "j");
 		tree.insert(0, "j");
 		tree.print();
 	}
