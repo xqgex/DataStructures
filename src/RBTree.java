@@ -203,16 +203,17 @@ public class RBTree {
 	}
 
 	public RBNode whereToInsert(RBNode root ,RBNode node) {
+		RBNode ans = root;
 		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
 			if(root.leftT != null) {
-				whereToInsert(root.leftT, node);
+				ans = whereToInsert(root.leftT, node);
 			}
 		} else {
 			if(root.rightT != null) {
-				whereToInsert(root.rightT, node);
+				ans = whereToInsert(root.rightT, node);
 			}
 		}
-		return root;
+		return ans;
 	}
 
 	/**
