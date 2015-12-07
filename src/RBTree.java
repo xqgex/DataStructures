@@ -186,6 +186,8 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
+		this.array_status = false;
+		this.size++;
 		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
 		if (root == null) {
 			this.root = newBaby;
@@ -197,6 +199,9 @@ public class RBTree {
 				father.setLeft(newBaby);
 			} else {
 				father.setRight(newBaby);
+			}
+			if (father.isRed()) {
+				fix(newBaby);
 			}
 			return 0;	// to be replaced by student code
 		}
@@ -216,6 +221,10 @@ public class RBTree {
 		return ans;
 	}
 
+	public void fix(RBNode node) {
+		
+	}
+
 	/**
 	* public int delete(int k)
 	*
@@ -233,6 +242,8 @@ public class RBTree {
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
 		 */
+		this.array_status = false;
+		this.size--;
 		return 42;	// to be replaced by student code
 	}
 

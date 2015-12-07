@@ -1,9 +1,8 @@
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.TreeSet;
-import java.util.Random;
 import java.util.Collections;
-import java.awt.Color;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.TreeSet;
 
 class MyTree {
 	private TreeSet<Integer> set;
