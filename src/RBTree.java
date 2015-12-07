@@ -1,6 +1,7 @@
 import java.awt.Color;
 
 public class RBTree {
+	// What happen when there is a duplicated key?
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
 	private RBNode min;
 	private RBNode max;
@@ -53,6 +54,10 @@ public class RBTree {
 
 		public String getKey() {
 			return this.key;
+		}
+
+		public void setParent(RBNode parentT) {
+			this.parentT = parentT;
 		}
 	}
 	public RBTree() {
@@ -173,7 +178,11 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
-		return 42;	// to be replaced by student code
+		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
+		RBNode father = whereToInsert(this.root, newBaby);
+		newBaby.setParent(father);
+		
+		return 0;	// to be replaced by student code
 	}
 
 	/**
