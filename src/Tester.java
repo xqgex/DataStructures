@@ -92,7 +92,6 @@ class TestRun implements Runnable {
     }
 }
 
-
 public class Tester {
 	public static final int SIZE = 2048;
 
