@@ -376,10 +376,10 @@ public class Tester {
 		System.out.println("Result #" + test_num + ": " + test_runner.success);
 		System.exit(0);*/
 		RBTree tree = new RBTree();
-		tree.insert(1, "f");
-		tree.insert(5, "s");
-		tree.insert(2, "h");
-		tree.insert(0, "j");
+		tree.insert(10, "f");
+		tree.insert(15, "s");
+		tree.insert(12, "h");
+		//tree.insert(2, "j");
 		tree.print();
 	}
 }

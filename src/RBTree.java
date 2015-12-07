@@ -56,7 +56,15 @@ public class RBTree {
 			return this.key;
 		}
 
-		public void setParent(RBNode parentT) {
+		public void changeColor() {
+			if (this.color == Color.RED) {
+				this.color = Color.BLACK;
+			} else {
+				this.color = Color.RED;
+			}
+		}
+
+		/*public void setParent(RBNode parentT) {
 			this.parentT = parentT;
 		}
 
@@ -66,7 +74,7 @@ public class RBTree {
 
 		public void setRight(RBNode node) {
 			this.rightT = node;
-		}
+		}*/
 	}
 	public RBTree() {
 		this.root = null;
@@ -81,14 +89,14 @@ public class RBTree {
 #####	Those function are from the .ppt presentation	######
 ##############################################################
 */
-	private static void leftChild(RBNode x, RBNode y) {
-		x.leftT = y;
-		y.parentT = x;
+	private static void leftChild(RBNode parent, RBNode Child) {
+		parent.leftT = Child;
+		Child.parentT = parent;
 	}
 
-	private static void rightChild(RBNode x, RBNode y) {
-		x.rightT = y;
-		y.parentT = x;
+	private static void rightChild(RBNode parent, RBNode Child) {
+		parent.rightT = Child;
+		Child.parentT = parent;
 	}
 
 	private static void transplant(RBNode x, RBNode y) {
@@ -110,6 +118,13 @@ public class RBTree {
 		transplant(x,y);
 		leftChild(x,y.leftT);
 		rightChild(y,x);
+	}
+
+	private static void rightRotate(RBNode y) {
+		RBNode x = y.leftT;
+		transplant(y,x);
+		leftChild(y,x.rightT);
+		rightChild(x,y);
 	}
 
  	/**
@@ -189,16 +204,16 @@ public class RBTree {
 		this.array_status = false;
 		this.size++;
 		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
-		if (root == null) {
+		if (this.root == null) {
 			this.root = newBaby;
+			this.root.changeColor();
 			return 0;
 		} else {
 			RBNode father = whereToInsert(this.root, newBaby);
-			newBaby.setParent(father);
 			if (Integer.parseInt(newBaby.key) < Integer.parseInt(father.key)) {
-				father.setLeft(newBaby);
+				leftChild(father, newBaby);
 			} else {
-				father.setRight(newBaby);
+				rightChild(father, newBaby);
 			}
 			if (father.isRed()) {
 				fix(newBaby);
@@ -213,7 +228,7 @@ public class RBTree {
 			if(root.leftT != null) {
 				ans = whereToInsert(root.leftT, node);
 			}
-		} else {
+		} else if(Integer.parseInt(node.key) > Integer.parseInt(root.key)) {
 			if(root.rightT != null) {
 				ans = whereToInsert(root.rightT, node);
 			}
@@ -221,8 +236,50 @@ public class RBTree {
 		return ans;
 	}
 
-	public void fix(RBNode node) {
-		
+	public int fix(RBNode node) {
+		int count = 0;
+		while (node.parentT.isRed()) {
+			print();
+			if (node.parentT == node.parentT.parentT.leftT) {
+				RBNode uncle = node.parentT.parentT.rightT;
+				if (uncle.isRed()) { // Case 1
+					node.parentT.parentT.changeColor();
+					node.parentT.changeColor();
+					uncle.changeColor();
+					count += 3;
+					node = node.parentT.parentT;
+				} else {
+					if (node == node.parentT.rightT) { // Case 2
+						node = node.parentT;
+						leftRotate(node);
+					} // Case 3
+					node.parentT.parentT.changeColor();
+					node.parentT.changeColor();
+					count += 2;
+					rightRotate(node);
+				}
+			} else {
+				RBNode uncle = node.parentT.parentT.rightT;
+				if (uncle.isRed()) { // Case 1
+					node.parentT.parentT.changeColor();
+					node.parentT.changeColor();
+					uncle.changeColor();
+					count += 3;
+					node = node.parentT.parentT;
+				} else {
+					if (node == node.parentT.leftT) { // Case 2
+						node = node.parentT;
+						rightRotate(node);
+					} // Case 3
+					node.parentT.parentT.changeColor();
+					node.parentT.changeColor();
+					count += 2;
+					leftRotate(node);
+				}
+			}
+		}
+		node.changeColor();
+		return count+1;
 	}
 
 	/**
