@@ -184,25 +184,19 @@ public class RBTree {
 		
 		return 0;	// to be replaced by student code
 	}
-	public RBNode wereToInsert(RBNode root , RBNode node){
-		if(Integer.parseInt(node.key) < Integer.parseInt(root.key) ){
-			if(root.leftT == null){
-				return root; 
+
+	public RBNode whereToInsert(RBNode root , RBNode node) {
+		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
+			if(root.leftT != null) {
+				whereToInsert(root.leftT, node);
 			}
-			else{
-				wereToInsert(root.leftT, node);
-			}
-		
-		}
-		else{
-			if(root.rightT == null){
-				return root; 
-			}
-			else{
-				wereToInsert(root.rightT, node);
-				}
+		} else {
+			if(root.rightT != null) {
+				whereToInsert(root.rightT, node);
 			}
 		}
+		return root;
+	}
 	/**
 	* public int delete(int k)
 	*
