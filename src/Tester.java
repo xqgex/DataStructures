@@ -376,15 +376,16 @@ public class Tester {
 		System.out.println("Result #" + test_num + ": " + test_runner.success);
 		System.exit(0);*/
 		RBTree tree = new RBTree();
-		/*tree.insert(1, "f");
-		tree.insert(5, "s");
-		tree.insert(2, "h");
-		tree.insert(3, "j");
-		tree.insert(6, "j");
-		tree.insert(0, "j");*/
-		tree.insert(10, "f");
-		tree.insert(15, "s");
-		tree.insert(12, "h");
+		System.out.println(tree.insert(1, "f"));
+		System.out.println(tree.insert(5, "s"));
+		System.out.println(tree.insert(2, "h"));
+		System.out.println(tree.insert(3, "j"));
+		System.out.println(tree.insert(6, "j"));
+		System.out.println(tree.insert(0, "j"));
+		System.out.println(tree.insert(10, "f"));
+		System.out.println(tree.insert(15, "s"));
+		System.out.println(tree.insert(12, "h"));
+		System.out.println("Tree:");
 		tree.print();
 	}
 }
