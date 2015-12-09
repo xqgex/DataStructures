@@ -131,6 +131,17 @@ public class RBTree {
 		leftChild(y,x.rightT);
 		rightChild(x,y);
 	}
+	public static void ReplaceWithR(RBNode y) {
+		RBNode successor = findSuc(y);// to be created..
+		if(y.parentT.leftT == y) {// if y parent is a left son
+			y.parentT.leftT = successor;
+			//do i need to also delete all the children of y?
+			// make find successor!!
+		}else{
+			y.parentT.rightT = successor;
+			//delete children?
+			}
+		}
 
  	/**
 	* public RBNode getRoot()
@@ -309,9 +320,19 @@ public class RBTree {
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
 		 */
-		this.array_status = false;
-		this.size--;
-		return 42;	// to be replaced by student code
+		RBNode ansNode = null;
+		RBNode node = binSearch(this.root, k, ansNode);
+		if(node == null){
+			return -1;
+		} else {
+			this.array_status = false;
+			this.size--;
+			if(node.color == Color.RED||node.color == Color.RED
+					||node.color == Color.RED){// not sure if true, what about red right son?
+				ReplaceWithR(node);
+		}
+		return 42;
+		}	// to be replaced by student code
 	}
 
 	/**
