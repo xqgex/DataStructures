@@ -115,9 +115,14 @@ public class RBTree {
 
 	private static void leftRotate(RBNode x) {
 		RBNode y = x.rightT;
-		transplant(x,y);
-		leftChild(x,y.leftT);
-		rightChild(y,x);
+		if (x.parentT != null) {
+			transplant(x,y);
+		} else {
+			y.parentT = null;
+		}
+		rightChild(x,y.leftT);
+		leftChild(y,x);
+		// 12 didn't change from 10 to 15
 	}
 
 	private static void rightRotate(RBNode y) {
@@ -259,8 +264,13 @@ public class RBTree {
 					rightRotate(node);
 				}
 			} else {
-				RBNode uncle = node.parentT.parentT.rightT;
-				if (uncle.isRed()) { // Case 1
+				RBNode uncle = node.parentT.parentT.leftT;
+				if (uncle == null) {
+					leftRotate(node.parentT.parentT);
+					node.parentT.leftT.changeColor();
+					node.parentT.changeColor();
+					count += 2;	
+				} else if (uncle.isRed()) { // Case 1
 					node.parentT.parentT.changeColor();
 					node.parentT.changeColor();
 					uncle.changeColor();
