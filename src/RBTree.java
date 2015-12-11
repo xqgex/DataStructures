@@ -59,13 +59,33 @@ public class RBTree {
 		public void changeColor() {
 			if (this.color == Color.RED) {
 				this.color = Color.BLACK;
-			} else {
+			} else if (this.color == Color.BLACK) {
 				this.color = Color.RED;
 			}
 		}
 
 		public void darken() {
-			// TODO
+			if (this.color == Color.RED) {
+				this.color = Color.BLACK;
+			} else if (this.color == Color.BLACK) {
+				this.color = Color.DARK_GRAY;
+			}
+		}
+
+		public boolean barren() {
+			if ( (this.rightT == null)&&(this.leftT == null) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public boolean oneChild() {
+			if ( (this.rightT == null)&&(this.leftT != null)||(this.rightT != null)&&(this.leftT == null) ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 		/*public void setParent(RBNode parentT) {
 			this.parentT = parentT;
@@ -102,14 +122,28 @@ public class RBTree {
 		Child.parentT = parent;
 	}
 
+	/**
+	 * private static void transplant(RBNode x, RBNode y)
+	 * 
+	 * Update y as a child of x parent instead of x
+	 * @param x
+	 * @param y
+	 */
 	private static void transplant(RBNode x, RBNode y) {
-		if(x.parentT.leftT == x) {
-			leftChild(x.parentT,y);
-		} else {
-			rightChild(x.parentT,y);
+		if(x.parentT.leftT == x) { // x is a left child
+			leftChild(x.parentT,y); // Update y as a left child instead of x
+		} else { // x is a right child
+			rightChild(x.parentT,y); // Update y as a right child instead of x
 		}
 	}
 
+	/**
+	 * private static void replace(RBNode x, RBNode y)
+	 * 
+	 * Replace old node (x) with a new one (y)
+	 * @param x
+	 * @param y
+	 */
 	private static void replace(RBNode x, RBNode y) {
 		transplant(x,y);
 		leftChild(y,x.leftT);
@@ -147,21 +181,19 @@ public class RBTree {
 	}
 
  	/**
-	* public RBNode getRoot()
-	*
-	* returns the root of the red black tree
-	*
-	*/
+	 * public RBNode getRoot()
+	 *
+	 * returns the root of the red black tree
+	 */
 	public RBNode getRoot() {
 			return this.root;
 		}
 
 	/**
-	* public boolean empty()
-	*
-	* returns true if and only if the tree is empty
-	*
-	*/
+	 * public boolean empty()
+	 *
+	 * returns true if and only if the tree is empty
+	 */
 	public boolean empty() {
 		if (this.root == null) {
 			return true;
@@ -170,11 +202,11 @@ public class RBTree {
 	}
 
  	/**
-	* public String search(int k)
-	*
-	* returns the value of an item with key k if it exists in the tree
-	* otherwise, returns null
-	*/
+	 * public String search(int k)
+	 *
+	 * returns the value of an item with key k if it exists in the tree
+	 * otherwise, returns null
+	 */
 	public String search(int k) { // envelop function
 		String ans = null;
 		RBNode root = this.root;
@@ -202,13 +234,13 @@ public class RBTree {
 	}
 
 	/**
-	* public int insert(int k, String v)
-	*
-	* inserts an item with key k and value v to the red black tree.
-	* the tree must remain valid (keep its invariants).
-	* returns the number of color switches, or 0 if no color switches were necessary.
-	* returns -1 if an item with key k already exists in the tree.
-	*/
+	 * public int insert(int k, String v)
+	 *
+	 * inserts an item with key k and value v to the red black tree.
+	 * the tree must remain valid (keep its invariants).
+	 * returns the number of color switches, or 0 if no color switches were necessary.
+	 * returns -1 if an item with key k already exists in the tree.
+	 */
 	public int insert(int k, String v) {
 		// Insert: Case 1a: z’s uncle w is red, z is a right child
 		// Insert: Case 1b: z’s uncle w is red, z is a left child
@@ -348,20 +380,32 @@ public class RBTree {
 		/*
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
-		 */
-		RBNode ansNode = null;
-		RBNode node = binSearch(this.root, k, ansNode);
-		if(node == null){
+		 */ //	 					RBNode ansNode = null => null ???????????????????
+		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years"
+		if(centenarian == null){ // No such key
 			return -1;
 		} else {
 			this.array_status = false;
 			this.size--;
-			if(node.color == Color.RED||node.color == Color.RED
-					||node.color == Color.RED){// not sure if true, what about red right son?
-				ReplaceWithR(node);
+			if (this.root == centenarian) { // Delete the root
+				this.root = null;
+				return 0;
 			}
-			return 42;
-		}	// to be replaced by student code
+			int changes = 0;
+			//
+			if (centenarian.barren()) { // The centenarian don't have child's
+				centenarian.darken();
+			} else if (centenarian.oneChild()) { // The centenarian have only one child
+				RBNode sccr = findSccr(centenarian);
+				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
+			} else { // The centenarian have two children
+				
+			}
+			RBNode father = centenarian.parentT;
+			//
+			changes = fixDelete(centenarian);
+			return changes;
+		}
 	}
 
 	/**
