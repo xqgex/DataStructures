@@ -89,6 +89,14 @@ public class RBTree {
 				return false;
 			}
 		}
+
+		public boolean twoChilds() {
+			if ( (this.rightT != null)&&(this.leftT != null) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		/*public void setParent(RBNode parentT) {
 			this.parentT = parentT;
 		}
@@ -349,28 +357,24 @@ public class RBTree {
 	}
 
 	public RBNode findSccr(RBNode node) {
-		if(node.rightT != null){ // if node has a right sub-tree. 
+		if (node.rightT != null) { // if node has a right sub-tree. 
 			node = node.getRight();
-			while(node.leftT != null){// has a left Subtree.
+			while(node.leftT != null) {// has a left Subtree.
 				node = node.getRight();
 			}
 			return node;
-		}else{ //if node does not have a right sub-tree.
-			if(node.parentT.getLeft() == node ){
+		} else { //if node does not have a right sub-tree.
+			if (node.parentT.getLeft() == node) {
 				return node.parentT;	
-			}else{
-			while(node != (node.parentT).getLeft()){// node is a left child.
-				node = node.parentT;
-			 }
+			} else {
+				while(node != (node.parentT).getLeft()) {// node is a left child.
+					node = node.parentT;
+				}
 			}
 			return node;
 		}
 	}
-	public void ReplaceWithR(RBNode y) {
-		RBNode successor = this.findSccr(y);
-		if(y.getRight() != null && successor.barren()){ // y has a right sub tree, and successor is a leaf. 
-			
-		}
+
 	/**
 	* public int delete(int k)
 	*
@@ -388,7 +392,7 @@ public class RBTree {
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
 		 */ //	 					RBNode ansNode = null => null ???????????????????
-		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years"
+		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
 		if(centenarian == null){ // No such key
 			return -1;
 		} else {
@@ -404,6 +408,11 @@ public class RBTree {
 				centenarian.darken();
 			} else if (centenarian.oneChild()) { // The centenarian have only one child
 				RBNode sccr = findSccr(centenarian);
+				if (centenarian.rightT != null) { // The successor is below the centenarian (is a child of the centenarian))
+					
+				} else { // The successor is above the centenarian (is a parent of the centenarian))
+					
+				}
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
 			} else { // The centenarian have two children
 				
