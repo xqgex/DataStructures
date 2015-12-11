@@ -64,6 +64,9 @@ public class RBTree {
 			}
 		}
 
+		public void darken() {
+			// TODO
+		}
 		/*public void setParent(RBNode parentT) {
 			this.parentT = parentT;
 		}
@@ -142,17 +145,6 @@ public class RBTree {
 		}
 		rightChild(x,y);
 	}
-	public static void ReplaceWithR(RBNode y) {
-		RBNode successor = null;//findSuc(y);// to be created..
-		if(y.parentT.leftT == y) {// if y parent is a left son
-			y.parentT.leftT = successor;
-			//do i need to also delete all the children of y?
-			// make find successor!!
-		}else{
-			y.parentT.rightT = successor;
-			//delete children?
-			}
-		}
 
  	/**
 	* public RBNode getRoot()
@@ -244,7 +236,7 @@ public class RBTree {
 				rightChild(father, newBaby);
 			}
 			if (father.isRed()) {
-				changes = fix(newBaby);
+				changes = fixInsert(newBaby);
 			}
 			return changes;
 		}
@@ -264,7 +256,7 @@ public class RBTree {
 		return ans;
 	}
 
-	public int fix(RBNode node) {
+	public int fixInsert(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != null)&&(node.parentT.isRed()) ) {
 			//print();
@@ -317,6 +309,29 @@ public class RBTree {
 		return count+1;
 	}
 
+	public int fixDelete(RBNode node) {
+		// TODO
+		return 0;
+	}
+
+	public RBNode findSccr(RBNode node) {
+		// TODO
+		return null;
+	}
+
+	public static void ReplaceWithR(RBNode y) {
+		// TODO
+		RBNode successor = null;//findSccr(y);// to be created..
+		if(y.parentT.leftT == y) {// if y parent is a left son
+			y.parentT.leftT = successor;
+			//do i need to also delete all the children of y?
+			// make find successor!!
+		}else{
+			y.parentT.rightT = successor;
+			//delete children?
+		}
+	}
+
 	/**
 	* public int delete(int k)
 	*
@@ -344,8 +359,8 @@ public class RBTree {
 			if(node.color == Color.RED||node.color == Color.RED
 					||node.color == Color.RED){// not sure if true, what about red right son?
 				ReplaceWithR(node);
-		}
-		return 42;
+			}
+			return 42;
 		}	// to be replaced by student code
 	}
 
