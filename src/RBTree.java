@@ -82,11 +82,13 @@ public class RBTree {
 			}
 		}
 
-		public boolean oneChild() {
-			if ( (this.rightT == null)&&(this.leftT != null)||(this.rightT != null)&&(this.leftT == null) ) {
-				return true;
+		public RBNode oneChild() {
+			if ( (this.rightT == null)&&(this.leftT != null) ) {
+				return this.leftT;
+			} else if ( (this.rightT != null)&&(this.leftT == null) ) {
+				return this.rightT;
 			} else {
-				return false;
+				return null;
 			}
 		}
 
@@ -95,6 +97,14 @@ public class RBTree {
 				return true;
 			} else {
 				return false;
+			}
+		}
+
+		public boolean mILeftchild() {
+			if (this == this.parentT.leftT) {
+				return true;
+			} else {
+				return true;
 			}
 		}
 		/*public void setParent(RBNode parentT) {
@@ -398,28 +408,39 @@ public class RBTree {
 		} else {
 			this.array_status = false;
 			this.size--;
-			if (this.root == centenarian) { // Delete the root
-				this.root = null;
-				return 0;
-			}
 			int changes = 0;
-			//
+			RBNode child;
 			if (centenarian.barren()) { // The centenarian don't have child's
-				centenarian.darken();
-			} else if (centenarian.oneChild()) { // The centenarian have only one child
+				if (!centenarian.isRed()) { // i am leaf and I'm black
+					centenarian.darken();
+					changes = fixDelete(centenarian);
+				} // We can safely delete the centenarian
+				if (centenarian.parentT != null) {
+					centenarian.darken();
+					changes = fixDelete(centenarian);
+					if (centenarian.mILeftchild()) {
+						centenarian.parentT.leftT = null;
+					} else {
+						centenarian.parentT.rightT = null;
+					}
+				} else { // Delete the root
+					this.root = null;
+				}
+			} else if ((child = centenarian.oneChild()) != null) { // The centenarian have only one child
+				if (!centenarian.isRed()) { // We can safely bridge the centenarian
+					child.darken();
+					changes = fixDelete(child);
+				}
+				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
+			} else { // The centenarian have two children
 				RBNode sccr = findSccr(centenarian);
-				if (centenarian.rightT != null) { // The successor is below the centenarian (is a child of the centenarian))
-					
-				} else { // The successor is above the centenarian (is a parent of the centenarian))
-					
+				sccr.darken();
+				changes = fixDelete(child);
+				if (centenarian != sccr.parentT) {
+					sccr.parentT.leftT = sccr.rightT;
 				}
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
-			} else { // The centenarian have two children
-				
 			}
-			RBNode father = centenarian.parentT;
-			//
-			changes = fixDelete(centenarian);
 			return changes;
 		}
 	}
