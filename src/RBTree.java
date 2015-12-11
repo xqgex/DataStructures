@@ -1,5 +1,7 @@
 import java.awt.Color;
 
+import com.sun.beans.finder.FieldFinder;
+
 public class RBTree {
 	// What happen when there is a duplicated key?
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
@@ -347,23 +349,28 @@ public class RBTree {
 	}
 
 	public RBNode findSccr(RBNode node) {
-		// TODO
-		return null;
-	}
-
-	public static void ReplaceWithR(RBNode y) {
-		// TODO
-		RBNode successor = null;//findSccr(y);// to be created..
-		if(y.parentT.leftT == y) {// if y parent is a left son
-			y.parentT.leftT = successor;
-			//do i need to also delete all the children of y?
-			// make find successor!!
-		}else{
-			y.parentT.rightT = successor;
-			//delete children?
+		if(node.rightT != null){ // if node has a right sub-tree. 
+			node = node.getRight();
+			while(node.leftT != null){// has a left Subtree.
+				node = node.getRight();
+			}
+			return node;
+		}else{ //if node does not have a right sub-tree.
+			if(node.parentT.getLeft() == node ){
+				return node.parentT;	
+			}else{
+			while(node != (node.parentT).getLeft()){// node is a left child.
+				node = node.parentT;
+			 }
+			}
+			return node;
 		}
 	}
-
+	public void ReplaceWithR(RBNode y) {
+		RBNode successor = this.findSccr(y);
+		if(y.getRight() != null && successor.barren()){ // y has a right sub tree, and successor is a leaf. 
+			
+		}
 	/**
 	* public int delete(int k)
 	*
