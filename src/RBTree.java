@@ -1,7 +1,5 @@
 ﻿import java.awt.Color;
 
-import sun.reflect.generics.tree.Tree;
-
 public class RBTree {
 	// What happen when there is a duplicated key?
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
@@ -178,19 +176,6 @@ public class RBTree {
 				return true;
 			}
 		}
-
-		// TODO DELETE ME \/
-		/*public void setParent(RBNode parentT) {
-			this.parentT = parentT;
-		}
-
-		public void setLeft(RBNode node) {
-			this.leftT = node;
-		}
-
-		public void setRight(RBNode node) {
-			this.rightT = node;
-		}*/
 	}
 
 	/**
@@ -222,7 +207,7 @@ public class RBTree {
 		parent.leftT = Child;
 		Child.parentT = parent;
 	}
-	
+
 	/**
 	 * private static void leftChild
 	 * 
@@ -231,7 +216,7 @@ public class RBTree {
 	 * @param parent
 	 * @param Child
 	 */
-	
+
 	private static void rightChild(RBNode parent, RBNode Child) {
 		parent.rightT = Child;
 		Child.parentT = parent;
@@ -264,6 +249,7 @@ public class RBTree {
 		leftChild(y,x.leftT);
 		rightChild(y,x.rightT);
 	}
+
 	/**
 	 * Performs a left rotation on node x,
 	 * according to the left rotation specifics 
@@ -285,6 +271,7 @@ public class RBTree {
 		}
 		leftChild(y,x);
 	}
+
 	/**
 	 * Performs a right rotation on node x,
 	 * according to the right rotation specifics 
@@ -314,7 +301,7 @@ public class RBTree {
 	 */
 	public RBNode getRoot() {
 			return this.root;
-		}
+	}
 
 	/**
 	 * public boolean empty()
@@ -376,9 +363,12 @@ public class RBTree {
 	 * the tree must remain valid (keep its invariants).
 	 * returns the number of color switches, or 0 if no color switches were necessary.
 	 * returns -1 if an item with key k already exists in the tree.
+	 * 
+	 * @param k
+	 * @param v
+	 * @return color changes count
 	 */
 	public int insert(int k, String v) {
-		
 		// Insert: Case 1a: z’s uncle w is red, z is a right child
 		// Insert: Case 1b: z’s uncle w is red, z is a left child
 		// Insert: Case 2:  z’s uncle w is black, z is a right child
@@ -389,32 +379,32 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
-		if(search(k) != null){
+		if (search(k) != null) {
 			return -1;
-		}else{
-		this.array_status = false;
-		this.size++;
-		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
-		if (this.root == null) { //First node at the tree
-			this.root = newBaby;
-			this.max = newBaby;
-			this.min = newBaby;
-			this.root.changeColor();
-			return 0;
 		} else {
-			int changes = 0;
-			RBNode father = whereToInsert(this.root, newBaby);
-			if (Integer.parseInt(newBaby.key) < Integer.parseInt(father.key)) {
-				leftChild(father, newBaby);
+			this.array_status = false;
+			this.size++;
+			RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
+			if (this.root == null) { //First node at the tree
+				this.root = newBaby;
+				this.max = newBaby;
+				this.min = newBaby;
+				this.root.changeColor();
+				return 0;
 			} else {
-				rightChild(father, newBaby);
+				int changes = 0;
+				RBNode father = whereToInsert(this.root, newBaby);
+				if (Integer.parseInt(newBaby.key) < Integer.parseInt(father.key)) {
+					leftChild(father, newBaby);
+				} else {
+					rightChild(father, newBaby);
+				}
+				if (father.isRed()) {
+					changes = fixInsert(newBaby);
+				}
+				upDate(newBaby);
+				return changes;
 			}
-			if (father.isRed()) {
-				changes = fixInsert(newBaby);
-			}
-			upDate(newBaby);
-			return changes;
-		}
 		}
 	// Updates the min and max of the tree; 
 	}
@@ -441,7 +431,7 @@ public class RBTree {
 	 * 
 	 * @param root
 	 * @param node
-	 * @return
+	 * @return new node father
 	 */
 	public RBNode whereToInsert(RBNode root ,RBNode node) {
 		RBNode ans = root;
@@ -456,15 +446,14 @@ public class RBTree {
 		}
 		return ans;
 	}
-	
+
 	/**
 	 * Rebalance the tree after the insertion 
-	 * of the node. 
+	 * of the node.
 	 * 
 	 * @param node
-	 * @return
+	 * @return color changes count
 	 */
-	
 	public int fixInsert(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != null)&&(node.parentT.isRed()) ) {
@@ -517,8 +506,14 @@ public class RBTree {
 		return count+1;
 	}
 
+	/**
+	 * Rebalance the tree after the deletion 
+	 * of the node.
+	 * 
+	 * @param node
+	 * @return color changes count
+	 */
 	public int fixDelete(RBNode node) {
-		// TODO
 		int count = 0;
 		while ( (node.parentT != null)&&(node.color == Color.DARK_GRAY) ) {
 			if (node == node.parentT.leftT) {
@@ -605,7 +600,7 @@ public class RBTree {
 	 * and return it
 	 *  
 	 * @param node
-	 * @return
+	 * @return node successor
 	 */
 	public RBNode findSccr(RBNode node) {
 		if (node.rightT != null) { // if node has a right sub-tree. 
@@ -633,6 +628,9 @@ public class RBTree {
 	* the tree must remain valid (keep its invariants).
 	* returns the number of color switches, or 0 if no color switches were needed.
 	* returns -1 if an item with key k was not found in the tree.
+	* 
+	* @param k
+	* @return color changes count
 	*/
 	public int delete(int k) {
 		// Delete: Case 1: x’s sibling w is red
@@ -700,6 +698,8 @@ public class RBTree {
 	*
 	* Returns the value of the item with the smallest key in the tree,
 	* or null if the tree is empty
+	* 
+	* @return minimum node at the tree
 	*/
 	public String min() {
 		return (this.min).key; 
@@ -710,6 +710,8 @@ public class RBTree {
 	*
 	* Returns the value of the item with the largest key in the tree,
 	* or null if the tree is empty
+	* 
+	* @return maximum node at the tree
 	*/
 	public String max() {
 		return (this.max).key; 
@@ -790,11 +792,23 @@ public class RBTree {
 		return this.size; // to be replaced by student code
 	}
 
+	/**
+	* public void print()
+	*
+	* Print the tree.
+	*/
 	public void print() {
 		RBTree.printHelper(this.root, 0);
 	}
 
-	// Print RedBlackTree
+	/**
+	* private static void printHelper(RBTree.RBNode n, int indent)
+	*
+	* Print a tree.
+	*
+	* @param n
+	* @param indent
+	*/
 	private static void printHelper(RBTree.RBNode n, int indent) {
 		if (n == null) {
 	        System.out.print("<empty tree>");
