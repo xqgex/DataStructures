@@ -1,6 +1,4 @@
-import java.awt.Color;
-
-import com.sun.beans.finder.FieldFinder;
+﻿import java.awt.Color;
 
 public class RBTree {
 	// What happen when there is a duplicated key?
