@@ -205,7 +205,9 @@ public class RBTree {
 	 */
 	private static void leftChild(RBNode parent, RBNode Child) {
 		parent.leftT = Child;
-		Child.parentT = parent;
+		if (Child != null) {
+			Child.parentT = parent;
+		}
 	}
 
 	/**
@@ -219,7 +221,9 @@ public class RBTree {
 
 	private static void rightChild(RBNode parent, RBNode Child) {
 		parent.rightT = Child;
-		Child.parentT = parent;
+		if (Child != null) {
+			Child.parentT = parent;
+		}
 	}
 
 	/**
@@ -344,12 +348,12 @@ public class RBTree {
 	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
 		if (Integer.parseInt(root.key) == k) {
 			ansNode = root;
-		} else if (Integer.parseInt(root.key) < k && root.leftT != null) {
-			root = root.leftT;
-			binSearch(root, k,ansNode);
-		} else if (Integer.parseInt(root.key) > k && root.rightT != null) {
+		} else if ( (Integer.parseInt(root.key) < k)&&(root.rightT != null) ) {
 			root = root.rightT;
-			binSearch(root, k,ansNode);
+			ansNode = binSearch(root, k,ansNode);
+		} else if ( (Integer.parseInt(root.key) > k)&&(root.leftT != null) ) {
+			root = root.leftT;
+			ansNode = binSearch(root, k,ansNode);
 		} else {
 			ansNode = null;
 		}
@@ -527,7 +531,7 @@ public class RBTree {
 					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 3
 						rightRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
-						brtr.rightT.changeColor(); //	//	  |X|      W
+						brtr.parentT.changeColor(); //	//	  |X|      W
 						count += 2; //					//	 /   \   /   \
 					} //								//	?a? ?b? <c> ?d?
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 4
@@ -562,7 +566,7 @@ public class RBTree {
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 3
 						leftRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
-						brtr.leftT.changeColor(); //	//	   X      |W|
+						brtr.parentT.changeColor(); //	//	   X      |W|
 						count += 2; //					//	 /   \   /   \
 					} //								//	<a> ?b? ?c? ?d?
 					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 4
@@ -640,8 +644,7 @@ public class RBTree {
 		/*
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
-		 */ //	 					RBNode ansNode = null => null ???????????????????
-		
+		 */
 		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
 		if(centenarian == null){ // No such key
 			return -1;
