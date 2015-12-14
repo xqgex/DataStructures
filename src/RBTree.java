@@ -1,5 +1,7 @@
 ﻿import java.awt.Color;
 
+import sun.reflect.generics.tree.Tree;
+
 public class RBTree {
 	// What happen when there is a duplicated key?
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
@@ -377,6 +379,7 @@ public class RBTree {
 	 */
 
 	public int insert(int k, String v) {
+		
 		// Insert: Case 1a: z’s uncle w is red, z is a right child
 		// Insert: Case 1b: z’s uncle w is red, z is a left child
 		// Insert: Case 2:  z’s uncle w is black, z is a right child
@@ -387,6 +390,9 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
+		if(search(k) != null){
+			return -1;
+		}else{
 		this.array_status = false;
 		this.size++;
 		RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
@@ -407,6 +413,7 @@ public class RBTree {
 			}
 			upDate(newBaby);
 			return changes;
+		}
 		}
 	// Updates the min and max of the tree; 
 	}
@@ -612,12 +619,14 @@ private void upDate(RBNode newBaby) {
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
 		 */ //	 					RBNode ansNode = null => null ???????????????????
+		
 		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
 		if(centenarian == null){ // No such key
 			return -1;
 		} else {
 			this.array_status = false;
 			this.size--;
+			upDateDel(centenarian);
 			int changes = 0;
 			RBNode child;
 			if (centenarian.barren()) { // The centenarian don't have child's
@@ -653,6 +662,13 @@ private void upDate(RBNode newBaby) {
 			}
 			return changes;
 		}
+	}
+
+	private void upDateDel(RBNode centenarian) {
+		if(){
+			
+		}
+		
 	}
 
 	/**
