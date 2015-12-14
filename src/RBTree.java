@@ -689,10 +689,36 @@ public class RBTree {
 	}
 
 	private void upDateDel(RBNode centenarian) {
-		if(){
-			
+		if (Integer.parseInt(centenarian.key) >= Integer.parseInt(this.max.key)) {
+			this.max = getMax(this.root);
+		}
+		if (Integer.parseInt(centenarian.key) <= Integer.parseInt(this.min.key)) {
+			this.min = getMin(this.root);
 		}
 		
+	}
+	/**
+	 * recursive max finder.
+	 * @param root2
+	 * @return
+	 */
+	private RBNode getMax(RBNode root2) {
+		if(root2.rightT != null){
+			getMax(root2.getRight());
+		}
+			return root2;
+	}
+
+	/**
+	 * recursive min finder.
+	 * @param root2
+	 * @return
+	 */
+	private RBNode getMin(RBNode root2) {
+		if(root2.leftT != null){
+			getMin(root2.getLeft());
+		}
+			return root2;
 	}
 
 	/**
