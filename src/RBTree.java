@@ -493,11 +493,68 @@ public class RBTree {
 
 	public int fixDelete(RBNode node) {
 		// TODO
-		return 0;
+		int count = 0;
+		while ( (node.parentT != null)&&(node.color == Color.DARK_GRAY) ) {
+			if (node == node.parentT.leftT) {
+				RBNode brtr = node.parentT.rightT;
+				if ( (brtr == null)||(!brtr.isRed()) ) {
+					if ( (brtr.rightT != null)&&(brtr.leftT != null)&&(!brtr.rightT.isRed())&&(!brtr.leftT.isRed()) ) {
+						node.color = Color.BLACK; // Case 2	//	     ?Y?
+						node.parentT.darken(); //			//	    /   \
+						brtr.changeColor(); //				//	 |X|      W 
+						count += 3; //						//	/   \   /   \
+						node = node.parentT; //				//	a   b   c   d
+					} else {
+						if ( (brtr.rightT != null)&&(!brtr.rightT.isRed()) ) { // Case 2
+							node = node.parentT; //			//	      Y
+							leftRotate(node); //			//	    /   \
+						} // Case 3 //						//	   <X>  d
+						node.parentT.parentT.changeColor(); //	  /   \
+						node.parentT.changeColor(); //		//	 <Z>  c
+						count += 2; //						//	/   \
+						node = node.parentT; //				//	a   b
+						rightRotate(node.parentT);
+					}
+				} else { // Case 1
+					leftRotate(node.parentT); //		//	      Y
+					node.parentT.parentT.changeColor(); //	    /   \
+					node.parentT.changeColor(); //		//	 |X|     <W>
+					count += 2; //						//	/   \   /   \
+					//node = node.parentT.parentT; //	//	a   b   c   d
+				}
+			} else {
+				RBNode uncle = node.parentT.parentT.leftT;
+				if ( (uncle == null)||(!uncle.isRed()) ) {
+					if (node == node.parentT.leftT) { // Case 2
+						node = node.parentT; //			//	      Y
+						rightRotate(node); //			//	    /   \
+					} // Case 3 //						//	   a   <X>
+					node.parentT.parentT.changeColor(); //	      /   \
+					node.parentT.changeColor(); //		//	     b   <Z>
+					count += 2; //						//	        /   \
+					node = node.parentT; //				//	        c   d
+					leftRotate(node.parentT);
+				} else { // Case 1						//	      Y
+					//node.parentT.parentT.changeColor(); //	    /   \
+					node.parentT.changeColor(); //		//	 <W>     <X>
+					uncle.changeColor(); //				//	/   \   /   \
+					count += 2; //						//	a   b   c  <Z>
+					node = node.parentT.parentT; //		//	          /   \
+				} //									//	          d   e
+			}
+		}
+		if (node.parentT != null) {
+			node.changeColor();
+		} else { // node is the root
+			this.root = node;
+			this.root.color = Color.BLACK;
+		}
+		return count+1;
 	}
+
 	/**
 	 * finds the successor of the node,
-	 * and return it  
+	 * and return it
 	 *  
 	 * @param node
 	 * @return
