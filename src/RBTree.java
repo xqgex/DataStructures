@@ -173,7 +173,7 @@ public class RBTree {
 			if (this == this.parentT.leftT) {
 				return true;
 			} else {
-				return true;
+				return false;
 			}
 		}
 	}
@@ -249,9 +249,17 @@ public class RBTree {
 	 * @param y
 	 */
 	private static void replace(RBNode x, RBNode y) {
-		transplant(x,y);
-		leftChild(y,x.leftT);
-		rightChild(y,x.rightT);
+		if (x.parentT != null) {
+			transplant(x,y);
+		} else { // x was the root
+			y.parentT = null;
+		}
+		if (y != x.leftT) {
+			leftChild(y,x.leftT);
+		}
+		if (y != x.rightT) {
+			rightChild(y,x.rightT);
+		}
 	}
 
 	/**
@@ -532,8 +540,9 @@ public class RBTree {
 						rightRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
 						brtr.parentT.changeColor(); //	//	  |X|      W
-						count += 2; //					//	 /   \   /   \
-					} //								//	?a? ?b? <c> ?d?
+						brtr = brtr.parentT; //			//	 /   \   /   \
+						count += 2; //					//	?a? ?b? <c> ?d?
+					}
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 4
 						leftRotate(node.parentT); //				//	      ?Y?
 						node.color = Color.BLACK; //				//	     /   \
@@ -610,14 +619,14 @@ public class RBTree {
 		if (node.rightT != null) { // if node has a right sub-tree. 
 			node = node.getRight();
 			while(node.leftT != null) {// has a left Subtree.
-				node = node.getRight();
+				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
 			}
 			return node;
 		} else { //if node does not have a right sub-tree.
 			if (node.parentT.getLeft() == node) {
 				return node.parentT;	
 			} else {
-				while(node != (node.parentT).getLeft()) {// node is a left child.
+				while (node != node.parentT.getLeft()) {// node is a left child.
 					node = node.parentT;
 				}
 			}
@@ -651,17 +660,16 @@ public class RBTree {
 		} else {
 			this.array_status = false;
 			this.size--;
-			upDateDel(centenarian);
 			int changes = 0;
 			RBNode child;
 			if (centenarian.barren()) { // The centenarian don't have child's
 				if (!centenarian.isRed()) { // i am leaf and I'm black
 					centenarian.darken();
-					changes = fixDelete(centenarian);
+					changes += fixDelete(centenarian);
 				} // We can safely delete the centenarian
 				if (centenarian.parentT != null) {
-					centenarian.darken();
-					changes = fixDelete(centenarian);
+					//centenarian.darken();
+					//changes += fixDelete(centenarian);
 					if (centenarian.mILeftchild()) {
 						centenarian.parentT.leftT = null;
 					} else {
@@ -673,18 +681,19 @@ public class RBTree {
 			} else if ((child = centenarian.oneChild()) != null) { // The centenarian have only one child
 				if (!centenarian.isRed()) { // We can safely bridge the centenarian
 					child.darken();
-					changes = fixDelete(child);
+					changes += fixDelete(child);
 				}
 				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
 			} else { // The centenarian have two children
 				RBNode sccr = findSccr(centenarian);
 				sccr.darken();
-				changes = fixDelete(child);
+				changes += fixDelete(sccr);
 				if (centenarian != sccr.parentT) {
 					sccr.parentT.leftT = sccr.rightT;
 				}
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
 			}
+			upDateDel(centenarian);
 			return changes;
 		}
 	}
@@ -704,10 +713,10 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMax(RBNode root2) {
-		if(root2.rightT != null){
-			getMax(root2.getRight());
+		if (root2.rightT != null) {
+			return getMax(root2.getRight());
 		}
-			return root2;
+		return root2;
 	}
 
 	/**
@@ -716,10 +725,10 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMin(RBNode root2) {
-		if(root2.leftT != null){
-			getMin(root2.getLeft());
+		if (root2.leftT != null) {
+			return getMin(root2.getLeft());
 		}
-			return root2;
+		return root2;
 	}
 
 	/**
