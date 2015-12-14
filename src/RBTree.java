@@ -405,9 +405,26 @@ public class RBTree {
 			if (father.isRed()) {
 				changes = fixInsert(newBaby);
 			}
+			upDate(newBaby);
 			return changes;
 		}
+	// Updates the min and max of the tree; 
 	}
+	/**
+	 *  compares the new node that was inserted to 
+	 *  the min ans max of the tree, ans resets it 
+	 *  to be the new node if needed.
+	 *  
+	 * @param newBaby
+	 */
+private void upDate(RBNode newBaby) {
+		if(Integer.parseInt(newBaby.key) >= Integer.parseInt(this.max.key)){
+		this.max = newBaby;
+	}
+		if(Integer.parseInt(newBaby.key) <= Integer.parseInt(this.min.key)){
+		this.min = newBaby;
+		}
+	} 
 /**
  * performs a binary search for the correct spot to insert 
  * the node.
@@ -588,7 +605,7 @@ public class RBTree {
 	* or null if the tree is empty
 	*/
 	public String min() {
-		return (this.min).key; // do i need to return key or info?
+		return (this.min).key; 
 	}
 
 	/**
@@ -598,7 +615,7 @@ public class RBTree {
 	* or null if the tree is empty
 	*/
 	public String max() {
-		return (this.max).key; // do i need to return key or info?
+		return (this.max).key; 
 	}
 
 	/**
