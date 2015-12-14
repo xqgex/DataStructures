@@ -196,6 +196,9 @@ public class RBTree {
 		this.size = 0;
 	}
 	/**
+	 * private static void leftChild
+	 * 
+	 * sets child to be the parents left child
 	 * 
 	 * @param parent
 	 * @param Child
@@ -204,7 +207,16 @@ public class RBTree {
 		parent.leftT = Child;
 		Child.parentT = parent;
 	}
-
+	
+	/**
+	 * private static void leftChild
+	 * 
+	 * sets child to be the parents right child
+	 * 
+	 * @param parent
+	 * @param Child
+	 */
+	
 	private static void rightChild(RBNode parent, RBNode Child) {
 		parent.rightT = Child;
 		Child.parentT = parent;
@@ -237,7 +249,13 @@ public class RBTree {
 		leftChild(y,x.leftT);
 		rightChild(y,x.rightT);
 	}
-
+	/**
+	 * Performs a left rotation on node x,
+	 * according to the left rotation specifics 
+	 * learned in class   
+	 * 
+	 * @param x
+	 */
 	private static void leftRotate(RBNode x) {
 		RBNode y = x.rightT;
 		if (x.parentT != null) {
@@ -252,7 +270,13 @@ public class RBTree {
 		}
 		leftChild(y,x);
 	}
-
+	/**
+	 * Performs a right rotation on node x,
+	 * according to the right rotation specifics 
+	 * learned in class   
+	 * 
+	 * @param x
+	 */
 	private static void rightRotate(RBNode y) {
 		RBNode x = y.leftT;
 		if (y.parentT != null) {
@@ -305,7 +329,16 @@ public class RBTree {
 		}
 		return ans;
 	}
-
+	/**
+	 * performs a binary search on the tree
+	 * in attempt to find the node with k key.
+	 * returns the node that has k as key.
+	 * 
+	 * @param root
+	 * @param k
+	 * @param ansNode
+	 * @return
+	 */
 	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
 		if (Integer.parseInt(root.key) == k) {
 			ansNode = root;
@@ -329,6 +362,7 @@ public class RBTree {
 	 * returns the number of color switches, or 0 if no color switches were necessary.
 	 * returns -1 if an item with key k already exists in the tree.
 	 */
+
 	public int insert(int k, String v) {
 		// Insert: Case 1a: z’s uncle w is red, z is a right child
 		// Insert: Case 1b: z’s uncle w is red, z is a left child
@@ -361,7 +395,14 @@ public class RBTree {
 			return changes;
 		}
 	}
-
+/**
+ * performs a binary search for the correct spot to insert 
+ * the node.
+ * 
+ * @param root
+ * @param node
+ * @return
+ */
 	public RBNode whereToInsert(RBNode root ,RBNode node) {
 		RBNode ans = root;
 		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
@@ -375,7 +416,15 @@ public class RBTree {
 		}
 		return ans;
 	}
-
+	
+	/**
+	 * Rebalance the tree after the insertion 
+	 * of the node. 
+	 * 
+	 * @param node
+	 * @return
+	 */
+	
 	public int fixInsert(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != null)&&(node.parentT.isRed()) ) {
@@ -433,7 +482,13 @@ public class RBTree {
 		// TODO
 		return 0;
 	}
-
+	/**
+	 * finds the successor of the node,
+	 * and return it  
+	 *  
+	 * @param node
+	 * @return
+	 */
 	public RBNode findSccr(RBNode node) {
 		if (node.rightT != null) { // if node has a right sub-tree. 
 			node = node.getRight();
