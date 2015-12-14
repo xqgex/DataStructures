@@ -7,9 +7,9 @@ public class RBTree {
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
 	private RBNode min;
 	private RBNode max;
-	private RBNode[] tree_array;
-	private boolean array_status;
-	protected int size;
+	private RBNode[] tree_array; // an array of all the nods by order.
+	private boolean array_status; // is the array above up to date.
+	protected int size; // size of the tree
 	private static final int INDENT_STEP = 4;
 
 	public static void main(String[] args) {
@@ -34,30 +34,58 @@ public class RBTree {
 			this.key = key;
 			this.color = color;
 		}
-
-		public boolean isRed() {
+/**
+ * public boolean isRed()
+ * 
+ * returns true if node is red 
+ * 
+ * @return
+ */
+		public boolean isRed() { // returns true if is red. 
 			 if (this.color == Color.RED) {
 				 return true;
 			 }
 			 return false;
 		}
-
+		/**
+		 * returns the left son of the node.
+		 * 
+		 * @return
+		 */
 		public RBNode getLeft() {
 			return this.leftT;
 		}
-
+		/**
+		 * returns the right son of the node.
+		 * 
+		 * @return
+		 */
 		public RBNode getRight() {
 			return this.rightT;
 		}
-
+		/**
+		 * returns the value of the node.
+		 * 
+		 * @return
+		 */
 		public int getValue() {
 			return Integer.parseInt(this.info);
 		}
-
+		/**
+		 * returns the key of the node.
+		 * 
+		 * @return
+		 */
 		public String getKey() {
 			return this.key;
 		}
-
+		/**
+		 * public void changeColor()
+		 * 
+		 * resets the color of the node from red 
+		 * to black and vise versa.
+		 * 
+		 */
 		public void changeColor() {
 			if (this.color == Color.RED) {
 				this.color = Color.BLACK;
@@ -65,7 +93,13 @@ public class RBTree {
 				this.color = Color.RED;
 			}
 		}
-
+		/**
+		 * public void darken()
+		 * resets the color of the node from red to 
+		 *  black and from black to dark gray
+		 * (Similar to double black)
+		 * 
+		 */
 		public void darken() {
 			if (this.color == Color.RED) {
 				this.color = Color.BLACK;
@@ -73,7 +107,14 @@ public class RBTree {
 				this.color = Color.DARK_GRAY;
 			}
 		}
-
+		/**
+		 * public boolean barren()
+		 * 
+		 * returns true if node has no children.
+		 * returns false otherwise.
+		 * 
+		 * @return
+		 */
 		public boolean barren() {
 			if ( (this.rightT == null)&&(this.leftT == null) ) {
 				return true;
@@ -81,7 +122,13 @@ public class RBTree {
 				return false;
 			}
 		}
-
+		/**
+		 * public RBNode oneChild()
+		 * 
+		 * returns true if node has only one child
+		 * 
+		 * returns false otherwise
+		 */
 		public RBNode oneChild() {
 			if ( (this.rightT == null)&&(this.leftT != null) ) {
 				return this.leftT;
@@ -91,7 +138,14 @@ public class RBTree {
 				return null;
 			}
 		}
-
+		/**
+		 * public boolean twoChilds()
+		 * 
+		 * returns true if node has two children
+		 * returns false otherwise
+		 * 
+		 * @return
+		 */
 		public boolean twoChilds() {
 			if ( (this.rightT != null)&&(this.leftT != null) ) {
 				return true;
@@ -99,7 +153,13 @@ public class RBTree {
 				return false;
 			}
 		}
-
+		/**
+		 * returns true if node itself is a left 
+		 * son of an other node.
+		 * 
+		 * 
+		 * @return
+		 */
 		public boolean mILeftchild() {
 			if (this == this.parentT.leftT) {
 				return true;
@@ -119,6 +179,14 @@ public class RBTree {
 			this.rightT = node;
 		}*/
 	}
+	/**
+	 * public RBTree()
+	 * 
+	 * a builder of the tree
+	 * 
+	 * sets all the fields of tree tree to 
+	 * be empty at start
+	 */
 	public RBTree() {
 		this.root = null;
 		this.min = null;
@@ -127,11 +195,11 @@ public class RBTree {
 		this.array_status = false;
 		this.size = 0;
 	}
-/*
-##############################################################
-#####	Those function are from the .ppt presentation	######
-##############################################################
-*/
+	/**
+	 * 
+	 * @param parent
+	 * @param Child
+	 */
 	private static void leftChild(RBNode parent, RBNode Child) {
 		parent.leftT = Child;
 		Child.parentT = parent;
