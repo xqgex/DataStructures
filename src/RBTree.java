@@ -32,19 +32,21 @@ public class RBTree {
 			this.key = key;
 			this.color = color;
 		}
-/**
- * public boolean isRed()
- * 
- * returns true if node is red 
- * 
- * @return
- */
+
+		/**
+		 * public boolean isRed()
+		 * 
+		 * returns true if node is red 
+		 * 
+		 * @return
+		 */
 		public boolean isRed() { // returns true if is red. 
 			 if (this.color == Color.RED) {
 				 return true;
 			 }
 			 return false;
 		}
+
 		/**
 		 * returns the left son of the node.
 		 * 
@@ -53,6 +55,7 @@ public class RBTree {
 		public RBNode getLeft() {
 			return this.leftT;
 		}
+
 		/**
 		 * returns the right son of the node.
 		 * 
@@ -61,6 +64,7 @@ public class RBTree {
 		public RBNode getRight() {
 			return this.rightT;
 		}
+
 		/**
 		 * returns the value of the node.
 		 * 
@@ -69,6 +73,7 @@ public class RBTree {
 		public int getValue() {
 			return Integer.parseInt(this.info);
 		}
+
 		/**
 		 * returns the key of the node.
 		 * 
@@ -77,6 +82,7 @@ public class RBTree {
 		public String getKey() {
 			return this.key;
 		}
+
 		/**
 		 * public void changeColor()
 		 * 
@@ -91,6 +97,7 @@ public class RBTree {
 				this.color = Color.RED;
 			}
 		}
+
 		/**
 		 * public void darken()
 		 * resets the color of the node from red to 
@@ -105,6 +112,7 @@ public class RBTree {
 				this.color = Color.DARK_GRAY;
 			}
 		}
+
 		/**
 		 * public boolean barren()
 		 * 
@@ -120,6 +128,7 @@ public class RBTree {
 				return false;
 			}
 		}
+
 		/**
 		 * public RBNode oneChild()
 		 * 
@@ -136,6 +145,7 @@ public class RBTree {
 				return null;
 			}
 		}
+
 		/**
 		 * public boolean twoChilds()
 		 * 
@@ -151,6 +161,7 @@ public class RBTree {
 				return false;
 			}
 		}
+
 		/**
 		 * returns true if node itself is a left 
 		 * son of an other node.
@@ -165,6 +176,8 @@ public class RBTree {
 				return true;
 			}
 		}
+
+		// TODO DELETE ME \/
 		/*public void setParent(RBNode parentT) {
 			this.parentT = parentT;
 		}
@@ -177,6 +190,7 @@ public class RBTree {
 			this.rightT = node;
 		}*/
 	}
+
 	/**
 	 * public RBTree()
 	 * 
@@ -193,6 +207,7 @@ public class RBTree {
 		this.array_status = false;
 		this.size = 0;
 	}
+
 	/**
 	 * 
 	 * @param parent
@@ -567,7 +582,7 @@ public class RBTree {
 		for (int i=0;i<this.tree_array.length;i++) {
 			retArray[i] = this.tree_array[i].info;
 		}
-		return retArray;				
+		return retArray;
 	}
 
 	private RBNode[] updateArray(RBNode[] arr, RBNode root,int cnt) {
