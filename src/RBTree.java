@@ -748,7 +748,11 @@ public class RBTree {
 	* @return minimum node at the tree
 	*/
 	public String min() {
-		return (this.min).key; 
+		if (this.min != null){
+			return (this.min).key; 
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -760,7 +764,11 @@ public class RBTree {
 	* @return maximum node at the tree
 	*/
 	public String max() {
-		return (this.max).key; 
+		if (this.max != null){
+			return (this.max).key; 
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -775,11 +783,15 @@ public class RBTree {
 			this.tree_array = updateArray(arr, this.root, 0);
 			this.array_status = true;
 		}
-		int[] retArray = new int[this.tree_array.length];
-		for (int i=0;i<this.tree_array.length;i++) {
-			retArray[i] = Integer.parseInt(this.tree_array[i].key);
+		if(this.tree_array != null){
+			int[] retArray = new int[this.tree_array.length];
+			for (int i=0;i<this.tree_array.length;i++) {
+				retArray[i] = Integer.parseInt(this.tree_array[i].key);
+			}
+			return retArray;
+		} else {
+			return new int[0];
 		}
-		return retArray;
 	}
 
 	/**
@@ -795,17 +807,40 @@ public class RBTree {
 			this.tree_array = updateArray(arr, this.root, 0);
 			this.array_status = true;
 		}
-		String[] retArray = new String[this.tree_array.length];
-		for (int i=0;i<this.tree_array.length;i++) {
-			retArray[i] = this.tree_array[i].info;
-		}
-		return retArray;
+		if(this.tree_array != null){
+			String[] retArray = new String[this.tree_array.length];
+			for (int i=0;i<this.tree_array.length;i++) {
+				retArray[i] = this.tree_array[i].info;
+			}
+			return retArray;
+			} else {
+				return new String[0];
+			}
 	}
 
 	private RBNode[] updateArray(RBNode[] arr, RBNode root,int cnt) {
-		if(root.rightT == null && root.leftT == null) {
-			arr[cnt] = root; // info or key?
-			cnt++;
+		if(root == null) {
+			arr = null;
+		} else {
+			arr[cnt] = root;
+			if(root.rightT == null && root.leftT == null) {
+				arr[cnt] = root;
+			} else if(root.leftT == null) {
+				root = root.rightT;
+				arr = updateArray(arr,root,cnt);
+			} else if(root.rightT == null) {
+				root = root.leftT;
+				arr = updateArray(arr,root,cnt);
+			} else {
+				arr = updateArray(arr,root.leftT,cnt);
+				arr = updateArray(arr,root.rightT,cnt);
+			}
+			
+		cnt++;
+		}
+		return arr;	
+	}
+		/*if(root.rightT == null && root.leftT == null) {
 			return null; // is this a good stopping action?
 		} else if(root.rightT == null) {
 			arr[cnt] = root; // info or key?
@@ -824,7 +859,7 @@ public class RBTree {
 			updateArray(arr,root.rightT,cnt);
 		}
 		return arr;
-	}
+	}*/
 
 	/**
 	* public int size()

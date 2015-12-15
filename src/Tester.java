@@ -363,10 +363,11 @@ public class Tester {
 			System.exit(1);
 		}
 		TestRun test_runner = new TestRun(test_num);
+		test_runner.run();
 		Thread test_thread = new Thread(test_runner);
-		//test_thread.start();
+		test_thread.start();
 		try {
-			test_thread.join(10000);
+			test_thread.join(100000000);
 			if (test_thread.isAlive())
 				System.out.println("Timeout on Test " + test_num);
 		}
@@ -374,7 +375,7 @@ public class Tester {
 			System.out.println("Exception on Test " + test_num + " : " + e);
 		}
 		System.out.println("Result #" + test_num + ": " + test_runner.success);
-		System.exit(0);  /*
+		System.exit(0); /*
 		RBTree tree = new RBTree();
 		System.out.println(tree.insert(1, "f"));
 		System.out.println(tree.insert(5, "s"));
