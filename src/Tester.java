@@ -374,8 +374,8 @@ public class Tester {
 			System.out.println("Exception on Test " + test_num + " : " + e);
 		}
 		System.out.println("Result #" + test_num + ": " + test_runner.success);
-		System.exit(0);
-		/*RBTree tree = new RBTree();
+		System.exit(0);  /*
+		RBTree tree = new RBTree();
 		System.out.println(tree.insert(1, "f"));
 		System.out.println(tree.insert(5, "s"));
 		System.out.println(tree.insert(2, "h"));
@@ -389,6 +389,6 @@ public class Tester {
 		tree.print();
 		System.out.println(tree.delete(5));
 		System.out.println("Tree:");
-		tree.print();*/
+		tree.print(); */
 	}
 }

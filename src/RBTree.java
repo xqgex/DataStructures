@@ -545,11 +545,12 @@ public class RBTree {
 					}
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 4
 						leftRotate(node.parentT); //				//	      ?Y?
+						brtr.color = node.parentT.color;
 						node.color = Color.BLACK; //				//	     /   \
 						node.parentT.color = Color.BLACK; //		//	  |X|      W
-						node.parentT.parentT.rightT.darken(); //	//	 /   \   /   \
+						node.parentT.parentT.rightT.changeColor(); //	//	 /   \   /   \
 						node = node.parentT.parentT; //				//	?a? ?b? ?c? <d>
-						count += 3;
+						count += 4;
 					} else { // Case 2
 						node.color = Color.BLACK; //		//	      ?Y?
 						node.parentT.darken(); //			//	     /   \
@@ -577,14 +578,15 @@ public class RBTree {
 						brtr.changeColor(); //			//	     /   \
 						brtr.parentT.changeColor(); //	//	   X      |W|
 						count += 2; //					//	 /   \   /   \
-					} //								//	<a> ?b? ?c? ?d?
+					} //								//	?a? <b> ?c? ?d?
 					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 4
 						rightRotate(node.parentT); //				//	      ?Y?
+						brtr.color = node.parentT.color;
 						node.color = Color.BLACK; //				//	     /   \
 						node.parentT.color = Color.BLACK; //		//	   X      |W|
-						node.parentT.parentT.leftT.darken(); //		//	 /   \   /   \
-						node = node.parentT.parentT; //				//	?a? <b> ?c? ?d?
-						count += 3;
+						node.parentT.parentT.leftT.changeColor(); //		//	 /   \   /   \
+						node = node.parentT.parentT; //				//	<a> ?b? ?c? ?d?
+						count += 4;
 					} else { // Case 2
 						node.color = Color.BLACK; //		//	      ?Y?
 						node.parentT.darken(); //			//	     /   \
@@ -684,14 +686,20 @@ public class RBTree {
 					changes += fixDelete(child);
 				}
 				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
+				if (centenarian.parentT == null) {
+					this.root = child;
+				}
 			} else { // The centenarian have two children
 				RBNode sccr = findSccr(centenarian);
-				sccr.darken();
-				changes += fixDelete(sccr);
+				sccr.color = centenarian.color;
+				//changes += fixDelete(sccr);
 				if (centenarian != sccr.parentT) {
 					sccr.parentT.leftT = sccr.rightT;
 				}
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
+				if (centenarian.parentT == null) {
+					this.root = sccr;
+				}
 			}
 			upDateDel(centenarian);
 			return changes;
