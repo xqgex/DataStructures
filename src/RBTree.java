@@ -34,7 +34,7 @@ public class RBTree {
 	 * @param parent
 	 * @param Child
 	 */
-	private static void leftChild(RBNode parent, RBNode Child) {
+	private void leftChild(RBNode parent, RBNode Child) {
 		parent.leftT = Child;
 		if (Child != null) {
 			Child.parentT = parent;
@@ -48,7 +48,7 @@ public class RBTree {
 	 * @param parent
 	 * @param Child
 	 */
-	private static void rightChild(RBNode parent, RBNode Child) {
+	private void rightChild(RBNode parent, RBNode Child) {
 		parent.rightT = Child;
 		if (Child != null) {
 			Child.parentT = parent;
@@ -61,7 +61,7 @@ public class RBTree {
 	 * @param x
 	 * @param y
 	 */
-	private static void transplant(RBNode x, RBNode y) {
+	private void transplant(RBNode x, RBNode y) {
 		if(x.parentT.leftT == x) { // x is a left child
 			leftChild(x.parentT,y); // Update y as a left child instead of x
 		} else { // x is a right child
@@ -75,11 +75,12 @@ public class RBTree {
 	 * @param x
 	 * @param y
 	 */
-	private static void replace(RBNode x, RBNode y) {
+	private void replace(RBNode x, RBNode y) {
 		if (x.parentT != null) {
 			transplant(x,y);
 		} else { // x was the root
 			y.parentT = null;
+			this.root = y;
 		}
 		if (y != x.leftT) {
 			leftChild(y,x.leftT);
@@ -95,12 +96,13 @@ public class RBTree {
 	 * 
 	 * @param x
 	 */
-	private static void leftRotate(RBNode x) {
+	private void leftRotate(RBNode x) {
 		RBNode y = x.rightT;
 		if (x.parentT != null) {
 			transplant(x,y);
 		} else { // x was the root
 			y.parentT = null;
+			this.root = y;
 		}
 		if (y.leftT != null) {
 			rightChild(x,y.leftT);
@@ -116,12 +118,13 @@ public class RBTree {
 	 * 
 	 * @param x
 	 */
-	private static void rightRotate(RBNode y) {
+	private void rightRotate(RBNode y) {
 		RBNode x = y.leftT;
 		if (y.parentT != null) {
 			transplant(y,x);
 		} else {
 			x.parentT = null;
+			this.root = y;
 		}
 		if (x.rightT != null) {
 			leftChild(y,x.rightT);
@@ -176,6 +179,9 @@ public class RBTree {
 		 */
 		public RBNode getRight() {
 			return this.rightT;
+		}
+		public RBNode getParent() {
+			return this.parentT;
 		}
 		/**
 		 * returns the value of the node.
@@ -451,9 +457,6 @@ public class RBTree {
 	 */
 	public int fixInsert(RBNode node) {
 		int count = 0;
-		if (node.key == "5") {
-			count = 0;
-		}
 		while ( (node.parentT != null)&&(node.parentT.isRed()) ) {
 			//this.print();
 			//System.out.println("wwwwww");
@@ -468,19 +471,19 @@ public class RBTree {
 						//this.print();
 						//System.out.println("qqqqqq");
 					} // Case 3 //						//	   <X>  d
-					node.parentT.parentT.changeColor(); //	  /   \
-					//node.parentT.changeColor(); //		//	 <Z>  c
-					count += 1; //						//	/   \
-					node = node.parentT; //				//	a   b
-					rightRotate(node.parentT);
+					node.parentT.parentT.color = Color.RED; //	  /   \
+					node.parentT.color = Color.BLACK; //		//	 <Z>  c
+					count += 2; //						//	/   \
+					//node = node.parentT; //				//	a   b
+					rightRotate(node.parentT.parentT);
 					//this.print();
 					//System.out.println("pppppp");
 				} else { // Case 1						//	      Y
 					//this.print();
 					//System.out.println("oooooo");
-					node.parentT.parentT.changeColor(); //	    /   \
-					node.parentT.changeColor(); //		//	 <X>     <W>
-					uncle.changeColor(); //				//	/   \   /   \
+					node.parentT.parentT.color = Color.RED; //	    /   \
+					node.parentT.color = Color.BLACK; //		//	 <X>     <W>
+					uncle.color = Color.BLACK; //				//	/   \   /   \
 					count += 3; //						//	a  <Z>  d   e
 					node = node.parentT.parentT; //		//	  /   \
 				} //									//	  b   c
@@ -495,22 +498,19 @@ public class RBTree {
 						//this.print();
 						//System.out.println("ssssss");
 					} // Case 3 //						//	   a   <X>
-					node.parentT.parentT.changeColor(); //	      /   \
-					if (node.color == node.parentT.color) {
-						node.parentT.changeColor(); //		//	     b   <Z>
-						count += 1;
-					}
-					count += 1; //						//	        /   \
-					node = node.parentT; //				//	        c   d
-					leftRotate(node.parentT);
+					node.parentT.parentT.color = Color.RED; //	      /   \
+					node.parentT.color = Color.BLACK; //		//	     b   <Z>
+					count += 2; //						//	        /   \
+					//node = node.parentT; //				//	        c   d
+					leftRotate(node.parentT.parentT);
 					//this.print();
 					//System.out.println("tttttt");
 				} else { // Case 1						//	      Y
 					//this.print();
 					//System.out.println("uuuuuu");
-					node.parentT.parentT.changeColor(); //	    /   \
-					node.parentT.changeColor(); //		//	 <W>     <X>
-					uncle.changeColor(); //				//	/   \   /   \
+					node.parentT.parentT.color = Color.RED; //	    /   \
+					node.parentT.color = Color.BLACK; //		//	 <W>     <X>
+					uncle.color = Color.BLACK; //				//	/   \   /   \
 					count += 3; //						//	a   b   c  <Z>
 					node = node.parentT.parentT; //		//	          /   \
 					//this.print();
@@ -724,6 +724,8 @@ public class RBTree {
 				//changes += fixDelete(sccr);
 				if (centenarian != sccr.parentT) {
 					sccr.parentT.leftT = sccr.rightT;
+				} else if ( (sccr.rightT != null)&&(centenarian.leftT != null) ) {
+					sccr.rightT.color = centenarian.leftT.color;
 				}
 				//this.print();
 				//System.out.println("eeeeee");
@@ -938,6 +940,20 @@ public class RBTree {
 	    if (n.getLeft() != null) {
 	        printHelper(n.getLeft(), indent + INDENT_STEP);
 	    }
+	}
+	public void printlist() {
+		String l, p, r;
+		if (!this.array_status) {
+			RBNode[] arr = new RBNode[this.size]; // new array of nodes
+			this.tree_array = updateArray(arr, this.root, 0);
+			this.array_status = true;
+		}
+		for (RBNode node : this.tree_array) {
+			if (node.parentT != null) {p=node.parentT.key;} else {p="null";}
+			if (node.leftT != null) {l=node.leftT.key;} else {l="null";}
+			if (node.rightT != null) {r=node.rightT.key;} else {r="null";}
+			System.out.println("Node " + node.key + "\t parent is " + p + ",\t Left child is: " + l + ",\t Right child is: " + r);
+		}
 	}
 }
 

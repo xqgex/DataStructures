@@ -92,7 +92,8 @@ class TestRun implements Runnable {
 }
 
 public class Tester {
-	public static final int SIZE = 22;//2048 //9+13+14+15
+	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
+	public static final int SIZE = 21;//2048 //9+13+14+15 //StaMAX 183 ???
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -238,8 +239,8 @@ public class Tester {
 		for (int j = 0; j < keys.length; j++) {
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
-			rbTree.print();
-			System.out.println("111111111");
+			//rbTree.print();
+			//System.out.println("111111111");
 			if (!checkSearch(rbTree, myTree))
 				return false;
 		}
@@ -389,22 +390,21 @@ public class Tester {
 			}
 			System.out.println("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
 		}
-		System.exit(0); /*
-		RBTree tree = new RBTree();
-		System.out.println(tree.insert(1, "f"));
-		System.out.println(tree.insert(5, "s"));
-		System.out.println(tree.insert(2, "h"));
-		System.out.println(tree.insert(3, "j"));
-		System.out.println(tree.insert(6, "j"));
-		System.out.println(tree.insert(0, "j"));
-		System.out.println(tree.insert(10, "f"));
-		System.out.println(tree.insert(15, "s"));
-		System.out.println(tree.insert(12, "h"));
+		System.exit(0);
+		/*RBTree tree = new RBTree();
+		int[] keys1 = new int[] {1, 2, 0, 3, 4, 10, 9, 7, 8, 6, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+		//int[] keys0 = new int[] {1, 5, 2, 3, 6, 0, 10, 15, 12};
+		for (int key : keys) {
+			tree.insert(key, String.valueOf(key));
+		}
 		System.out.println("Tree:");
 		tree.print();
-		System.out.println(tree.delete(5));
-		System.out.println(tree.delete(0));
+		tree.printlist();
+		System.out.println(tree.delete(15));
 		System.out.println("Tree:");
-		tree.print(); */
+		tree.print();
+		System.out.println(tree.delete(19));
+		System.out.println("Tree:");
+		tree.print();*/
 	}
 }
