@@ -173,7 +173,7 @@ public class RBTree {
 			if (this == this.parentT.leftT) {
 				return true;
 			} else {
-				return true;
+				return false;
 			}
 		}
 	}
@@ -205,7 +205,9 @@ public class RBTree {
 	 */
 	private static void leftChild(RBNode parent, RBNode Child) {
 		parent.leftT = Child;
-		Child.parentT = parent;
+		if (Child != null) {
+			Child.parentT = parent;
+		}
 	}
 
 	/**
@@ -219,7 +221,9 @@ public class RBTree {
 
 	private static void rightChild(RBNode parent, RBNode Child) {
 		parent.rightT = Child;
-		Child.parentT = parent;
+		if (Child != null) {
+			Child.parentT = parent;
+		}
 	}
 
 	/**
@@ -245,9 +249,17 @@ public class RBTree {
 	 * @param y
 	 */
 	private static void replace(RBNode x, RBNode y) {
-		transplant(x,y);
-		leftChild(y,x.leftT);
-		rightChild(y,x.rightT);
+		if (x.parentT != null) {
+			transplant(x,y);
+		} else { // x was the root
+			y.parentT = null;
+		}
+		if (y != x.leftT) {
+			leftChild(y,x.leftT);
+		}
+		if (y != x.rightT) {
+			rightChild(y,x.rightT);
+		}
 	}
 
 	/**
@@ -344,12 +356,12 @@ public class RBTree {
 	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
 		if (Integer.parseInt(root.key) == k) {
 			ansNode = root;
-		} else if (Integer.parseInt(root.key) < k && root.leftT != null) {
-			root = root.leftT;
-			binSearch(root, k,ansNode);
-		} else if (Integer.parseInt(root.key) > k && root.rightT != null) {
+		} else if ( (Integer.parseInt(root.key) < k)&&(root.rightT != null) ) {
 			root = root.rightT;
-			binSearch(root, k,ansNode);
+			ansNode = binSearch(root, k,ansNode);
+		} else if ( (Integer.parseInt(root.key) > k)&&(root.leftT != null) ) {
+			root = root.leftT;
+			ansNode = binSearch(root, k,ansNode);
 		} else {
 			ansNode = null;
 		}
@@ -527,9 +539,10 @@ public class RBTree {
 					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 3
 						rightRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
-						brtr.rightT.changeColor(); //	//	  |X|      W
-						count += 2; //					//	 /   \   /   \
-					} //								//	?a? ?b? <c> ?d?
+						brtr.parentT.changeColor(); //	//	  |X|      W
+						brtr = brtr.parentT; //			//	 /   \   /   \
+						count += 2; //					//	?a? ?b? <c> ?d?
+					}
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 4
 						leftRotate(node.parentT); //				//	      ?Y?
 						node.color = Color.BLACK; //				//	     /   \
@@ -562,7 +575,7 @@ public class RBTree {
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 3
 						leftRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
-						brtr.leftT.changeColor(); //	//	   X      |W|
+						brtr.parentT.changeColor(); //	//	   X      |W|
 						count += 2; //					//	 /   \   /   \
 					} //								//	<a> ?b? ?c? ?d?
 					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 4
@@ -606,14 +619,14 @@ public class RBTree {
 		if (node.rightT != null) { // if node has a right sub-tree. 
 			node = node.getRight();
 			while(node.leftT != null) {// has a left Subtree.
-				node = node.getRight();
+				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
 			}
 			return node;
 		} else { //if node does not have a right sub-tree.
 			if (node.parentT.getLeft() == node) {
 				return node.parentT;	
 			} else {
-				while(node != (node.parentT).getLeft()) {// node is a left child.
+				while (node != node.parentT.getLeft()) {// node is a left child.
 					node = node.parentT;
 				}
 			}
@@ -640,25 +653,23 @@ public class RBTree {
 		/*
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
-		 */ //	 					RBNode ansNode = null => null ???????????????????
-		
+		 */
 		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
 		if(centenarian == null){ // No such key
 			return -1;
 		} else {
 			this.array_status = false;
 			this.size--;
-			upDateDel(centenarian);
 			int changes = 0;
 			RBNode child;
 			if (centenarian.barren()) { // The centenarian don't have child's
 				if (!centenarian.isRed()) { // i am leaf and I'm black
 					centenarian.darken();
-					changes = fixDelete(centenarian);
+					changes += fixDelete(centenarian);
 				} // We can safely delete the centenarian
 				if (centenarian.parentT != null) {
-					centenarian.darken();
-					changes = fixDelete(centenarian);
+					//centenarian.darken();
+					//changes += fixDelete(centenarian);
 					if (centenarian.mILeftchild()) {
 						centenarian.parentT.leftT = null;
 					} else {
@@ -670,18 +681,19 @@ public class RBTree {
 			} else if ((child = centenarian.oneChild()) != null) { // The centenarian have only one child
 				if (!centenarian.isRed()) { // We can safely bridge the centenarian
 					child.darken();
-					changes = fixDelete(child);
+					changes += fixDelete(child);
 				}
 				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
 			} else { // The centenarian have two children
 				RBNode sccr = findSccr(centenarian);
 				sccr.darken();
-				changes = fixDelete(child);
+				changes += fixDelete(sccr);
 				if (centenarian != sccr.parentT) {
 					sccr.parentT.leftT = sccr.rightT;
 				}
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
 			}
+			upDateDel(centenarian);
 			return changes;
 		}
 	}
@@ -701,10 +713,10 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMax(RBNode root2) {
-		if(root2.rightT != null){
-			getMax(root2.getRight());
+		if (root2.rightT != null) {
+			return getMax(root2.getRight());
 		}
-			return root2;
+		return root2;
 	}
 
 	/**
@@ -713,10 +725,10 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMin(RBNode root2) {
-		if(root2.leftT != null){
-			getMin(root2.getLeft());
+		if (root2.leftT != null) {
+			return getMin(root2.getLeft());
 		}
-			return root2;
+		return root2;
 	}
 
 	/**

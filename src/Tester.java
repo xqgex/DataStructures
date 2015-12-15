@@ -386,6 +386,9 @@ public class Tester {
 		System.out.println(tree.insert(15, "s"));
 		System.out.println(tree.insert(12, "h"));
 		System.out.println("Tree:");
+		tree.print();
+		System.out.println(tree.delete(5));
+		System.out.println("Tree:");
 		tree.print();*/
 	}
 }
