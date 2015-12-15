@@ -1,7 +1,6 @@
 ﻿import java.awt.Color;
 
 public class RBTree {
-	// What happen when there is a duplicated key?
 	private RBNode root; // all of these must be implemented while making, and changed while changing the tree.
 	private RBNode min;
 	private RBNode max;
@@ -9,175 +8,8 @@ public class RBTree {
 	private boolean array_status; // is the array above up to date.
 	protected int size; // size of the tree
 	private static final int INDENT_STEP = 4;
-
 	public static void main(String[] args) {
 	}
-	
-	/**
-	* public class RBNode
-	*/
-	public static class RBNode { // is it alive?
-		private RBNode leftT;
-		private RBNode parentT;
-		private RBNode rightT;
-		protected String info;
-		private String key;
-		private Color color;
-
-		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, Color color){
-			this.leftT = leftT;
-			this.parentT = parentT;
-			this.rightT = rightT;
-			this.info = info;
-			this.key = key;
-			this.color = color;
-		}
-
-		/**
-		 * public boolean isRed()
-		 * 
-		 * returns true if node is red 
-		 * 
-		 * @return
-		 */
-		public boolean isRed() { // returns true if is red. 
-			 if (this.color == Color.RED) {
-				 return true;
-			 }
-			 return false;
-		}
-
-		/**
-		 * returns the left son of the node.
-		 * 
-		 * @return
-		 */
-		public RBNode getLeft() {
-			return this.leftT;
-		}
-
-		/**
-		 * returns the right son of the node.
-		 * 
-		 * @return
-		 */
-		public RBNode getRight() {
-			return this.rightT;
-		}
-
-		/**
-		 * returns the value of the node.
-		 * 
-		 * @return
-		 */
-		public int getValue() {
-			return Integer.parseInt(this.info);
-		}
-
-		/**
-		 * returns the key of the node.
-		 * 
-		 * @return
-		 */
-		public String getKey() {
-			return this.key;
-		}
-
-		/**
-		 * public void changeColor()
-		 * 
-		 * resets the color of the node from red 
-		 * to black and vise versa.
-		 * 
-		 */
-		public void changeColor() {
-			if (this.color == Color.RED) {
-				this.color = Color.BLACK;
-			} else if (this.color == Color.BLACK) {
-				this.color = Color.RED;
-			}
-		}
-
-		/**
-		 * public void darken()
-		 * resets the color of the node from red to 
-		 *  black and from black to dark gray
-		 * (Similar to double black)
-		 * 
-		 */
-		public void darken() {
-			if (this.color == Color.RED) {
-				this.color = Color.BLACK;
-			} else if (this.color == Color.BLACK) {
-				this.color = Color.DARK_GRAY;
-			}
-		}
-
-		/**
-		 * public boolean barren()
-		 * 
-		 * returns true if node has no children.
-		 * returns false otherwise.
-		 * 
-		 * @return
-		 */
-		public boolean barren() {
-			if ( (this.rightT == null)&&(this.leftT == null) ) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		/**
-		 * public RBNode oneChild()
-		 * 
-		 * returns true if node has only one child
-		 * 
-		 * returns false otherwise
-		 */
-		public RBNode oneChild() {
-			if ( (this.rightT == null)&&(this.leftT != null) ) {
-				return this.leftT;
-			} else if ( (this.rightT != null)&&(this.leftT == null) ) {
-				return this.rightT;
-			} else {
-				return null;
-			}
-		}
-
-		/**
-		 * public boolean twoChilds()
-		 * 
-		 * returns true if node has two children
-		 * returns false otherwise
-		 * 
-		 * @return
-		 */
-		public boolean twoChilds() {
-			if ( (this.rightT != null)&&(this.leftT != null) ) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		/**
-		 * returns true if node itself is a left 
-		 * son of an other node.
-		 * 
-		 * 
-		 * @return
-		 */
-		public boolean mILeftchild() {
-			if (this == this.parentT.leftT) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-
 	/**
 	 * public RBTree()
 	 * 
@@ -194,7 +26,6 @@ public class RBTree {
 		this.array_status = false;
 		this.size = 0;
 	}
-
 	/**
 	 * private static void leftChild
 	 * 
@@ -209,7 +40,6 @@ public class RBTree {
 			Child.parentT = parent;
 		}
 	}
-
 	/**
 	 * private static void leftChild
 	 * 
@@ -218,14 +48,12 @@ public class RBTree {
 	 * @param parent
 	 * @param Child
 	 */
-
 	private static void rightChild(RBNode parent, RBNode Child) {
 		parent.rightT = Child;
 		if (Child != null) {
 			Child.parentT = parent;
 		}
 	}
-
 	/**
 	 * private static void transplant(RBNode x, RBNode y)
 	 * 
@@ -240,7 +68,6 @@ public class RBTree {
 			rightChild(x.parentT,y); // Update y as a right child instead of x
 		}
 	}
-
 	/**
 	 * private static void replace(RBNode x, RBNode y)
 	 * 
@@ -261,7 +88,6 @@ public class RBTree {
 			rightChild(y,x.rightT);
 		}
 	}
-
 	/**
 	 * Performs a left rotation on node x,
 	 * according to the left rotation specifics 
@@ -283,7 +109,6 @@ public class RBTree {
 		}
 		leftChild(y,x);
 	}
-
 	/**
 	 * Performs a right rotation on node x,
 	 * according to the right rotation specifics 
@@ -305,8 +130,159 @@ public class RBTree {
 		}
 		rightChild(x,y);
 	}
-
- 	/**
+	/**
+	* public class RBNode
+	*/
+	public static class RBNode { // is it alive?
+		private RBNode leftT;
+		private RBNode parentT;
+		private RBNode rightT;
+		protected String info;
+		private String key;
+		private Color color;
+		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, Color color){
+			this.leftT = leftT;
+			this.parentT = parentT;
+			this.rightT = rightT;
+			this.info = info;
+			this.key = key;
+			this.color = color;
+		}
+		/**
+		 * public boolean isRed()
+		 * 
+		 * returns true if node is red 
+		 * 
+		 * @return
+		 */
+		public boolean isRed() { // returns true if is red. 
+			 if (this.color == Color.RED) {
+				 return true;
+			 }
+			 return false;
+		}
+		/**
+		 * returns the left son of the node.
+		 * 
+		 * @return
+		 */
+		public RBNode getLeft() {
+			return this.leftT;
+		}
+		/**
+		 * returns the right son of the node.
+		 * 
+		 * @return
+		 */
+		public RBNode getRight() {
+			return this.rightT;
+		}
+		/**
+		 * returns the value of the node.
+		 * 
+		 * @return
+		 */
+		public int getValue() {
+			return Integer.parseInt(this.info);
+		}
+		/**
+		 * returns the key of the node.
+		 * 
+		 * @return
+		 */
+		public String getKey() {
+			return this.key;
+		}
+		/**
+		 * public void changeColor()
+		 * 
+		 * resets the color of the node from red 
+		 * to black and vise versa.
+		 * 
+		 */
+		public void changeColor() {
+			if (this.color == Color.RED) {
+				this.color = Color.BLACK;
+			} else if (this.color == Color.BLACK) {
+				this.color = Color.RED;
+			}
+		}
+		/**
+		 * public void darken()
+		 * resets the color of the node from red to 
+		 *  black and from black to dark gray
+		 * (Similar to double black)
+		 * 
+		 */
+		public void darken() {
+			if (this.color == Color.RED) {
+				this.color = Color.BLACK;
+			} else if (this.color == Color.BLACK) {
+				this.color = Color.DARK_GRAY;
+			}
+		}
+		/**
+		 * public boolean barren()
+		 * 
+		 * returns true if node has no children.
+		 * returns false otherwise.
+		 * 
+		 * @return
+		 */
+		public boolean barren() {
+			if ( (this.rightT == null)&&(this.leftT == null) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		/**
+		 * public RBNode oneChild()
+		 * 
+		 * returns true if node has only one child
+		 * 
+		 * returns false otherwise
+		 */
+		public RBNode oneChild() {
+			if ( (this.rightT == null)&&(this.leftT != null) ) {
+				return this.leftT;
+			} else if ( (this.rightT != null)&&(this.leftT == null) ) {
+				return this.rightT;
+			} else {
+				return null;
+			}
+		}
+		/**
+		 * public boolean twoChilds()
+		 * 
+		 * returns true if node has two children
+		 * returns false otherwise
+		 * 
+		 * @return
+		 */
+		public boolean twoChilds() {
+			if ( (this.rightT != null)&&(this.leftT != null) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		/**
+		 * returns true if node itself is a left 
+		 * son of an other node.
+		 * 
+		 * 
+		 * @return
+		 */
+		public boolean mILeftchild() {
+			if (this == this.parentT.leftT) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	/**
 	 * public RBNode getRoot()
 	 *
 	 * returns the root of the red black tree
@@ -314,7 +290,6 @@ public class RBTree {
 	public RBNode getRoot() {
 			return this.root;
 	}
-
 	/**
 	 * public boolean empty()
 	 *
@@ -326,7 +301,6 @@ public class RBTree {
 		}
 		return false;
 	}
-
  	/**
 	 * public String search(int k)
 	 *
@@ -354,7 +328,9 @@ public class RBTree {
 	 * @return
 	 */
 	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
-		if (Integer.parseInt(root.key) == k) {
+		if (root == null) {
+			ansNode = null;
+		} else if (Integer.parseInt(root.key) == k) {
 			ansNode = root;
 		} else if ( (Integer.parseInt(root.key) < k)&&(root.rightT != null) ) {
 			root = root.rightT;
@@ -411,14 +387,21 @@ public class RBTree {
 				} else {
 					rightChild(father, newBaby);
 				}
+				//this.print();
+				//System.out.println("llllll");
 				if (father.isRed()) {
 					changes = fixInsert(newBaby);
+					//this.print();
+					//System.out.println("mmmmmm");
 				}
 				upDate(newBaby);
+				/*if (this.size > 6) {
+					this.print();
+					System.out.println("dddddd");
+				}*/
 				return changes;
 			}
 		}
-	// Updates the min and max of the tree; 
 	}
 
 	/**
@@ -468,20 +451,33 @@ public class RBTree {
 	 */
 	public int fixInsert(RBNode node) {
 		int count = 0;
+		if (node.key == "5") {
+			count = 0;
+		}
 		while ( (node.parentT != null)&&(node.parentT.isRed()) ) {
+			//this.print();
+			//System.out.println("wwwwww");
 			if (node.parentT == node.parentT.parentT.leftT) {
 				RBNode uncle = node.parentT.parentT.rightT;
 				if ( (uncle == null)||(!uncle.isRed()) ) {
 					if (node == node.parentT.rightT) { // Case 2
+						//this.print();
+						//System.out.println("nnnnnn");
 						node = node.parentT; //			//	      Y
 						leftRotate(node); //			//	    /   \
+						//this.print();
+						//System.out.println("qqqqqq");
 					} // Case 3 //						//	   <X>  d
 					node.parentT.parentT.changeColor(); //	  /   \
-					node.parentT.changeColor(); //		//	 <Z>  c
-					count += 2; //						//	/   \
+					//node.parentT.changeColor(); //		//	 <Z>  c
+					count += 1; //						//	/   \
 					node = node.parentT; //				//	a   b
 					rightRotate(node.parentT);
+					//this.print();
+					//System.out.println("pppppp");
 				} else { // Case 1						//	      Y
+					//this.print();
+					//System.out.println("oooooo");
 					node.parentT.parentT.changeColor(); //	    /   \
 					node.parentT.changeColor(); //		//	 <X>     <W>
 					uncle.changeColor(); //				//	/   \   /   \
@@ -492,25 +488,38 @@ public class RBTree {
 				RBNode uncle = node.parentT.parentT.leftT;
 				if ( (uncle == null)||(!uncle.isRed()) ) {
 					if (node == node.parentT.leftT) { // Case 2
+						//this.print();
+						//System.out.println("rrrrrr");
 						node = node.parentT; //			//	      Y
 						rightRotate(node); //			//	    /   \
+						//this.print();
+						//System.out.println("ssssss");
 					} // Case 3 //						//	   a   <X>
 					node.parentT.parentT.changeColor(); //	      /   \
-					node.parentT.changeColor(); //		//	     b   <Z>
-					count += 2; //						//	        /   \
+					if (node.color == node.parentT.color) {
+						node.parentT.changeColor(); //		//	     b   <Z>
+						count += 1;
+					}
+					count += 1; //						//	        /   \
 					node = node.parentT; //				//	        c   d
 					leftRotate(node.parentT);
+					//this.print();
+					//System.out.println("tttttt");
 				} else { // Case 1						//	      Y
-					//node.parentT.parentT.changeColor(); //	    /   \
+					//this.print();
+					//System.out.println("uuuuuu");
+					node.parentT.parentT.changeColor(); //	    /   \
 					node.parentT.changeColor(); //		//	 <W>     <X>
 					uncle.changeColor(); //				//	/   \   /   \
-					count += 2; //						//	a   b   c  <Z>
+					count += 3; //						//	a   b   c  <Z>
 					node = node.parentT.parentT; //		//	          /   \
+					//this.print();
+					//System.out.println("xxxxxx");
 				} //									//	          d   e
 			}
 		}
 		if (node.parentT != null) {
-			node.changeColor();
+			//node.changeColor();
 		} else { // node is the root
 			this.root = node;
 			this.root.color = Color.BLACK;
@@ -528,6 +537,8 @@ public class RBTree {
 	public int fixDelete(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != null)&&(node.color == Color.DARK_GRAY) ) {
+			//this.print();
+			//System.out.println("dddddd");
 			if (node == node.parentT.leftT) {
 				RBNode brtr = node.parentT.rightT;
 				if (brtr == null) { // Node don't have brothers (Only child)
@@ -544,12 +555,12 @@ public class RBTree {
 						count += 2; //					//	?a? ?b? <c> ?d?
 					}
 					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 4
-						leftRotate(node.parentT); //				//	      ?Y?
-						brtr.color = node.parentT.color;
-						node.color = Color.BLACK; //				//	     /   \
-						node.parentT.color = Color.BLACK; //		//	  |X|      W
+						leftRotate(node.parentT);
+						brtr.color = node.parentT.color; //				//	      ?Y?
+						node.color = Color.BLACK; //					//	     /   \
+						node.parentT.color = Color.BLACK; //			//	  |X|      W
 						node.parentT.parentT.rightT.changeColor(); //	//	 /   \   /   \
-						node = node.parentT.parentT; //				//	?a? ?b? ?c? <d>
+						node = node.parentT.parentT; //					//	?a? ?b? ?c? <d>
 						count += 4;
 					} else { // Case 2
 						node.color = Color.BLACK; //		//	      ?Y?
@@ -557,13 +568,17 @@ public class RBTree {
 						brtr.changeColor(); //				//	  |X|      W 
 						count += 3; //						//	 /   \   /   \
 						node = node.parentT; //				//	?a? ?b?  c   d
+						//this.print();
+						//System.out.println("ffffff");
 					}
 				} else { // Case 1
-					leftRotate(node.parentT); //		//	      Y
-					node.parentT.parentT.changeColor(); //	    /   \
-					node.parentT.changeColor(); //		//	 |X|     <W>
-					count += 2; //						//	/   \   /   \
-					//node = node.parentT.parentT; //	//	a   b   c   d
+					if (node.parentT.parentT == null) {
+						this.root = node.parentT.rightT;
+					} //									//	      Y
+					leftRotate(node.parentT); //			//      /   \
+					node.parentT.parentT.changeColor(); //	//   |X|     <W>
+					node.parentT.changeColor(); //			//	/   \   /   \
+					count += 2; //							//	a   b   c   d
 				}
 			} else {
 				RBNode brtr = node.parentT.leftT;
@@ -580,14 +595,16 @@ public class RBTree {
 						count += 2; //					//	 /   \   /   \
 					} //								//	?a? <b> ?c? ?d?
 					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 4
-						rightRotate(node.parentT); //				//	      ?Y?
-						brtr.color = node.parentT.color;
-						node.color = Color.BLACK; //				//	     /   \
-						node.parentT.color = Color.BLACK; //		//	   X      |W|
-						node.parentT.parentT.leftT.changeColor(); //		//	 /   \   /   \
-						node = node.parentT.parentT; //				//	<a> ?b? ?c? ?d?
+						rightRotate(node.parentT);
+						brtr.color = node.parentT.color; //				//	      ?Y?
+						node.color = Color.BLACK; //					//	     /   \
+						node.parentT.color = Color.BLACK; //			//	   X      |W|
+						node.parentT.parentT.leftT.changeColor(); //	//	 /   \   /   \
+						node = node.parentT.parentT; //					//	<a> ?b? ?c? ?d?
 						count += 4;
 					} else { // Case 2
+						//this.print();
+						//System.out.println("gggggg");
 						node.color = Color.BLACK; //		//	      ?Y?
 						node.parentT.darken(); //			//	     /   \
 						brtr.changeColor(); //				//	   X      |W|
@@ -595,11 +612,13 @@ public class RBTree {
 						node = node.parentT; //				//	 a   b  ?c? ?d?
 					}
 				} else { // Case 1
-					rightRotate(node.parentT); //		//	      Y
-					node.parentT.parentT.changeColor(); //	    /   \
-					node.parentT.changeColor(); //		//	 <X>     |W|
-					count += 2; //						//	/   \   /   \
-					//node = node.parentT.parentT; //	//	a   b   c   d
+					if (node.parentT.parentT == null) {
+						this.root = node.parentT.leftT;
+					} //									//	      Y
+					rightRotate(node.parentT); //			//	    /   \
+					node.parentT.parentT.changeColor(); //	//	 <X>     |W|
+					node.parentT.changeColor(); //			//	/   \   /   \
+					count += 2; //							//	a   b   c   d
 				}
 			}
 		}
@@ -609,7 +628,6 @@ public class RBTree {
 		}
 		return count;
 	}
-
 	/**
 	 * finds the successor of the node,
 	 * and return it
@@ -635,7 +653,6 @@ public class RBTree {
 			return node;
 		}
 	}
-
 	/**
 	* public int delete(int k)
 	*
@@ -656,6 +673,8 @@ public class RBTree {
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
 		 */
+		//this.print();
+		//System.out.println("kkkkkk");
 		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
 		if(centenarian == null){ // No such key
 			return -1;
@@ -667,11 +686,15 @@ public class RBTree {
 			if (centenarian.barren()) { // The centenarian don't have child's
 				if (!centenarian.isRed()) { // i am leaf and I'm black
 					centenarian.darken();
+					//this.print();
+					//System.out.println("hhhhhh");
 					changes += fixDelete(centenarian);
 				} // We can safely delete the centenarian
 				if (centenarian.parentT != null) {
 					//centenarian.darken();
 					//changes += fixDelete(centenarian);
+					//this.print();
+					//System.out.println("jjjjjj");
 					if (centenarian.mILeftchild()) {
 						centenarian.parentT.leftT = null;
 					} else {
@@ -683,7 +706,11 @@ public class RBTree {
 			} else if ((child = centenarian.oneChild()) != null) { // The centenarian have only one child
 				if (!centenarian.isRed()) { // We can safely bridge the centenarian
 					child.darken();
+					//this.print();
+					//System.out.println("aaaaaa");
 					changes += fixDelete(child);
+					//this.print();
+					//System.out.println("bbbbbb");
 				}
 				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
 				if (centenarian.parentT == null) {
@@ -692,10 +719,14 @@ public class RBTree {
 			} else { // The centenarian have two children
 				RBNode sccr = findSccr(centenarian);
 				sccr.color = centenarian.color;
+				//this.print();
+				//System.out.println("cccccc");
 				//changes += fixDelete(sccr);
 				if (centenarian != sccr.parentT) {
 					sccr.parentT.leftT = sccr.rightT;
 				}
+				//this.print();
+				//System.out.println("eeeeee");
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
 				if (centenarian.parentT == null) {
 					this.root = sccr;
@@ -705,7 +736,6 @@ public class RBTree {
 			return changes;
 		}
 	}
-
 	private void upDateDel(RBNode centenarian) {
 		if (Integer.parseInt(centenarian.key) >= Integer.parseInt(this.max.key)) {
 			this.max = getMax(this.root);
@@ -721,24 +751,22 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMax(RBNode root2) {
-		if (root2.rightT != null) {
+		if ( (root2 != null)&&(root2.rightT != null) ) {
 			return getMax(root2.getRight());
 		}
 		return root2;
 	}
-
 	/**
 	 * recursive min finder.
 	 * @param root2
 	 * @return
 	 */
 	private RBNode getMin(RBNode root2) {
-		if (root2.leftT != null) {
+		if ( (root2 != null)&&(root2.leftT != null) ) {
 			return getMin(root2.getLeft());
 		}
 		return root2;
 	}
-
 	/**
 	* public String min()
 	*
@@ -754,7 +782,6 @@ public class RBTree {
 			return null;
 		}
 	}
-
 	/**
 	* public String max()
 	*
@@ -770,7 +797,6 @@ public class RBTree {
 			return null;
 		}
 	}
-
 	/**
 	* public int[] keysToArray()
 	*
@@ -793,7 +819,6 @@ public class RBTree {
 			return new int[0];
 		}
 	}
-
 	/**
 	* public String[] valuesToArray()
 	*
@@ -813,34 +838,40 @@ public class RBTree {
 				retArray[i] = this.tree_array[i].info;
 			}
 			return retArray;
-			} else {
-				return new String[0];
-			}
+		} else {
+			return new String[0];
+		}
 	}
-
 	private RBNode[] updateArray(RBNode[] arr, RBNode root,int cnt) {
 		if(root == null) {
 			arr = null;
 		} else {
-			arr[cnt] = root;
-			if(root.rightT == null && root.leftT == null) {
-				arr[cnt] = root;
-			} else if(root.leftT == null) {
-				root = root.rightT;
-				arr = updateArray(arr,root,cnt);
-			} else if(root.rightT == null) {
-				root = root.leftT;
-				arr = updateArray(arr,root,cnt);
-			} else {
+			//arr[cnt] = root;
+			if(root.leftT != null) {
 				arr = updateArray(arr,root.leftT,cnt);
+				cnt = findLast(arr,cnt+1);
+			}
+			arr[cnt] = root;
+			cnt = findLast(arr,cnt+1);
+			if(root.rightT != null) {
 				arr = updateArray(arr,root.rightT,cnt);
 			}
-			
-		cnt++;
 		}
 		return arr;	
 	}
-		/*if(root.rightT == null && root.leftT == null) {
+	/**
+	 * The function find the last element in array that isn't null
+	 * @return
+	 */
+	private int findLast(RBNode[] arr, int lastCount) {
+		for (int i=lastCount; i<arr.length; i++) {
+			if (arr[i] == null) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	/*if(root.rightT == null && root.leftT == null) {
 			return null; // is this a good stopping action?
 		} else if(root.rightT == null) {
 			arr[cnt] = root; // info or key?
@@ -860,7 +891,6 @@ public class RBTree {
 		}
 		return arr;
 	}*/
-
 	/**
 	* public int size()
 	*
@@ -869,10 +899,9 @@ public class RBTree {
 	* precondition: none
 	* postcondition: none
 	*/
-	public int size() {
+ 	public int size() {
 		return this.size; // to be replaced by student code
 	}
-
 	/**
 	* public void print()
 	*
@@ -881,7 +910,6 @@ public class RBTree {
 	public void print() {
 		RBTree.printHelper(this.root, 0);
 	}
-
 	/**
 	* private static void printHelper(RBTree.RBNode n, int indent)
 	*
@@ -902,6 +930,8 @@ public class RBTree {
 	        System.out.print(" ");
 	    if (n.isRed()) {
 	    	System.out.println("<" + n.getKey() + ">");
+	    } else if (n.color == Color.DARK_GRAY) {
+	    	System.out.println("|" + n.getKey() + "|");
 	    } else {
 	    	System.out.println(n.getKey());
 	    }

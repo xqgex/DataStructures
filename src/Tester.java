@@ -92,7 +92,7 @@ class TestRun implements Runnable {
 }
 
 public class Tester {
-	public static final int SIZE = 2048;
+	public static final int SIZE = 22;//2048 //9+13+14+15
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -176,6 +176,8 @@ public class Tester {
 	public static void insert(RBTree rbTree, MyTree myTree, int[] keys) {
 		for (int j = 0; j < keys.length; j++) {
 			rbTree.insert(keys[j],(""+keys[j]));
+			//rbTree.print();
+			//System.out.println("111111111");
 			myTree.insert(keys[j]);
 		}
 	}
@@ -236,6 +238,8 @@ public class Tester {
 		for (int j = 0; j < keys.length; j++) {
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
+			rbTree.print();
+			System.out.println("111111111");
 			if (!checkSearch(rbTree, myTree))
 				return false;
 		}
@@ -303,7 +307,10 @@ public class Tester {
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
+			//rbTree.print();
 			rbTree.delete(keys[j]);
+			//rbTree.print();
+			//System.out.println("ffdf");
 			myTree.delete(keys[j]);
 			if (!checkKeysArray(rbTree, myTree))
 				return false;
@@ -357,24 +364,31 @@ public class Tester {
 	}
 	
 	public static void main(String[] args) {
-		int test_num = parseArgs(args);
+		/*int test_num = parseArgs(args);
 		if (test_num == -1) {
 			System.out.println("USAGE: java Tester <test_num>");
 			System.exit(1);
+		}*/
+		long startTime;
+		for (int test_num=0; test_num<10; test_num++) {
+			startTime = System.currentTimeMillis();
+			if (test_num==1) {
+				continue;
+			}
+			TestRun test_runner = new TestRun(test_num);
+			test_runner.run();
+			Thread test_thread = new Thread(test_runner);
+			test_thread.start();
+			try {
+				test_thread.join(100000000);
+				if (test_thread.isAlive())
+					System.out.println("Timeout on Test " + test_num);
+			}
+			catch (Exception e) {
+				System.out.println("Exception on Test " + test_num + " : " + e);
+			}
+			System.out.println("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
 		}
-		TestRun test_runner = new TestRun(test_num);
-		test_runner.run();
-		Thread test_thread = new Thread(test_runner);
-		test_thread.start();
-		try {
-			test_thread.join(100000000);
-			if (test_thread.isAlive())
-				System.out.println("Timeout on Test " + test_num);
-		}
-		catch (Exception e) {
-			System.out.println("Exception on Test " + test_num + " : " + e);
-		}
-		System.out.println("Result #" + test_num + ": " + test_runner.success);
 		System.exit(0); /*
 		RBTree tree = new RBTree();
 		System.out.println(tree.insert(1, "f"));
@@ -389,6 +403,7 @@ public class Tester {
 		System.out.println("Tree:");
 		tree.print();
 		System.out.println(tree.delete(5));
+		System.out.println(tree.delete(0));
 		System.out.println("Tree:");
 		tree.print(); */
 	}
