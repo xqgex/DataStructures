@@ -210,8 +210,8 @@ public class Tester {
 		MyTree myTree = new MyTree();
 		if (!checkAll(rbTree, myTree))
 			return false;
-		rbTree.insert(1, "1");
-		rbTree.delete(1);
+		//rbTree.insert(1, "1");
+		//rbTree.delete(1);
 		return checkAll(rbTree, myTree);
 	}
 
@@ -364,7 +364,7 @@ public class Tester {
 		}
 		TestRun test_runner = new TestRun(test_num);
 		Thread test_thread = new Thread(test_runner);
-		test_thread.start();
+		//test_thread.start();
 		try {
 			test_thread.join(10000);
 			if (test_thread.isAlive())
