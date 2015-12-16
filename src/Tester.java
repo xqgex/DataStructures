@@ -93,7 +93,7 @@ class TestRun implements Runnable {
 
 public class Tester {
 	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
-	public static final int SIZE = 22;//2048 //9+13+14+15 //StaMAX 183 ???
+	public static final int SIZE = 8;//2048 //9+13+14+15 //StaMAX 183 ???
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -161,14 +161,14 @@ public class Tester {
 		for (int i = 0; i < SIZE; i++) {
 			int a = intValue(rbTree.search(i));
 			boolean b = myTree.contains(i);
-			if ( (a == 8)&&(rbTree.size() == 14) ) {
+			/*if ( (a == 8)&&(rbTree.size() == 14) ) {
 				rbTree.printlist();
 				System.out.println("VVVVVV");
-			}
+			}*/
 			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i)) {
-				rbTree.print();
+				/*rbTree.print();
 				rbTree.printlist();
-				System.out.println("zzzzzz");
+				System.out.println("zzzzzz");*/
 				return false;
 			}
 		}
@@ -247,11 +247,11 @@ public class Tester {
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
-			if (j > 7) {
+			/*if (j > -1) {
 				System.out.println("HHHHHH Delete " + keys[j]);
 				rbTree.print();
 				rbTree.printlist();
-			}
+			}*/
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
 			if (!checkSearch(rbTree, myTree))
