@@ -93,7 +93,7 @@ class TestRun implements Runnable {
 
 public class Tester {
 	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
-	public static final int SIZE = 21;//2048 //9+13+14+15 //StaMAX 183 ???
+	public static final int SIZE = 22;//2048 //9+13+14+15 //StaMAX 183 ???
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -159,8 +159,18 @@ public class Tester {
 
 	public static boolean checkSearch(RBTree rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
-			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i))
+			int a = intValue(rbTree.search(i));
+			boolean b = myTree.contains(i);
+			if ( (a == 8)&&(rbTree.size() == 14) ) {
+				rbTree.printlist();
+				System.out.println("VVVVVV");
+			}
+			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i)) {
+				rbTree.print();
+				rbTree.printlist();
+				System.out.println("zzzzzz");
 				return false;
+			}
 		}
 		return true;
 	}
@@ -237,10 +247,13 @@ public class Tester {
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
+			if (j > 7) {
+				System.out.println("HHHHHH Delete " + keys[j]);
+				rbTree.print();
+				rbTree.printlist();
+			}
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
-			//rbTree.print();
-			//System.out.println("111111111");
 			if (!checkSearch(rbTree, myTree))
 				return false;
 		}
@@ -370,6 +383,7 @@ public class Tester {
 			System.out.println("USAGE: java Tester <test_num>");
 			System.exit(1);
 		}*/
+		
 		long startTime;
 		for (int test_num=0; test_num<10; test_num++) {
 			startTime = System.currentTimeMillis();
@@ -391,20 +405,24 @@ public class Tester {
 			System.out.println("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
 		}
 		System.exit(0);
-		/*RBTree tree = new RBTree();
-		int[] keys1 = new int[] {1, 2, 0, 3, 4, 10, 9, 7, 8, 6, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
-		//int[] keys0 = new int[] {1, 5, 2, 3, 6, 0, 10, 15, 12};
-		for (int key : keys) {
-			tree.insert(key, String.valueOf(key));
+		/*
+		RBTree tree = new RBTree();
+		int[][] keysSet = new int[2][];
+		keysSet[0] = new int[] {1, 2, 0, 3, 4, 10, 9, 7, 8, 6, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+		keysSet[1] = new int[] {1, 5, 2, 3, 6, 0, 10, 15, 12};
+		for (int[] set : keysSet) {
+			for (int key : set) {
+				tree.insert(key, String.valueOf(key));
+			}
+			System.out.println("Tree:");
+			tree.print();
+			tree.printlist();
+			for (int key : set) {
+				tree.delete(key);
+				System.out.println("Tree: Delete " + String.valueOf(key));
+				tree.print();
+			}
 		}
-		System.out.println("Tree:");
-		tree.print();
-		tree.printlist();
-		System.out.println(tree.delete(15));
-		System.out.println("Tree:");
-		tree.print();
-		System.out.println(tree.delete(19));
-		System.out.println("Tree:");
-		tree.print();*/
+		*/
 	}
 }

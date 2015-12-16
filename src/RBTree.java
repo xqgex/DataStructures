@@ -314,14 +314,14 @@ public class RBTree {
 	 * otherwise, returns null
 	 */
 	public String search(int k) { // envelop function
-		String ans = null;
 		RBNode root = this.root;
 		RBNode ansNode = null;
 		RBNode node = binSearch(root,k,ansNode);
 		if(node != null){
-			ans = node.info;
+			return node.info;
+		} else {
+			return null;
 		}
-		return ans;
 	}
 	/**
 	 * performs a binary search on the tree
@@ -723,6 +723,7 @@ public class RBTree {
 				//System.out.println("cccccc");
 				//changes += fixDelete(sccr);
 				if (centenarian != sccr.parentT) {
+					sccr.rightT.color = sccr.color;
 					sccr.parentT.leftT = sccr.rightT;
 				} else if ( (sccr.rightT != null)&&(centenarian.leftT != null) ) {
 					sccr.rightT.color = centenarian.leftT.color;
