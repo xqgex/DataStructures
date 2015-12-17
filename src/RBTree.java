@@ -231,12 +231,21 @@ public class RBTree {
 		 * to black and vise versa.
 		 * 
 		 */
-		public void changeColor() {
-			if (this.color == Color.RED) {
-				this.color = Color.BLACK;
-			} else if (this.color == Color.BLACK) {
-				this.color = Color.RED;
+		public int changeColor(Color color) {
+			if (this.color == color) {
+				return 0;
+			} else  {
+				this.color = color;
+				return 1;
 			}
+		}
+		public int changeColor(RBNode node) {
+			if (this.color == node.color) {
+				return 0;
+			} else  {
+				this.color = node.color;
+				return 1;
+			}	
 		}
 		/**
 		 * public void darken()
@@ -245,12 +254,15 @@ public class RBTree {
 		 * (Similar to double black)
 		 * 
 		 */
-		public void darken() {
+		public int changeColor() {
 			if (this.color == Color.RED) {
 				this.color = Color.BLACK;
 			} else if (this.color == Color.BLACK) {
 				this.color = Color.DARK_GRAY;
+			} else {
+				System.err.println("tried to draken the drakest. witch is impossible. unless?? mohaa mohaa haa haa ");
 			}
+			return 1;
 		}
 		/**
 		 * public boolean barren()
