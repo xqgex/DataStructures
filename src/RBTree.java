@@ -632,8 +632,7 @@ public class RBTree {
 				if (brtr == RBTree.blank) { // Node don't have brothers (Only child)
 					node.color = Color.BLACK;
 					node = node.parentT;
-					node.darken();
-					count += 2;
+					count += node.changeColor();
 				} else if (!brtr.isRed()) { // I have a black brother 8-)
 					if ( (brtr.leftT != RBTree.blank)&&(brtr.leftT.isRed()) ) { // Case 3
 						rightRotate(brtr); //			//	      ?Y?
@@ -652,7 +651,8 @@ public class RBTree {
 						count += 4;
 					} else { // Case 2
 						node.color = Color.BLACK; //		//	      ?Y?
-						node.parentT.darken(); //			//	     /   \
+						count += node.parentT.changeColor();
+															//			//	     /   \
 						brtr.changeColor(); //				//	  |X|      W 
 						count += 3; //						//	 /   \   /   \
 						node = node.parentT; //				//	?a? ?b?  c   d
@@ -673,7 +673,7 @@ public class RBTree {
 				if (brtr == RBTree.blank) { // Node don't have brothers (Only child)
 					node.color = Color.BLACK;
 					node = node.parentT;
-					node.darken();
+					count += node.changeColor();
 					count += 2;
 				} else if (!brtr.isRed()) { // I have a black brother 8-)
 					if ( (brtr.rightT != RBTree.blank)&&(brtr.rightT.isRed()) ) { // Case 3
@@ -694,7 +694,7 @@ public class RBTree {
 						//this.print();
 						//System.out.println("gggggg");
 						node.color = Color.BLACK; //		//	      ?Y?
-						node.parentT.darken(); //			//	     /   \
+						count += node.parentT.changeColor(); //			//	     /   \
 						brtr.changeColor(); //				//	   X      |W|
 						count += 3; //						//	 /   \   /   \
 						node = node.parentT; //				//	 a   b  ?c? ?d?
@@ -753,6 +753,7 @@ public class RBTree {
 	* @return color changes count
 	*/
 	public int delete(int k) {
+		int count = 0;
 		// Delete: Case 1: x’s sibling w is red
 		// Delete: Case 2: x’s sibling w is black, and both children of w are black
 		// Delete: Case 3: x’s sibling w is black, w’s left child is red, and w’s right child is black
@@ -773,7 +774,7 @@ public class RBTree {
 			RBNode child;
 			if (centenarian.barren()) { // The centenarian don't have child's
 				if (!centenarian.isRed()) { // i am leaf and I'm black
-					centenarian.darken();
+					count += centenarian.changeColor();
 					this.print();
 					System.out.println("hhhhhh");
 					changes += fixDelete(centenarian);
@@ -793,7 +794,7 @@ public class RBTree {
 				}
 			} else if ((child = centenarian.oneChild()) != RBTree.blank) { // The centenarian have only one child
 				if (!centenarian.isRed()) { // We can safely bridge the centenarian
-					child.darken();
+					count += child.changeColor();
 					this.print();
 					System.out.println("aaaaaa");
 					changes += fixDelete(child);
