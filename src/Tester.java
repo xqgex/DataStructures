@@ -247,15 +247,19 @@ public class Tester {
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
-			/*if (j > -1) {
+			if (j > -1) {
 				System.out.println("HHHHHH Delete " + keys[j]);
 				rbTree.print();
 				rbTree.printlist();
-			}*/
+			}
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
-			if (!checkSearch(rbTree, myTree))
+			if (!checkSearch(rbTree, myTree)) {
+				System.out.println("JJJJJJ");
+				rbTree.print();
+				rbTree.printlist();
 				return false;
+			}
 		}
 		return true;
 	}
@@ -385,6 +389,7 @@ public class Tester {
 		}*/
 		
 		long startTime;
+		String res = "";
 		for (int test_num=0; test_num<10; test_num++) {
 			startTime = System.currentTimeMillis();
 			if (test_num==1) {
@@ -402,8 +407,9 @@ public class Tester {
 			catch (Exception e) {
 				System.out.println("Exception on Test " + test_num + " : " + e);
 			}
-			System.out.println("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+			res+=("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.\r\n");
 		}
+		System.out.println(res);
 		System.exit(0);
 		/*
 		RBTree tree = new RBTree();
