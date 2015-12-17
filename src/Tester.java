@@ -96,7 +96,7 @@ class TestRun implements Runnable {
 
 public class Tester {
 	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
-	public static final int SIZE = 88;//2048 //9+13+14+15 //StaMAX 183 ???
+	public static final int SIZE = 24;//2048 //9+13+14+15 //StaMAX 183 ???
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -443,7 +443,7 @@ public class Tester {
 	}
 	
 	
-		  public static void shuffleArra (int[] ar) {
+	public static void shuffleArra (int[] ar) {
 		    Random rnd = ThreadLocalRandom.current();
 		    for (int i = ar.length - 1; i > 0; i--) {
 		      int index = rnd.nextInt(i + 1);
@@ -453,7 +453,7 @@ public class Tester {
 		      ar[i] = a;
 		    }
 		  }
-		public static void testRun(int numberOf) {
+	public static void testRun(int numberOf) {
 			int[] list = new int[200000];
 			for (int i = 1; i < list.length; i++) {
 				list[i] = i;
