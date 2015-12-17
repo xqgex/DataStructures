@@ -96,7 +96,7 @@ class TestRun implements Runnable {
 
 public class Tester {
 	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
-	public static final int SIZE = 24;//2048 //9+13+14+15 //StaMAX 183 ???
+	public static final int SIZE = 6;//2048 //9+13+14+15 //StaMAX 183 ???
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];

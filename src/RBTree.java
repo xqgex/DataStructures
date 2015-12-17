@@ -830,7 +830,43 @@ public class RBTree {
 	* @param k
 	* @return color changes count
 	*/
+
 	public int delete(int k) {
+		RBNode centenarian = binSearch(this.root, k, RBTree.blank); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
+		RBNode sccr = centenarian;
+		RBNode brdr = null;
+		int count = 0;
+		Color backupColor = centenarian.color;
+		count += centenarian.changeColor("darken");
+		if (centenarian.leftT == RBTree.blank) {
+			brdr = centenarian.rightT;
+			transplant(centenarian, centenarian.rightT);
+		} else if (centenarian.rightT == RBTree.blank) {
+			brdr = centenarian.leftT;
+			transplant(centenarian, centenarian.leftT);
+		} else {
+			sccr = findSccr(centenarian);
+			backupColor = sccr.color;
+			brdr = sccr.rightT;
+			if (sccr.parentT == centenarian) {
+				brdr.parentT = sccr;
+			} else {
+				transplant(sccr, sccr.rightT);
+				sccr.rightT = centenarian.rightT;
+				sccr.rightT.parentT = sccr;
+			}
+			transplant(centenarian, sccr);
+			sccr.leftT = centenarian.leftT;
+			sccr.leftT.parentT = sccr;
+			sccr.color = centenarian.color;
+		}
+		if (backupColor == Color.BLACK) {
+			fixDelete(centenarian);
+		}
+		return count;
+	}
+	
+	public int deleteBackUp(int k) {
 		int count = 0;
 		// Delete: Case 1: x’s sibling w is red
 		// Delete: Case 2: x’s sibling w is black, and both children of w are black
