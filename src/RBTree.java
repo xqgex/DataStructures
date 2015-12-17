@@ -82,7 +82,7 @@ public class RBTree {
 		if (y.parentT == x) {
 			father = true;
 		} else {
-			origFather = x.parentT;
+			origFather = y.parentT;
 		}
 		this.print();
 		System.out.println("cccccc");
@@ -92,15 +92,7 @@ public class RBTree {
 			y.parentT = RBTree.blank;
 			this.root = y;
 		}
-		this.print();
-		System.out.println("pppppp");
-		if (!father) { // Make x father forget he ever was his son
-			if (origFather.leftT == x) {
-				origFather.leftT = RBTree.blank;
-			} else if (origFather.rightT == x) {
-				origFather.rightT = RBTree.blank;
-			}
-		}
+
 		this.print();
 		System.out.println("bbbbbb");
 		if (y != x.leftT) {
@@ -110,6 +102,13 @@ public class RBTree {
 		System.out.println("kkkkkk");
 		if ( (y != x.rightT)&&(x.rightT != RBTree.blank) ) {
 			rightChild(y,x.rightT);
+		}
+		if (!father) { // Make x father forget he ever was a son
+			if (origFather.leftT == y) {
+				origFather.leftT = RBTree.blank;
+			} else if (origFather.rightT == y) {
+				origFather.rightT = RBTree.blank;
+			}
 		}
 		this.print();
 		System.out.println("aaaaaa");
