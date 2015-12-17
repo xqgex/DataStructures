@@ -78,11 +78,9 @@ public class RBTree {
 	 */
 	private void replace(RBNode x, RBNode y) {
 		boolean father = false;
-		RBNode origFather = null;
+		RBNode origFather = y.parentT;;
 		if (y.parentT == x) {
 			father = true;
-		} else {
-			origFather = y.parentT;
 		}
 		this.print();
 		System.out.println("cccccc");
@@ -95,7 +93,7 @@ public class RBTree {
 
 		this.print();
 		System.out.println("bbbbbb");
-		if (y != x.leftT) {
+		if ( (y != x.leftT)&&(x.leftT != RBTree.blank) ) {
 			leftChild(y,x.leftT);
 		}
 		this.print();
@@ -103,13 +101,13 @@ public class RBTree {
 		if ( (y != x.rightT)&&(x.rightT != RBTree.blank) ) {
 			rightChild(y,x.rightT);
 		}
-		if (!father) { // Make x father forget he ever was a son
+		//if (!father) { // Make x father forget he ever was a son
 			if (origFather.leftT == y) {
 				origFather.leftT = RBTree.blank;
 			} else if (origFather.rightT == y) {
 				origFather.rightT = RBTree.blank;
 			}
-		}
+		//}
 		this.print();
 		System.out.println("aaaaaa");
 	}
@@ -589,8 +587,8 @@ public class RBTree {
 				if ( (brtr.leftT.color == Color.BLACK)&&(brtr.rightT.color == Color.BLACK) ) {
 					brtr.color = Color.RED; // Case 2
 					node = node.parentT;
-				} else if (brtr.rightT.color == Color.BLACK) {
-					if ( (brtr.leftT != RBTree.blank)&&(brtr.leftT.isRed()) ) {
+				} else {
+					if (brtr.rightT.color == Color.BLACK) {
 						brtr.leftT.color = Color.BLACK; // Case 3
 						brtr.color = Color.RED;
 						rightRotate(brtr);
@@ -613,8 +611,8 @@ public class RBTree {
 				if ( (brtr.rightT.color == Color.BLACK)&&(brtr.leftT.color == Color.BLACK) ) {
 					brtr.color = Color.RED; // Case 2
 					node = node.parentT;
-				} else if (brtr.leftT.color == Color.BLACK) {
-					if ( (brtr.rightT != RBTree.blank)&&(brtr.rightT.isRed()) ) {
+				} else {
+					if (brtr.leftT.color == Color.BLACK) {
 						brtr.rightT.color = Color.BLACK; // Case 3
 						brtr.color = Color.RED;
 						rightRotate(brtr);
@@ -631,6 +629,71 @@ public class RBTree {
 		node.color = Color.BLACK;
 		return count;
 	}
+	public int fixDelete(RBNode node) {
+		int count = 0;
+		RBNode brtr;
+		while ( (node!=this.root)&&(node.color == Color.DARK_GRAY) ) {
+			if (node == node.parentT.leftT) {
+				brtr = node.parentT.rightT; // Case 1
+				if (brtr.color == Color.RED) {
+					brtr.color = Color.BLACK;
+					node.parentT.color = Color.RED;
+					leftRotate(node.parentT);
+					brtr = node.parentT.rightT;
+				}
+				if (brtr != RBTree.blank) {
+					if ( (brtr.leftT.color == Color.BLACK)&&(brtr.rightT.color == Color.BLACK) ) {
+						brtr.color = Color.RED; // Case 2
+						node = node.parentT;
+					} else {
+						if (brtr.rightT.color == Color.BLACK) {
+							brtr.leftT.color = Color.BLACK; // Case 3
+							brtr.color = Color.RED;
+							rightRotate(brtr);
+							brtr = node.parentT.rightT;
+							brtr.color = node.parentT.color;
+						}
+						node.parentT.color = Color.BLACK; // Case 4
+						brtr.rightT.color = Color.BLACK;
+						leftRotate(node.parentT);
+						node = this.root;
+					}
+				} else {
+					node = node.parentT;
+				}
+			} else {
+				brtr = node.parentT.leftT; // Case 1
+				if (brtr.color == Color.RED) {
+					brtr.color = Color.BLACK;
+					node.parentT.color = Color.RED;
+					leftRotate(node.parentT);
+					brtr = node.parentT.leftT;
+				}
+				if (brtr != RBTree.blank) {
+					if ( (brtr.rightT.color == Color.BLACK)&&(brtr.leftT.color == Color.BLACK) ) {
+						brtr.color = Color.RED; // Case 2
+						node = node.parentT;
+					} else {
+						if (brtr.leftT.color == Color.BLACK) {
+							brtr.rightT.color = Color.BLACK; // Case 3
+							brtr.color = Color.RED;
+							rightRotate(brtr);
+							brtr = node.parentT.leftT;
+							brtr.color = node.parentT.color;
+						}
+						node.parentT.color = Color.BLACK; // Case 4
+						brtr.leftT.color = Color.BLACK;
+						leftRotate(node.parentT);
+						node = this.root;
+					}
+				} else {
+					node = node.parentT;
+				}
+			}
+		}
+		node.color = Color.BLACK;
+		return count;
+	}
 	/**
 	 * Rebalance the tree after the deletion 
 	 * of the node.
@@ -638,7 +701,7 @@ public class RBTree {
 	 * @param node
 	 * @return color changes count
 	 */
-	public int fixDelete(RBNode node) { // TODO Delete me
+	public int fixDeleteBackUp(RBNode node) { // TODO Delete me
 		int count = 0;
 		while ( (node.parentT != RBTree.blank)&&(node.color == Color.DARK_GRAY) ) {
 			//this.print();
@@ -796,8 +859,8 @@ public class RBTree {
 				if (centenarian.parentT != RBTree.blank) {
 					//centenarian.darken();
 					//changes += fixDelete(centenarian);
-					//this.print();
-					//System.out.println("jjjjjj");
+					this.print();
+					System.out.println("jjjjjj");
 					if (centenarian.mILeftchild()) {
 						centenarian.parentT.leftT = RBTree.blank;
 					} else {
