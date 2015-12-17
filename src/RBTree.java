@@ -8,6 +8,7 @@ public class RBTree {
 	private boolean array_status; // is the array above up to date.
 	protected int size; // size of the tree
 	private static final int INDENT_STEP = 4;
+	private static final RBNode blank = new RBNode(null,null,null,"-1","-1",Color.BLACK);
 	public static void main(String[] args) {
 	}
 	/**
@@ -19,9 +20,9 @@ public class RBTree {
 	 * be empty at start
 	 */
 	public RBTree() {
-		this.root = null;
-		this.min = null;
-		this.max = null;
+		this.root = RBTree.blank;
+		this.min = RBTree.blank;
+		this.max = RBTree.blank;
 		this.tree_array = null;
 		this.array_status = false;
 		this.size = 0;
@@ -34,10 +35,10 @@ public class RBTree {
 	 * @param parent
 	 * @param Child
 	 */
-	private void leftChild(RBNode parent, RBNode Child) {
-		parent.leftT = Child;
-		if (Child != null) {
-			Child.parentT = parent;
+	private void leftChild(RBNode parent, RBNode child) {
+		parent.leftT = child;
+		if (child != RBTree.blank) {
+			child.parentT = parent;
 		}
 	}
 	/**
@@ -48,10 +49,10 @@ public class RBTree {
 	 * @param parent
 	 * @param Child
 	 */
-	private void rightChild(RBNode parent, RBNode Child) {
-		parent.rightT = Child;
-		if (Child != null) {
-			Child.parentT = parent;
+	private void rightChild(RBNode parent, RBNode child) {
+		parent.rightT = child;
+		if (child != RBTree.blank) {
+			child.parentT = parent;
 		}
 	}
 	/**
@@ -76,31 +77,42 @@ public class RBTree {
 	 * @param y
 	 */
 	private void replace(RBNode x, RBNode y) {
-		//this.print();
-		//System.out.println("cccccc");
-		if (x.parentT != null) {
+		boolean father = false;
+		RBNode origFather = null;
+		if (y.parentT == x) {
+			father = true;
+		} else {
+			origFather = x.parentT;
+		}
+		this.print();
+		System.out.println("cccccc");
+		if (x.parentT != RBTree.blank) {
 			transplant(x,y);
 		} else { // x was the root
-			y.parentT = null;
+			y.parentT = RBTree.blank;
 			this.root = y;
 		}
-		if (y.parentT.leftT == y) {
-			y.parentT.leftT = null;
-		} else {
-			y.parentT.rightT = null;
+		this.print();
+		System.out.println("pppppp");
+		if (!father) { // Make x father forget he ever was his son
+			if (origFather.leftT == x) {
+				origFather.leftT = RBTree.blank;
+			} else if (origFather.rightT == x) {
+				origFather.rightT = RBTree.blank;
+			}
 		}
-		//this.print();
-		//System.out.println("bbbbbb");
+		this.print();
+		System.out.println("bbbbbb");
 		if (y != x.leftT) {
 			leftChild(y,x.leftT);
 		}
-		//this.print();
-		//System.out.println("kkkkkk");
-		if ( (y != x.rightT)&&(x.rightT != null) ) {
+		this.print();
+		System.out.println("kkkkkk");
+		if ( (y != x.rightT)&&(x.rightT != RBTree.blank) ) {
 			rightChild(y,x.rightT);
 		}
-		//this.print();
-		//System.out.println("aaaaaa");
+		this.print();
+		System.out.println("aaaaaa");
 	}
 	/**
 	 * Performs a left rotation on node x,
@@ -111,16 +123,16 @@ public class RBTree {
 	 */
 	private void leftRotate(RBNode x) {
 		RBNode y = x.rightT;
-		if (x.parentT != null) {
+		if (x.parentT != RBTree.blank) {
 			transplant(x,y);
 		} else { // x was the root
-			y.parentT = null;
+			y.parentT = RBTree.blank;
 			this.root = y;
 		}
-		if (y.leftT != null) {
+		if (y.leftT != RBTree.blank) {
 			rightChild(x,y.leftT);
 		} else {
-			x.rightT = null;
+			x.rightT = RBTree.blank;
 		}
 		leftChild(y,x);
 	}
@@ -133,16 +145,16 @@ public class RBTree {
 	 */
 	private void rightRotate(RBNode y) {
 		RBNode x = y.leftT;
-		if (y.parentT != null) {
+		if (y.parentT != RBTree.blank) {
 			transplant(y,x);
 		} else {
-			x.parentT = null;
+			x.parentT = RBTree.blank;
 			this.root = y;
 		}
-		if (x.rightT != null) {
+		if (x.rightT != RBTree.blank) {
 			leftChild(y,x.rightT);
 		} else {
-			y.leftT = null;
+			y.leftT = RBTree.blank;
 		}
 		rightChild(x,y);
 	}
@@ -249,7 +261,7 @@ public class RBTree {
 		 * @return
 		 */
 		public boolean barren() {
-			if ( (this.rightT == null)&&(this.leftT == null) ) {
+			if ( (this.rightT == RBTree.blank)&&(this.leftT == RBTree.blank) ) {
 				return true;
 			} else {
 				return false;
@@ -263,12 +275,12 @@ public class RBTree {
 		 * returns false otherwise
 		 */
 		public RBNode oneChild() {
-			if ( (this.rightT == null)&&(this.leftT != null) ) {
+			if ( (this.rightT == RBTree.blank)&&(this.leftT != RBTree.blank) ) {
 				return this.leftT;
-			} else if ( (this.rightT != null)&&(this.leftT == null) ) {
+			} else if ( (this.rightT != RBTree.blank)&&(this.leftT == RBTree.blank) ) {
 				return this.rightT;
 			} else {
-				return null;
+				return RBTree.blank;
 			}
 		}
 		/**
@@ -280,7 +292,7 @@ public class RBTree {
 		 * @return
 		 */
 		public boolean twoChilds() {
-			if ( (this.rightT != null)&&(this.leftT != null) ) {
+			if ( (this.rightT != RBTree.blank)&&(this.leftT != RBTree.blank) ) {
 				return true;
 			} else {
 				return false;
@@ -315,7 +327,7 @@ public class RBTree {
 	 * returns true if and only if the tree is empty
 	 */
 	public boolean empty() {
-		if (this.root == null) {
+		if (this.root == RBTree.blank) {
 			return true;
 		}
 		return false;
@@ -328,9 +340,9 @@ public class RBTree {
 	 */
 	public String search(int k) { // envelop function
 		RBNode root = this.root;
-		RBNode ansNode = null;
+		RBNode ansNode = RBTree.blank;
 		RBNode node = binSearch(root,k,ansNode);
-		if(node != null){
+		if(node != RBTree.blank){
 			return node.info;
 		} else {
 			return null;
@@ -347,22 +359,21 @@ public class RBTree {
 	 * @return
 	 */
 	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
-		if (root == null) {
-			ansNode = null;
+		if (root == RBTree.blank) {
+			ansNode = RBTree.blank;
 		} else if (Integer.parseInt(root.key) == k) {
 			ansNode = root;
-		} else if ( (Integer.parseInt(root.key) < k)&&(root.rightT != null) ) {
+		} else if ( (Integer.parseInt(root.key) < k)&&(root.rightT != RBTree.blank) ) {
 			root = root.rightT;
 			ansNode = binSearch(root, k,ansNode);
-		} else if ( (Integer.parseInt(root.key) > k)&&(root.leftT != null) ) {
+		} else if ( (Integer.parseInt(root.key) > k)&&(root.leftT != RBTree.blank) ) {
 			root = root.leftT;
 			ansNode = binSearch(root, k,ansNode);
 		} else {
-			ansNode = null;
+			ansNode = RBTree.blank;
 		}
 		return ansNode;
 	}
-
 	/**
 	 * public int insert(int k, String v)
 	 *
@@ -386,13 +397,13 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
-		if ( (this.root != null)&&(search(k) != null) ) {
+		if ( (this.root != RBTree.blank)&&(search(k) != null) ) {
 			return -1;
 		} else {
 			this.array_status = false;
 			this.size++;
-			RBNode newBaby = new RBNode(null, null, null, v, String.valueOf(k), Color.RED);
-			if (this.root == null) { //First node at the tree
+			RBNode newBaby = new RBNode(RBTree.blank, RBTree.blank, RBTree.blank, v, String.valueOf(k), Color.RED);
+			if (this.root == RBTree.blank) { //First node at the tree
 				this.root = newBaby;
 				this.max = newBaby;
 				this.min = newBaby;
@@ -422,7 +433,6 @@ public class RBTree {
 			}
 		}
 	}
-
 	/**
 	 *  compares the new node that was inserted to 
 	 *  the min ans max of the tree, ans resets it 
@@ -438,7 +448,6 @@ public class RBTree {
 			this.min = newBaby;
 		}
 	}
-
 	/**
 	 * performs a binary search for the correct spot to insert 
 	 * the node.
@@ -450,17 +459,16 @@ public class RBTree {
 	public RBNode whereToInsert(RBNode root ,RBNode node) {
 		RBNode ans = root;
 		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
-			if(root.leftT != null) {
+			if(root.leftT != RBTree.blank) {
 				ans = whereToInsert(root.leftT, node);
 			}
 		} else if(Integer.parseInt(node.key) > Integer.parseInt(root.key)) {
-			if(root.rightT != null) {
+			if(root.rightT != RBTree.blank) {
 				ans = whereToInsert(root.rightT, node);
 			}
 		}
 		return ans;
 	}
-
 	/**
 	 * Rebalance the tree after the insertion 
 	 * of the node.
@@ -470,12 +478,12 @@ public class RBTree {
 	 */
 	public int fixInsert(RBNode node) {
 		int count = 0;
-		while ( (node.parentT != null)&&(node.parentT.isRed()) ) {
+		while ( (node.parentT != RBTree.blank)&&(node.parentT.isRed()) ) {
 			//this.print();
 			//System.out.println("wwwwww");
 			if (node.parentT == node.parentT.parentT.leftT) {
 				RBNode uncle = node.parentT.parentT.rightT;
-				if ( (uncle == null)||(!uncle.isRed()) ) {
+				if ( (uncle == RBTree.blank)||(!uncle.isRed()) ) {
 					if (node == node.parentT.rightT) { // Case 2
 						//this.print();
 						//System.out.println("nnnnnn");
@@ -502,7 +510,7 @@ public class RBTree {
 				} //									//	  b   c
 			} else {
 				RBNode uncle = node.parentT.parentT.leftT;
-				if ( (uncle == null)||(!uncle.isRed()) ) {
+				if ( (uncle == RBTree.blank)||(!uncle.isRed()) ) {
 					if (node == node.parentT.leftT) { // Case 2
 						//this.print();
 						//System.out.println("rrrrrr");
@@ -531,7 +539,7 @@ public class RBTree {
 				} //									//	          d   e
 			}
 		}
-		if (node.parentT != null) {
+		if (node.parentT != RBTree.blank) {
 			//node.changeColor();
 		} else { // node is the root
 			this.root = node;
@@ -555,7 +563,7 @@ public class RBTree {
 					brtr.color = Color.RED; // Case 2
 					node = node.parentT;
 				} else if (brtr.rightT.color == Color.BLACK) {
-					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) {
+					if ( (brtr.leftT != RBTree.blank)&&(brtr.leftT.isRed()) ) {
 						brtr.leftT.color = Color.BLACK; // Case 3
 						brtr.color = Color.RED;
 						rightRotate(brtr);
@@ -579,7 +587,7 @@ public class RBTree {
 					brtr.color = Color.RED; // Case 2
 					node = node.parentT;
 				} else if (brtr.leftT.color == Color.BLACK) {
-					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) {
+					if ( (brtr.rightT != RBTree.blank)&&(brtr.rightT.isRed()) ) {
 						brtr.rightT.color = Color.BLACK; // Case 3
 						brtr.color = Color.RED;
 						rightRotate(brtr);
@@ -605,25 +613,25 @@ public class RBTree {
 	 */
 	public int fixDelete(RBNode node) { // TODO Delete me
 		int count = 0;
-		while ( (node.parentT != null)&&(node.color == Color.DARK_GRAY) ) {
+		while ( (node.parentT != RBTree.blank)&&(node.color == Color.DARK_GRAY) ) {
 			//this.print();
 			//System.out.println("dddddd");
 			if (node == node.parentT.leftT) {
 				RBNode brtr = node.parentT.rightT;
-				if (brtr == null) { // Node don't have brothers (Only child)
+				if (brtr == RBTree.blank) { // Node don't have brothers (Only child)
 					node.color = Color.BLACK;
 					node = node.parentT;
 					node.darken();
 					count += 2;
 				} else if (!brtr.isRed()) { // I have a black brother 8-)
-					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 3
+					if ( (brtr.leftT != RBTree.blank)&&(brtr.leftT.isRed()) ) { // Case 3
 						rightRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
 						brtr.parentT.changeColor(); //	//	  |X|      W
 						brtr = brtr.parentT; //			//	 /   \   /   \
 						count += 2; //					//	?a? ?b? <c> ?d?
 					}
-					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 4
+					if ( (brtr.rightT != RBTree.blank)&&(brtr.rightT.isRed()) ) { // Case 4
 						leftRotate(node.parentT);
 						brtr.color = node.parentT.color; //				//	      ?Y?
 						node.color = Color.BLACK; //					//	     /   \
@@ -641,7 +649,7 @@ public class RBTree {
 						//System.out.println("ffffff");
 					}
 				} else { // Case 1
-					if (node.parentT.parentT == null) {
+					if (node.parentT.parentT == RBTree.blank) {
 						this.root = node.parentT.rightT;
 					} //									//	      Y
 					leftRotate(node.parentT); //			//      /   \
@@ -651,19 +659,19 @@ public class RBTree {
 				}
 			} else {
 				RBNode brtr = node.parentT.leftT;
-				if (brtr == null) { // Node don't have brothers (Only child)
+				if (brtr == RBTree.blank) { // Node don't have brothers (Only child)
 					node.color = Color.BLACK;
 					node = node.parentT;
 					node.darken();
 					count += 2;
 				} else if (!brtr.isRed()) { // I have a black brother 8-)
-					if ( (brtr.rightT != null)&&(brtr.rightT.isRed()) ) { // Case 3
+					if ( (brtr.rightT != RBTree.blank)&&(brtr.rightT.isRed()) ) { // Case 3
 						leftRotate(brtr); //			//	      ?Y?
 						brtr.changeColor(); //			//	     /   \
 						brtr.parentT.changeColor(); //	//	   X      |W|
 						count += 2; //					//	 /   \   /   \
 					} //								//	?a? <b> ?c? ?d?
-					if ( (brtr.leftT != null)&&(brtr.leftT.isRed()) ) { // Case 4
+					if ( (brtr.leftT != RBTree.blank)&&(brtr.leftT.isRed()) ) { // Case 4
 						rightRotate(node.parentT);
 						brtr.color = node.parentT.color; //				//	      ?Y?
 						node.color = Color.BLACK; //					//	     /   \
@@ -681,7 +689,7 @@ public class RBTree {
 						node = node.parentT; //				//	 a   b  ?c? ?d?
 					}
 				} else { // Case 1
-					if (node.parentT.parentT == null) {
+					if (node.parentT.parentT == RBTree.blank) {
 						this.root = node.parentT.leftT;
 					} //									//	      Y
 					rightRotate(node.parentT); //			//	    /   \
@@ -691,7 +699,7 @@ public class RBTree {
 				}
 			}
 		}
-		if (node.parentT == null) { // node is the root
+		if (node.parentT == RBTree.blank) { // node is the root
 			this.root = node;
 			this.root.color = Color.BLACK;
 		}
@@ -705,9 +713,9 @@ public class RBTree {
 	 * @return node successor
 	 */
 	public RBNode findSccr(RBNode node) {
-		if (node.rightT != null) { // if node has a right sub-tree. 
+		if (node.rightT != RBTree.blank) { // if node has a right sub-tree. 
 			node = node.getRight();
-			while(node.leftT != null) {// has a left Subtree.
+			while(node.leftT != RBTree.blank) {// has a left Subtree.
 				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
 			}
 			return node;
@@ -744,8 +752,8 @@ public class RBTree {
 		 */
 		//this.print();
 		//System.out.println("kkkkkk");
-		RBNode centenarian = binSearch(this.root, k, null); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
-		if(centenarian == null){ // No such key
+		RBNode centenarian = binSearch(this.root, k, RBTree.blank); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
+		if(centenarian == RBTree.blank){ // No such key
 			return -1;
 		} else {
 			this.array_status = false;
@@ -755,34 +763,34 @@ public class RBTree {
 			if (centenarian.barren()) { // The centenarian don't have child's
 				if (!centenarian.isRed()) { // i am leaf and I'm black
 					centenarian.darken();
-					//this.print();
-					//System.out.println("hhhhhh");
+					this.print();
+					System.out.println("hhhhhh");
 					changes += fixDelete(centenarian);
 				} // We can safely delete the centenarian
-				if (centenarian.parentT != null) {
+				if (centenarian.parentT != RBTree.blank) {
 					//centenarian.darken();
 					//changes += fixDelete(centenarian);
 					//this.print();
 					//System.out.println("jjjjjj");
 					if (centenarian.mILeftchild()) {
-						centenarian.parentT.leftT = null;
+						centenarian.parentT.leftT = RBTree.blank;
 					} else {
-						centenarian.parentT.rightT = null;
+						centenarian.parentT.rightT = RBTree.blank;
 					}
 				} else { // Delete the root
-					this.root = null;
+					this.root = RBTree.blank;
 				}
-			} else if ((child = centenarian.oneChild()) != null) { // The centenarian have only one child
+			} else if ((child = centenarian.oneChild()) != RBTree.blank) { // The centenarian have only one child
 				if (!centenarian.isRed()) { // We can safely bridge the centenarian
 					child.darken();
-					//this.print();
-					//System.out.println("aaaaaa");
+					this.print();
+					System.out.println("aaaaaa");
 					changes += fixDelete(child);
-					//this.print();
-					//System.out.println("bbbbbb");
+					this.print();
+					System.out.println("bbbbbb");
 				}
 				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
-				if (centenarian.parentT == null) {
+				if (centenarian.parentT == RBTree.blank) {
 					this.root = child;
 				}
 			} else { // The centenarian have two children
@@ -791,16 +799,16 @@ public class RBTree {
 				//this.print();
 				//System.out.println("cccccc");
 				//changes += fixDelete(sccr);
-				if ( (sccr.rightT != null)&&(centenarian != sccr.parentT) ) {
+				if ( (sccr.rightT != RBTree.blank)&&(centenarian != sccr.parentT) ) {
 					sccr.rightT.color = sccr.color;
 					sccr.parentT.leftT = sccr.rightT;
-				} else if ( (sccr.rightT != null)&&(centenarian.leftT != null) ) {
+				} else if ( (sccr.rightT != RBTree.blank)&&(centenarian.leftT != RBTree.blank) ) {
 					sccr.rightT.color = centenarian.leftT.color;
 				}
-				//this.print();
-				//System.out.println("eeeeee");
+				this.print();
+				System.out.println("eeeeee");
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
-				if (centenarian.parentT == null) {
+				if (centenarian.parentT == RBTree.blank) {
 					this.root = sccr;
 				}
 			}
@@ -823,7 +831,7 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMax(RBNode root2) {
-		if ( (root2 != null)&&(root2.rightT != null) ) {
+		if ( (root2 != RBTree.blank)&&(root2.rightT != RBTree.blank) ) {
 			return getMax(root2.getRight());
 		}
 		return root2;
@@ -834,7 +842,7 @@ public class RBTree {
 	 * @return
 	 */
 	private RBNode getMin(RBNode root2) {
-		if ( (root2 != null)&&(root2.leftT != null) ) {
+		if ( (root2 != RBTree.blank)&&(root2.leftT != RBTree.blank) ) {
 			return getMin(root2.getLeft());
 		}
 		return root2;
@@ -848,7 +856,7 @@ public class RBTree {
 	* @return minimum node at the tree
 	*/
 	public String min() {
-		if (this.min != null){
+		if (this.min != RBTree.blank){
 			return (this.min).key; 
 		} else {
 			return null;
@@ -863,7 +871,7 @@ public class RBTree {
 	* @return maximum node at the tree
 	*/
 	public String max() {
-		if (this.max != null){
+		if (this.max != RBTree.blank){
 			return (this.max).key; 
 		} else {
 			return null;
@@ -914,18 +922,18 @@ public class RBTree {
 			return new String[0];
 		}
 	}
-	private RBNode[] updateArray(RBNode[] arr, RBNode root,int cnt) {
-		if(root == null) {
+	private RBNode[] updateArray(RBNode[] arr, RBNode root, int cnt) {
+		if(root == RBTree.blank) {
 			arr = null;
 		} else {
 			//arr[cnt] = root;
-			if(root.leftT != null) {
+			if(root.leftT != RBTree.blank) {
 				arr = updateArray(arr,root.leftT,cnt);
 				cnt = findLast(arr,cnt+1);
 			}
 			arr[cnt] = root;
 			cnt = findLast(arr,cnt+1);
-			if(root.rightT != null) {
+			if(root.rightT != RBTree.blank) {
 				arr = updateArray(arr,root.rightT,cnt);
 			}
 		}
@@ -980,7 +988,7 @@ public class RBTree {
 	* Print the tree.
 	*/
 	public void print() {
-		RBTree.printHelper(this.root, 0);
+		RBTree.printHelper(this.root, 0, RBTree.blank);
 	}
 	/**
 	* private static void printHelper(RBTree.RBNode n, int indent)
@@ -990,13 +998,13 @@ public class RBTree {
 	* @param n
 	* @param indent
 	*/
-	private static void printHelper(RBTree.RBNode n, int indent) {
-		if (n == null) {
+	private static void printHelper(RBTree.RBNode n, int indent, RBNode blank) {
+		if (n == blank) {
 	        System.out.print("<empty tree>");
 	        return;
 	    }
-	    if (n.getRight() != null) {
-	        printHelper(n.getRight(), indent + INDENT_STEP);
+	    if (n.getRight() != blank) {
+	        printHelper(n.getRight(), indent + INDENT_STEP, blank);
 	    }
 	    for (int i = 0; i < indent; i++)
 	        System.out.print(" ");
@@ -1007,8 +1015,8 @@ public class RBTree {
 	    } else {
 	    	System.out.println(n.getKey());
 	    }
-	    if (n.getLeft() != null) {
-	        printHelper(n.getLeft(), indent + INDENT_STEP);
+	    if (n.getLeft() != blank) {
+	        printHelper(n.getLeft(), indent + INDENT_STEP, blank);
 	    }
 	}
 	public void printlist() {
@@ -1019,9 +1027,9 @@ public class RBTree {
 			this.array_status = true;
 		}
 		for (RBNode node : this.tree_array) {
-			if (node.parentT != null) {p=node.parentT.key;} else {p="null";}
-			if (node.leftT != null) {l=node.leftT.key;} else {l="null";}
-			if (node.rightT != null) {r=node.rightT.key;} else {r="null";}
+			if (node.parentT != RBTree.blank) {p=node.parentT.key;} else {p="null";}
+			if (node.leftT != RBTree.blank) {l=node.leftT.key;} else {l="null";}
+			if (node.rightT != RBTree.blank) {r=node.rightT.key;} else {r="null";}
 			System.out.println("Node " + node.key + "\t parent is " + p + ",\t Left child is: " + l + ",\t Right child is: " + r);
 		}
 	}
