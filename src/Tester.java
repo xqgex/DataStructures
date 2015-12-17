@@ -3,6 +3,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 class MyTree {
 	private TreeSet<Integer> set;
@@ -405,6 +408,8 @@ public class Tester {
 			System.out.println("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.");
 		}
 		System.exit(0);
+		
+		
 		/*
 		RBTree tree = new RBTree();
 		int[][] keysSet = new int[2][];
@@ -424,5 +429,48 @@ public class Tester {
 			}
 		}
 		*/
+		int times = 10000;
+		for (int i = 1; i <= 10; i++) {
+			times *= i;
+			testRun(times);
+		}
 	}
-}
+	
+	
+		  public static void shuffleArra (int[] ar) {
+		    Random rnd = ThreadLocalRandom.current();
+		    for (int i = ar.length - 1; i > 0; i--) {
+		      int index = rnd.nextInt(i + 1);
+		      // Simple swap
+		      int a = ar[index];
+		      ar[index] = ar[i];
+		      ar[i] = a;
+		    }
+		  }
+		public static void testRun(int numberOf) {
+			int[] list = new int[200000];
+			for (int i = 1; i < list.length; i++) {
+				list[i] = i;
+			}
+			shuffleArra (list);
+			int cnt;
+			int totalI = 0;
+			int totalD = 0;
+			RBTree tree = new RBTree();
+			for (int i = 0; i <= numberOf; i++) {
+				cnt = tree.insert(list[i], "value");
+				if (cnt != -1) {
+					totalI += cnt; 
+				}
+			}
+			System.out.println("insert:"+numberOf +"=" + totalI/numberOf);
+			for (int i = 0; i <= numberOf; i++) {
+				cnt = tree.delete(list[i]);
+				if (cnt != -1) {
+					totalD += cnt; 
+				}
+			}
+			System.out.println("delete:"+numberOf +"=" + totalD/numberOf);
+		}
+	
+	}
