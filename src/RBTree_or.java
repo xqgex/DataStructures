@@ -373,14 +373,25 @@ public class RBTree_or {
 	 *  the min and max of the tree, and resets it 
 	 *  to be the new node if needed.
 	 *  
+	 *  type=0 : 
+	 *  type=1 : 
+	 *  
 	 * @param newBaby
 	 */
-	private void updateMinMax(RBNode centenarian) {
+	private void updateMinMax(RBNode centenarian, int type) {
 		if (centenarian.key >= this.max.key) {
-			this.max = getMax(this.root);
+			if (type == 0) {
+				this.max = centenarian;
+			} else {
+				this.max = getMax(this.root);
+			}
 		}
-		if (centenarian.key <= (this.min.key) {
-			this.min = getMin(this.root);
+		if (centenarian.key <= this.min.key) {
+			if (type == 0) {
+				this.min = centenarian;
+			} else {
+				this.min = getMin(this.root);
+			}
 		}
 	}
 	/**
