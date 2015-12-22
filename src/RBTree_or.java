@@ -39,6 +39,169 @@ public class RBTree_or {
 		return -1;
 	}
 	/**
+	 * 
+	 * @param x - the new node
+	 * @param y - x's uncle
+	 * Case 2 of fix insert, coloring y and his sibling (x's father) black and their
+	 * father black, by that maintaining tree's invariants
+	 * @return is the number of color changes in this case
+	 */
+	private int fixColor(RBNode x, RBNode y) {
+		x.parentT.color = Color.BLACK;
+		y.color = Color.BLACK;
+		x.parentT.parentT.color = Color.RED;
+		return 3;
+	}
+	/**
+	 * 
+	 * @param x
+	 * if the node x we deleted was BLACK we overview all cases (learned in lecture)
+	 * to maintain tree's invariants
+	 * returns the number of color changes needed to fix the tree
+	 */
+	private int fixDelete(RBNode x) {
+		RBNode w; //x's "uncle"
+		int changes = 0; //Color changes
+		while (x.parentT != blank && x.isBlack()) { //x is not root and RED
+			if (x == x.parentT.leftT) { //If x is left child
+				w = x.parentT.rightT;
+				if (w.isRed()) { // Case 1
+					changes++;
+					w.color = Color.BLACK;
+					if (x.parentT.isBlack())
+						changes++;
+					x.parentT.color = Color.RED;
+					this.leftRotate(x.parentT);
+					w = x.parentT.rightT;
+				}
+				if (w.leftT.isBlack() && w.rightT.isBlack()) { // Case 2
+					if (w.isBlack())
+						changes++;
+					w.color = Color.RED;
+					x = x.parentT;
+				} else {
+					if (w.rightT.isBlack()) { // Case 3
+						if (w.leftT.isRed())
+							changes++;
+						w.leftT.color = Color.BLACK;
+						if (w.isBlack())
+							changes++;
+						w.color = Color.RED;
+						this.rightRotate(w);
+						w = x.parentT.rightT;
+					} // Case 4
+					if (!w.color.equals(x.parentT.color))
+						changes++;
+					w.color = x.parentT.color;
+					if (x.parentT.isRed())
+						changes++;
+					x.parentT.color = Color.BLACK;
+					if (w.rightT.isRed())
+						changes++;
+					w.rightT.color =Color.BLACK;
+					this.leftRotate(x.parentT);
+					x = this.root;
+				}
+			} else {
+				w = x.parentT.leftT;
+				if (w.isRed()) { // Case 1
+					changes++;
+					w.color = Color.BLACK;
+					if (x.parentT.isBlack())
+						changes++;
+					x.parentT.color = Color.RED;
+					this.rightRotate(x.parentT);
+					w = x.parentT.leftT;
+				}
+				if (w.leftT.isBlack() && w.rightT.isBlack()) { // Case 2
+					if (w.isBlack())
+						changes++;
+					w.color = Color.RED;
+					x = x.parentT;
+				} else {
+					if (w.leftT.isBlack()) { // Case 3
+						if (w.rightT.isRed())
+							changes++;
+						w.rightT.color = Color.BLACK;
+						if (w.isBlack())
+							changes++;
+						w.color = Color.RED;
+						this.leftRotate(w);
+						w = x.parentT.leftT;
+					} // Case 4
+					if (!w.color.equals(x.parentT.color))
+						changes++;
+					w.color = x.parentT.color;
+					if (x.parentT.isRed())
+						changes++;
+					x.parentT.color = Color.BLACK;
+					if (w.leftT.isRed())
+						changes++;
+					w.leftT.color = Color.BLACK;
+					this.rightRotate(x.parentT);
+					x = this.root;
+				}
+			}
+		}
+		if (x.isRed()) //If x is root and RED we want to change
+			changes++;
+		x.color = Color.BLACK;
+		return changes;
+	}
+	/**
+	 * 
+	 * @param x
+	 * Returns the number of color changes needed to keep the tree's invariants
+	 * by overviewing all cases (learned in lecture) 
+	 */
+	private int fixInsert(RBNode x) {
+		int cntChanges = 0; //Color changes
+		RBNode y = blank; //To be x's uncle
+		while (x.parentT != blank && x.parentT.isRed()) { //x is not the root and child of RED node
+			if (x.parentT == x.parentT.parentT.leftT) { //x's father is left child
+				y = x.parentT.parentT.rightT;
+				if (y.isRed()){ //Uncle is RED, case 1
+					cntChanges += fixColor(x, y);
+					x = x.parentT.parentT; //Bubbling-up the colors problem
+				}
+				else { //Case 2
+					if (x == x.parentT.rightT) { //x is a right child
+						x = x.parentT; 
+						leftRotate(x); //Fixing the tree with left rotation
+					}
+					//Case 3
+					cntChanges += 2;
+					x.parentT.color = Color.BLACK; 
+					x.parentT.parentT.color = Color.RED;
+											//Changing colors to maintain invariants
+					rightRotate(x.parentT.parentT); //Fix using right rotation
+				}
+			} else { //x's father is right child
+				y = x.parentT.parentT.leftT; //Still his uncle
+				if (y.isRed()){ //Case 1, same as before
+					cntChanges += fixColor(x, y);
+					x = x.parentT.parentT; //Bubbling-up the problem
+				}
+				else{
+					if (x == x.parentT.leftT) { //Case 2
+						x = x.parentT;
+						rightRotate(x);
+					}
+					//Case 3
+					cntChanges += 2;
+					x.parentT.color = Color.BLACK;
+					x.parentT.parentT.color = Color.RED;
+					leftRotate(x.parentT.parentT);
+				}
+			}
+		}
+		if (root.isRed()) {
+			root.color = Color.BLACK;
+			cntChanges++;
+		}
+		return cntChanges;
+	}
+	/**
 	 * private static void leftChild
 	 * 
 	 * sets child to be the parents left child
@@ -482,102 +645,7 @@ public class RBTree_or {
 			max = maxNode();
 		return changes;
 	}
-	/**
-	 * 
-	 * @param x
-	 * if the node x we deleted was BLACK we overview all cases (learned in lecture)
-	 * to maintain tree's invariants
-	 * returns the number of color changes needed to fix the tree
-	 */
-	private int fixDelete(RBNode x) {
-		RBNode w; //x's "uncle"
-		int changes = 0; //Color changes
-		while (x.parentT != blank && x.isBlack()) { //x is not root and RED
-			if (x == x.parentT.leftT) { //If x is left child
-				w = x.parentT.rightT;
-				if (w.isRed()) { // Case 1
-					changes++;
-					w.color = Color.BLACK;
-					if (x.parentT.isBlack())
-						changes++;
-					x.parentT.color = Color.RED;
-					this.leftRotate(x.parentT);
-					w = x.parentT.rightT;
-				}
-				if (w.leftT.isBlack() && w.rightT.isBlack()) { // Case 2
-					if (w.isBlack())
-						changes++;
-					w.color = Color.RED;
-					x = x.parentT;
-				} else {
-					if (w.rightT.isBlack()) { // Case 3
-						if (w.leftT.isRed())
-							changes++;
-						w.leftT.color = Color.BLACK;
-						if (w.isBlack())
-							changes++;
-						w.color = Color.RED;
-						this.rightRotate(w);
-						w = x.parentT.rightT;
-					} // Case 4
-					if (!w.color.equals(x.parentT.color))
-						changes++;
-					w.color = x.parentT.color;
-					if (x.parentT.isRed())
-						changes++;
-					x.parentT.color = Color.BLACK;
-					if (w.rightT.isRed())
-						changes++;
-					w.rightT.color =Color.BLACK;
-					this.leftRotate(x.parentT);
-					x = this.root;
-				}
-			} else {
-				w = x.parentT.leftT;
-				if (w.isRed()) { // Case 1
-					changes++;
-					w.color = Color.BLACK;
-					if (x.parentT.isBlack())
-						changes++;
-					x.parentT.color = Color.RED;
-					this.rightRotate(x.parentT);
-					w = x.parentT.leftT;
-				}
-				if (w.leftT.isBlack() && w.rightT.isBlack()) { // Case 2
-					if (w.isBlack())
-						changes++;
-					w.color = Color.RED;
-					x = x.parentT;
-				} else {
-					if (w.leftT.isBlack()) { // Case 3
-						if (w.rightT.isRed())
-							changes++;
-						w.rightT.color = Color.BLACK;
-						if (w.isBlack())
-							changes++;
-						w.color = Color.RED;
-						this.leftRotate(w);
-						w = x.parentT.leftT;
-					} // Case 4
-					if (!w.color.equals(x.parentT.color))
-						changes++;
-					w.color = x.parentT.color;
-					if (x.parentT.isRed())
-						changes++;
-					x.parentT.color = Color.BLACK;
-					if (w.leftT.isRed())
-						changes++;
-					w.leftT.color = Color.BLACK;
-					this.rightRotate(x.parentT);
-					x = this.root;
-				}
-			}
-		}
-		if (x.isRed()) //If x is root and RED we want to change
-			changes++;
-		x.color = Color.BLACK;
-		return changes;
-	}
+
 	/**
 	* public String min()
 	*
@@ -677,21 +745,7 @@ public class RBTree_or {
 			return new String[0];
 		}
 	}
-	/**
-	 * 
-	 * @param minNode
-	 * @return the array of all nodes in tree in-order
-	 */
-	private RBNode[] nodesToArray(RBNode minNode){
-		RBNode[] arr = new RBNode[size]; //To be array of all nodes
-		arr[0] = minNode; //Inserting node with smallest key
-		RBNode s = findSccr(minNode);
-		for (int i=1; i<size; i++){ //(n = size) n calls for successor
-			arr[i] = s;
-			s = findSccr(s);
-		}
-		return arr;
-	}
+
 	/**
 	* public int size()
 	*
@@ -703,73 +757,8 @@ public class RBTree_or {
 	public int size() {
 		return size;
 	}
-	/**
-	 * 
-	 * @param x
-	 * Returns the number of color changes needed to keep the tree's invariants
-	 * by overviewing all cases (learned in lecture) 
-	 */
-	private int fixInsert(RBNode x) {
-		int cntChanges = 0; //Color changes
-		RBNode y = blank; //To be x's uncle
-		while (x.parentT != blank && x.parentT.isRed()) { //x is not the root and child of RED node
-			if (x.parentT == x.parentT.parentT.leftT) { //x's father is left child
-				y = x.parentT.parentT.rightT;
-				if (y.isRed()){ //Uncle is RED, case 1
-					cntChanges += fixColor(x, y);
-					x = x.parentT.parentT; //Bubbling-up the colors problem
-				}
-				else { //Case 2
-					if (x == x.parentT.rightT) { //x is a right child
-						x = x.parentT; 
-						leftRotate(x); //Fixing the tree with left rotation
-					}
-					//Case 3
-					cntChanges += 2;
-					x.parentT.color = Color.BLACK; 
-					x.parentT.parentT.color = Color.RED;
-											//Changing colors to maintain invariants
-					rightRotate(x.parentT.parentT); //Fix using right rotation
-				}
-			} else { //x's father is right child
-				y = x.parentT.parentT.leftT; //Still his uncle
-				if (y.isRed()){ //Case 1, same as before
-					cntChanges += fixColor(x, y);
-					x = x.parentT.parentT; //Bubbling-up the problem
-				}
-				else{
-					if (x == x.parentT.leftT) { //Case 2
-						x = x.parentT;
-						rightRotate(x);
-					}
-					//Case 3
-					cntChanges += 2;
-					x.parentT.color = Color.BLACK;
-					x.parentT.parentT.color = Color.RED;
-					leftRotate(x.parentT.parentT);
-				}
-			}
-		}
-		if (root.isRed()) {
-			root.color = Color.BLACK;
-			cntChanges++;
-		}
-		return cntChanges;
-	}
-	/**
-	 * 
-	 * @param x - the new node
-	 * @param y - x's uncle
-	 * Case 2 of fix insert, coloring y and his sibling (x's father) black and their
-	 * father black, by that maintaining tree's invariants
-	 * @return is the number of color changes in this case
-	 */
-	private int fixColor(RBNode x, RBNode y) {
-		x.parentT.color = Color.BLACK;
-		y.color = Color.BLACK;
-		x.parentT.parentT.color = Color.RED;
-		return 3;
-	}
+
+
 
 
 
