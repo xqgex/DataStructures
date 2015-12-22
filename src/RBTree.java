@@ -17,8 +17,6 @@ public class RBTree {
 	private boolean array_status; // Is the array above up to date.
 	private final RBNode blank = new RBNode(-1, null, Color.BLACK, null, null); // The NIL node
 	private static final int INDENT_STEP = 4;
-	public String darker = "darken";
-	public String switcher = "switch";
 	
 	/**
 	 * public RBTree()
@@ -90,13 +88,6 @@ public class RBTree {
 			return node;
 		}
 	}
-	/**
-	 * 
-	 * @param x
-	 * if the node x we deleted was BLACK we overview all cases (learned in lecture)
-	 * to maintain tree's invariants
-	 * returns the number of color changes needed to fix the tree
-	 */
 	public int fixDelete(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != this.blank)&&(node.color == Color.DARK_GRAY) ) {
@@ -179,12 +170,6 @@ public class RBTree {
 		}
 		return count;
 	}
-	/**
-	 * 
-	 * @param x
-	 * Returns the number of color changes needed to keep the tree's invariants
-	 * by overviewing all cases (learned in lecture) 
-	 */
 	public int fixInsert(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != this.blank)&&(node.parentT.isRed()) ) {
@@ -602,14 +587,6 @@ public class RBTree {
 		}
 	}
 
-	/**
-	 * public int delete(int k)
-	 *
-	 * deletes an item with key k from the binary tree, if it is there; the tree
-	 * must remain valid (keep its invariants). returns the number of color
-	 * switches, or 0 if no color switches were needed. returns -1 if an item
-	 * with key k was not found in the tree.
-	 */
 	public int delete(int k) {
 		int count = 0;
 		RBNode centenarian = binSearch(this.root, k); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
@@ -664,7 +641,7 @@ public class RBTree {
 	/**
 	 * public boolean empty()
 	 *
-	 * returns true if and only if the tree is empty
+	 * returns true iff the tree is empty
 	 */
 	public boolean empty() {
 		return (this.root == this.blank);
@@ -672,7 +649,7 @@ public class RBTree {
 	/**
 	 * public RBNode getRoot()
 	 *
-	 * returns the root of the red black tree
+	 * returns the root of the tree
 	 */
 	public RBNode getRoot() {
 		if (this.root == this.blank) {
@@ -681,14 +658,6 @@ public class RBTree {
 			return this.root;
 		}
 	}
-	/**
-	 * public int insert(int k, String v)
-	 *
-	 * inserts an item with key k and value v to the red black tree. the tree
-	 * must remain valid (keep its invariants). returns the number of color
-	 * switches, or 0 if no color switches were necessary. returns -1 if an item
-	 * with key k already exists in the tree.
-	 */
 	public int insert(int k, String v) {
 		int changes = 0;
 		// Insert: Case 1a: zג€™s uncle w is red, z is a right child
@@ -731,7 +700,7 @@ public class RBTree {
 	/**
 	 * public int[] keysToArray()
 	 *
-	 * Returns a sorted array which contains all keys in the tree,
+	 * Returns a sorted array which contains all the keys in the tree,
 	 * or an empty array if the tree is empty.
 	 */
 	public int[] keysToArray() {
@@ -816,9 +785,6 @@ public class RBTree {
 	 * public int size()
 	 *
 	 * Returns the number of nodes in the tree.
-	 *
-	 * precondition: none
-	 * postcondition: none
 	 */
 	public int size() {
 		return size;
