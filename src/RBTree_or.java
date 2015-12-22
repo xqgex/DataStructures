@@ -25,6 +25,155 @@ public class RBTree_or {
 		this.tree_array = null;
 		this.array_status = false;
 	}
+
+	/**
+	 * The function find the last element in array that isn't null
+	 * @return
+	 */
+	private int findLast(RBNode[] arr, int lastCount) {
+		for (int i=lastCount; i<arr.length; i++) {
+			if (arr[i] == null) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	/**
+	 * private static void leftChild
+	 * 
+	 * sets child to be the parents left child
+	 * 
+	 * @param parent
+	 * @param Child
+	 */
+	private void leftChild(RBNode parent, RBNode child) {
+		parent.leftT = child;
+		if (child != this.blank) {
+			child.parentT = parent;
+		}
+	}
+	/**
+	 * Performs a left rotation on node x,
+	 * according to the left rotation specifics 
+	 * learned in class   
+	 * 
+	 * @param x
+	 */
+	private void leftRotate(RBNode node){
+		RBNode y = node.rightT;
+		if (node.parentT != this.blank) {
+			transplant(node,y);
+		} else { // x was the root
+			y.parentT = this.blank;
+			this.root = y;
+		}
+		if (y.leftT != this.blank) {
+			rightChild(node,y.leftT);
+		} else {
+			node.rightT = this.blank;
+		}
+		leftChild(y,node);
+	}
+	private static void printHelper(RBTree_or.RBNode n, int indent, RBNode blank) {
+		if (n == blank) {
+	        System.out.print("<empty tree>");
+	        return;
+	    }
+	    if (n.getRight() != blank) {
+	        printHelper(n.getRight(), indent + INDENT_STEP, blank);
+	    }
+	    for (int i = 0; i < indent; i++)
+	        System.out.print(" ");
+	    if (n.isRed()) {
+	    	System.out.println("<" + n.getKey() + ">");
+	    } else if (n.color == Color.DARK_GRAY) {
+	    	System.out.println("|" + n.getKey() + "|");
+	    } else {
+	    	System.out.println(n.getKey());
+	    }
+	    if (n.getLeft() != blank) {
+	        printHelper(n.getLeft(), indent + INDENT_STEP, blank);
+	    }
+	}
+	/**
+	 * private static void rightChild
+	 * 
+	 * sets child to be the parents right child
+	 * 
+	 * @param parent
+	 * @param Child
+	 */
+	private void rightChild(RBNode parent, RBNode child) {
+		parent.rightT = child;
+		if (child != this.blank) {
+			child.parentT = parent;
+		}
+	}
+	/**
+	 * Performs a right rotation on node x,
+	 * according to the right rotation specifics 
+	 * learned in class   
+	 * 
+	 * @param x
+	 */
+	private void rightRotate(RBNode node){
+		RBNode x = node.leftT;
+		if (node.parentT != this.blank) {
+			transplant(node,x);
+		} else {
+			x.parentT = this.blank;
+			this.root = node;
+		}
+		if (x.rightT != this.blank) {
+			leftChild(node,x.rightT);
+		} else {
+			node.leftT = this.blank;
+		}
+		rightChild(x,node);
+	}
+	/**
+	 * private static void transplant(RBNode x, RBNode y)
+	 * 
+	 * Update y as a child of x parent instead of x
+	 * @param x
+	 * @param y
+	 */
+	private void transplant(RBNode x, RBNode y) {
+		if(x.parentT.leftT == x) { // x is a left child
+			leftChild(x.parentT,y); // Update y as a left child instead of x
+		} else { // x is a right child
+			rightChild(x.parentT,y); // Update y as a right child instead of x
+		}
+	}
+	private RBNode[] updateArray(RBNode[] arr, RBNode root, int cnt) {
+		if(root == this.blank) {
+			arr = null;
+		} else {
+			if(root.leftT != this.blank) {
+				arr = updateArray(arr,root.leftT,cnt);
+				cnt = findLast(arr,cnt+1);
+			}
+			arr[cnt] = root;
+			cnt = findLast(arr,cnt+1);
+			if(root.rightT != this.blank) {
+				arr = updateArray(arr,root.rightT,cnt);
+			}
+		}
+		return arr;	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * public class RBNode
 	 */
@@ -508,34 +657,8 @@ public class RBTree_or {
 		}
 		return successor; //Successor node
 	}
-	private RBNode[] updateArray(RBNode[] arr, RBNode root, int cnt) {
-		if(root == this.blank) {
-			arr = null;
-		} else {
-			if(root.leftT != this.blank) {
-				arr = updateArray(arr,root.leftT,cnt);
-				cnt = findLast(arr,cnt+1);
-			}
-			arr[cnt] = root;
-			cnt = findLast(arr,cnt+1);
-			if(root.rightT != this.blank) {
-				arr = updateArray(arr,root.rightT,cnt);
-			}
-		}
-		return arr;	
-	}
-	/**
-	 * The function find the last element in array that isn't null
-	 * @return
-	 */
-	private int findLast(RBNode[] arr, int lastCount) {
-		for (int i=lastCount; i<arr.length; i++) {
-			if (arr[i] == null) {
-				return i;
-			}
-		}
-		return -1;
-	}
+
+
 	/**
 	* public int[] keysToArray()
 	*
@@ -674,122 +797,11 @@ public class RBTree_or {
 		x.parentT.parentT.color = Color.RED;
 		return 3;
 	}
-	/**
-	 * private static void leftChild
-	 * 
-	 * sets child to be the parents left child
-	 * 
-	 * @param parent
-	 * @param Child
-	 */
-	private void leftChild(RBNode parent, RBNode child) {
-		parent.leftT = child;
-		if (child != this.blank) {
-			child.parentT = parent;
-		}
-	}
-	/**
-	 * private static void leftChild
-	 * 
-	 * sets child to be the parents right child
-	 * 
-	 * @param parent
-	 * @param Child
-	 */
-	private void rightChild(RBNode parent, RBNode child) {
-		parent.rightT = child;
-		if (child != this.blank) {
-			child.parentT = parent;
-		}
-	}
-	/**
-	 * private static void transplant(RBNode x, RBNode y)
-	 * 
-	 * Update y as a child of x parent instead of x
-	 * @param x
-	 * @param y
-	 */
-	private void transplant(RBNode x, RBNode y) {
-		if(x.parentT.leftT == x) { // x is a left child
-			leftChild(x.parentT,y); // Update y as a left child instead of x
-		} else { // x is a right child
-			rightChild(x.parentT,y); // Update y as a right child instead of x
-		}
-	}
-	/**
-	 * Performs a left rotation on node x,
-	 * according to the left rotation specifics 
-	 * learned in class   
-	 * 
-	 * @param x
-	 */
-	private void leftRotate(RBNode node){
-		RBNode y = node.rightT;
-		if (node.parentT != this.blank) {
-			transplant(node,y);
-		} else { // x was the root
-			y.parentT = this.blank;
-			this.root = y;
-		}
-		if (y.leftT != this.blank) {
-			rightChild(node,y.leftT);
-		} else {
-			node.rightT = this.blank;
-		}
-		leftChild(y,node);
-		/*RBNode y = node.rightT; //node.rightT not null
-		node.rightT = y.leftT; //Changing relations
-		if (y.leftT != NIL)
-			y.leftT.parentT = node;
-		y.parentT = node.parentT; //Linking y to node's father
-		if (node.parentT == NIL){ //Changing root
-			root = y;
-		}
-		else if (node == node.parentT.leftT)
-			node.parentT.leftT = y;
-		else
-			node.parentT.rightT = y;
-		//Completing links
-		y.leftT = node;
-		node.parentT = y;*/
-	}
-	/**
-	 * Performs a right rotation on node x,
-	 * according to the right rotation specifics 
-	 * learned in class   
-	 * 
-	 * @param x
-	 */
-	private void rightRotate(RBNode node){
-		RBNode x = node.leftT;
-		if (node.parentT != this.blank) {
-			transplant(node,x);
-		} else {
-			x.parentT = this.blank;
-			this.root = node;
-		}
-		if (x.rightT != this.blank) {
-			leftChild(node,x.rightT);
-		} else {
-			node.leftT = this.blank;
-		}
-		rightChild(x,node);
-//Comments exactly like in leftRotate
-//		RBNode y = node.leftT;//node.leftT not null
-//		node.leftT = y.rightT;
-//		if (y.rightT != blank)
-//			y.rightT.parentT = node;
-//		y.parentT = node.parentT;
-//		if (node.parentT == blank){
-//			root = y;
-//		}
-//		else if (node == node.parentT.rightT)
-//			node.parentT.rightT = y;
-//		else
-//			node.parentT.leftT = y;
-//		y.rightT = node;
-//		node.parentT = y;
-	}
+
+
+
+
+
 	/**
 	* public void print()
 	*
@@ -798,27 +810,7 @@ public class RBTree_or {
 	public void print() {
 		RBTree_or.printHelper(this.root, 0, this.blank);
 	}
-	private static void printHelper(RBTree_or.RBNode n, int indent, RBNode blank) {
-		if (n == blank) {
-	        System.out.print("<empty tree>");
-	        return;
-	    }
-	    if (n.getRight() != blank) {
-	        printHelper(n.getRight(), indent + INDENT_STEP, blank);
-	    }
-	    for (int i = 0; i < indent; i++)
-	        System.out.print(" ");
-	    if (n.isRed()) {
-	    	System.out.println("<" + n.getKey() + ">");
-	    } else if (n.color == Color.DARK_GRAY) {
-	    	System.out.println("|" + n.getKey() + "|");
-	    } else {
-	    	System.out.println(n.getKey());
-	    }
-	    if (n.getLeft() != blank) {
-	        printHelper(n.getLeft(), indent + INDENT_STEP, blank);
-	    }
-	}
+
 	public void printlist() {
 		int l;
 		int r;
