@@ -151,32 +151,32 @@ public class RBTree_or {
 	 * returns the value of an item with key k if it exists in the tree
 	 * otherwise, returns null
 	 */
-//	public String search(int k){
-//		RBNode found = this.searchNode(k); //searching the node with key k
-//		if (found == null)
-//			return null;
-//		return found.value;
-//	}
-//	/**
-//	 * 
-//	 * @param k
-//	 * returns the node with key k, or null if not in tree
-//	 */
-//	private RBNode searchNode(int k) {
-//		RBNode tmpNode = root;
-//		int found = -1; //indicator
-//		while (found == -1 && tmpNode != blank) { //binary tree search
-//			if (tmpNode.key == k)
-//				found = 1;
-//			else if (tmpNode.key < k)
-//				tmpNode = tmpNode.rightT;
-//			else
-//				tmpNode = tmpNode.leftT;
-//		}
-//		if (found == -1) //node NOT FOUND
-//			return null;
-//		return tmpNode;
-//	}
+	public String search(int k){
+		RBNode found = this.searchNode(k); //searching the node with key k
+		if (found == null)
+			return null;
+		return found.value;
+	}
+	/**
+	 * 
+	 * @param k
+	 * returns the node with key k, or null if not in tree
+	 */
+	private RBNode searchNode(int k) {
+		RBNode tmpNode = root;
+		int found = -1; //indicator
+		while (found == -1 && tmpNode != blank) { //binary tree search
+			if (tmpNode.key == k)
+				found = 1;
+			else if (tmpNode.key < k)
+				tmpNode = tmpNode.rightT;
+			else
+				tmpNode = tmpNode.leftT;
+		}
+		if (found == -1) //node NOT FOUND
+			return null;
+		return tmpNode;
+	}
 	/**
 	 * public int insert(int k, String v)
 	 *
@@ -233,8 +233,7 @@ public class RBTree_or {
 	 */
 	public int delete(int k) {
 		int changes = 0; //Color changes
-		RBNode ansNode = blank;
-		RBNode toDelete = this.binSearch(root, k, ansNode); //Finding the node we want to delete
+		RBNode toDelete = this.binSearch(root, k); //Finding the node we want to delete
 		if (toDelete == null) //Key k not in tree
 			return -1;
 		this.array_status = false;
@@ -514,7 +513,7 @@ public class RBTree_or {
 		if(this.tree_array != null){
 			String[] retArray = new String[this.tree_array.length];
 			for (int i=0;i<this.tree_array.length;i++) {
-				retArray[i] = this.tree_array[i].info;
+				retArray[i] = this.tree_array[i].value;
 			}
 			return retArray;
 		} else {
@@ -776,8 +775,8 @@ public class RBTree_or {
 		}
 	}
 
-	public String search(int k) { // envelop function
-		RBNode node = binSearch(this.root,k,this.blank);
+	public String search1(int k) { // envelop function
+		RBNode node = binSearch(this.root,k);
 		if(node != this.blank){
 			return node.value;
 		} else {
@@ -791,23 +790,21 @@ public class RBTree_or {
 	 * 
 	 * @param root
 	 * @param k
-	 * @param ansNode
 	 * @return
 	 */
-	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
+	public RBNode binSearch(RBNode root, int k) { // an added recursive function
 		if (root == this.blank) {
-			ansNode = this.blank;
+			return this.blank;
 		} else if (root.key == k) {
-			ansNode = root;
+			return root;
 		} else if ( (root.key < k)&&(root.rightT != this.blank) ) {
 			root = root.rightT;
-			ansNode = binSearch(root, k,ansNode);
+			return binSearch(root, k);
 		} else if ( (root.key > k)&&(root.leftT != this.blank) ) {
 			root = root.leftT;
-			ansNode = binSearch(root, k,ansNode);
+			return binSearch(root, k);
 		} else {
-			ansNode = this.blank;
+			return this.blank;
 		}
-		return ansNode;
 	}
 }
