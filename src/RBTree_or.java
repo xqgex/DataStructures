@@ -35,35 +35,7 @@ public class RBTree_or {
 		RBNode leftT = blank;
 		RBNode rightT = blank;
 		RBNode parentT = blank;
-		private RBNode(){}
 		/**
-		 * 
-		 * RBNode constructor that creates a RED node with key and value
-		 */
-		private RBNode(int key, String value) {
-			this.key = key;
-			this.value = value;
-			this.color = Color.RED;
-		}
-		/**
-		 * 
-		 * @param key
-		 * @param value
-		 * @param color
-		 * RBNode constructor that creates a node in Color color with key and value
-		 */
-		private RBNode(int key, String value, Color color) {
-			this.key = key;
-			this.value = value;
-			this.color = color;
-		}
-		/**
-		 * 
-		 * @param k
-		 * @param v
-		 * @param c
-		 * @param l
-		 * @param r
 		 * RBNode constructor that creates a node with key k, value v, color c,
 		 * left child l, right child r
 		 */
@@ -73,14 +45,6 @@ public class RBTree_or {
 			color = c;
 			leftT = l;
 			rightT = r;
-		}
-		/**
-		 * 
-		 * @return true if node is internal leaf
-		 * 
-		 */
-		public boolean isLeaf() {
-			return leftT == blank && rightT == blank;
 		}
 		/**
 		 * 
@@ -94,7 +58,7 @@ public class RBTree_or {
 		 * @return true if node is RED
 		 */
 		boolean isRed() {
-			return color.equals("red");
+			return this.color == Color.RED;
 		}
 		/**
 		 * 
@@ -124,18 +88,138 @@ public class RBTree_or {
 		int getKey() {
 			return this.key;
 		}
+		/**
+		 * public void changeColor()
+		 * 
+		 * resets the color of the node from red 
+		 * to black and vise versa.
+		 * 
+		 */
+		public int changeColor(Color color) {
+			if (this.color == color) {
+				return 0;
+			} else  {
+				this.color = color;
+				return 1;
+			}
+		}
+		public int changeColor(RBNode node) {
+			if (this.color == node.color) {
+				return 0;
+			} else  {
+				this.color = node.color;
+				return 1;
+			}	
+		}
+		/**
+		 * public void darken()
+		 * resets the color of the node from red to 
+		 *  black and from black to dark gray
+		 * (Similar to double black)
+		 * 
+		 */
+		public int changeColor(String string) {
+			if(string.equals("darken")){
+				if (this.color == Color.RED) {
+					this.color = Color.BLACK;
+				} else if (this.color == Color.BLACK) {
+					this.color = Color.DARK_GRAY;
+				} else {
+					System.err.println("tried to draken the drakest. witch is impossible. unless?? mohaa mohaa haa haa ");
+				}
+				return 1;
+			} else if(string.equals("switch")) { 
+				if (this.color == Color.RED) {
+					this.color = Color.BLACK;
+				} else if (this.color == Color.BLACK) {
+					this.color = Color.RED;
+				}  else {
+					System.err.println("tried to switch the drakest. witch is impossible. unless?? mohaa mohaa haa haa ");
+				}
+				return 1;
+			}
+			else { 
+				System.err.println("not a coorect input");
+				return 0;
+			}
+		}
+		public boolean recognizeBlank(RBNode node) {
+			if ( (node.parentT == node.leftT)&&(node.rightT == node.leftT) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		/**
+		 * public boolean barren()
+		 * 
+		 * returns true if node has no children.
+		 * returns false otherwise.
+		 * 
+		 * @return
+		 */
+		public boolean barren() {
+			if ( (recognizeBlank(this.rightT))&&(recognizeBlank(this.leftT)) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		/**
+		 * public RBNode oneChild()
+		 * 
+		 * returns the only child
+		 */
+		public RBNode oneChild() {
+			if ( (recognizeBlank(this.rightT))&&(!recognizeBlank(this.leftT)) ) {
+				return this.leftT;
+			} else if ( (!recognizeBlank(this.rightT))&&(recognizeBlank(this.leftT)) ) {
+				return this.rightT;
+			} else {
+				return this;
+			}
+		}
+		/**
+		 * public boolean twoChilds()
+		 * 
+		 * returns true if node has two children
+		 * returns false otherwise
+		 * 
+		 * @return
+		 */
+		public boolean twoChilds() {
+			if ( (!recognizeBlank(this.rightT))&&(!recognizeBlank(this.leftT)) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		/**
+		 * returns true if node itself is a left 
+		 * son of an other node.
+		 * 
+		 * 
+		 * @return
+		 */
+		public boolean mILeftchild() {
+			if (this == this.parentT.leftT) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	/**
 	 * public RBNode getRoot()
 	 *
 	 * returns the root of the red black tree
-	 *
 	 */
 	public RBNode getRoot() {
-		RBNode result = root;
-		if (result == blank)
-			result = null;
-		return result;
+		if (this.root == this.blank) {
+			return null;
+		} else {
+			return this.root;
+		}
 	}
 	/**
 	 * public boolean empty()
@@ -156,7 +240,7 @@ public class RBTree_or {
 	 */
 	public int insert(int k, String v) {
 		this.array_status = false;
-		RBNode z = new RBNode(k, v, Color.RED); //Inserting z
+		RBNode z = new RBNode(k, v, Color.RED, this.blank, this.blank); //Inserting z
 		if (k > max.key)
 			max = z;
 		if (k < min.key)
@@ -346,15 +430,19 @@ public class RBTree_or {
 		return changes;
 	}
 	/**
-	 * public String min()
-	 *
-	 * Returns the value of the item with the smallest key in the tree, or null
-	 * if the tree is empty
-	 */
+	* public String min()
+	*
+	* Returns the value of the item with the smallest key in the tree,
+	* or null if the tree is empty
+	* 
+	* @return minimum node at the tree
+	*/
 	public String min(){
-		if (min == blank) //Tree is empty
+		if (this.min != this.blank){
+			return this.min.value; 
+		} else {
 			return null;
-		return min.value;
+		}
 	}
 	/**
 	 * 
@@ -369,15 +457,19 @@ public class RBTree_or {
 		return tmpNode; //Min node
 	}
 	/**
-	 * public String max()
-	 *
-	 * Returns the value of the item with the largest key in the tree, or null
-	 * if the tree is empty
-	 */
+	* public String max()
+	*
+	* Returns the value of the item with the largest key in the tree,
+	* or null if the tree is empty
+	* 
+	* @return maximum node at the tree
+	*/
 	public String max() {
-		if (max == blank) //Tree is empty
+		if (this.max != this.blank){
+			return this.max.value; 
+		} else {
 			return null;
-		return max.value;
+		}
 	}
 	/**
 	 * 
