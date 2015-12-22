@@ -17,6 +17,9 @@ public class RBTree_or {
 	private boolean array_status; // Is the array above up to date.
 	private final RBNode blank = new RBNode(-1, null, Color.BLACK, null, null); // The NIL node
 	private static final int INDENT_STEP = 4;
+	public String darker = "darken";
+	public String switcher = "switch";
+	
 	/**
 	 * public RBTree()
 	 * 
@@ -642,7 +645,7 @@ public class RBTree_or {
 	 * with key k was not found in the tree.
 	 */
 	public int delete(int k) {
-		int changes = 0;
+		int count = 0;
 		RBNode centenarian = binSearch(this.root, k); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
 		if (centenarian == this.blank) { // No such key
 			return -1;
@@ -653,9 +656,10 @@ public class RBTree_or {
 				this.max = this.blank;
 				this.min = this.blank;
 				this.size = 0;
-				return changes;
+				return count;
 			} else { // The node have family
-				RBNode node, sccr;
+				RBNode node;
+				RBNode sccr;
 				if (centenarian.leftT == this.blank || centenarian.rightT == this.blank) {
 					sccr = centenarian;
 				} else {
@@ -670,7 +674,7 @@ public class RBTree_or {
 				if (sccr.parentT == this.blank) {
 					if (node.isRed()) {
 						node.color = Color.BLACK;
-						changes++;
+						count++;
 					}
 					this.root = node;
 				} else if (sccr == sccr.parentT.leftT) {
@@ -683,11 +687,11 @@ public class RBTree_or {
 					centenarian.value = sccr.value;
 				}
 				if (sccr.isBlack()) {
-					changes += this.fixDelete(node);
+					count += this.fixDelete(node);
 				}
 				size--;
 				updateMinMax(centenarian,1);
-				return changes;
+				return count;
 			}
 		}
 	}
