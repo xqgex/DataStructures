@@ -665,6 +665,7 @@ public class RBTree {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 *//*
+
 		if ( (this.root != this.blank)&&(search(k) != null) ) {
 			return -1;
 		} else {

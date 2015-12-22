@@ -154,53 +154,76 @@ public class RBTree_or {
 	 * Returns the number of color changes needed to keep the tree's invariants
 	 * by overviewing all cases (learned in lecture) 
 	 */
-	private int fixInsert(RBNode x) {
-		int cntChanges = 0; //Color changes
-		RBNode y = blank; //To be x's uncle
-		while (x.parentT != blank && x.parentT.isRed()) { //x is not the root and child of RED node
-			if (x.parentT == x.parentT.parentT.leftT) { //x's father is left child
-				y = x.parentT.parentT.rightT;
-				if (y.isRed()){ //Uncle is RED, case 1
-					cntChanges += fixColor(x, y);
-					x = x.parentT.parentT; //Bubbling-up the colors problem
-				}
-				else { //Case 2
-					if (x == x.parentT.rightT) { //x is a right child
-						x = x.parentT; 
-						leftRotate(x); //Fixing the tree with left rotation
-					}
-					//Case 3
-					cntChanges += 2;
-					x.parentT.color = Color.BLACK; 
-					x.parentT.parentT.color = Color.RED;
-											//Changing colors to maintain invariants
-					rightRotate(x.parentT.parentT); //Fix using right rotation
-				}
-			} else { //x's father is right child
-				y = x.parentT.parentT.leftT; //Still his uncle
-				if (y.isRed()){ //Case 1, same as before
-					cntChanges += fixColor(x, y);
-					x = x.parentT.parentT; //Bubbling-up the problem
-				}
-				else{
-					if (x == x.parentT.leftT) { //Case 2
-						x = x.parentT;
-						rightRotate(x);
-					}
-					//Case 3
-					cntChanges += 2;
-					x.parentT.color = Color.BLACK;
-					x.parentT.parentT.color = Color.RED;
-					leftRotate(x.parentT.parentT);
-				}
+	public int fixInsert(RBNode node) {
+		int count = 0;
+		while ( (node.parentT != this.blank)&&(node.parentT.isRed()) ) {
+			//this.print();
+			//System.out.println("wwwwww");
+			if (node.parentT == node.parentT.parentT.leftT) {
+				RBNode uncle = node.parentT.parentT.rightT;
+				if ( (uncle == this.blank)||(!uncle.isRed()) ) {
+					if (node == node.parentT.rightT) { // Case 2
+						//this.print();
+						//System.out.println("nnnnnn");
+						node = node.parentT; //			//	      Y
+						leftRotate(node); //			//	    /   \
+						//this.print();
+						//System.out.println("qqqqqq");
+					} // Case 3 //						//	   <X>  d
+					count += node.parentT.parentT.changeColor(Color.RED); //	  /   \
+					count += node.parentT.changeColor(Color.BLACK); //		//	 <Z>  c
+					//count += 2; //						//	/   \
+					//node = node.parentT; //				//	a   b
+					rightRotate(node.parentT.parentT);
+					//this.print();
+					//System.out.println("pppppp");
+				} else { // Case 1						//	      Y
+					//this.print();
+					//System.out.println("oooooo");
+					count += node.parentT.parentT.changeColor(Color.RED); //	    /   \
+					count += node.parentT.changeColor(Color.BLACK); //		//	 <X>     <W>
+					count += uncle.changeColor(Color.BLACK); //				//	/   \   /   \
+					//count += 3; //						//	a  <Z>  d   e
+					node = node.parentT.parentT; //		//	  /   \
+				} //									//	  b   c
+			} else {
+				RBNode uncle = node.parentT.parentT.leftT;
+				if ( (uncle == this.blank)||(!uncle.isRed()) ) {
+					if (node == node.parentT.leftT) { // Case 2
+						//this.print();
+						//System.out.println("rrrrrr");
+						node = node.parentT; //			//	      Y
+						rightRotate(node); //			//	    /   \
+						//this.print();
+						//System.out.println("ssssss");
+					} // Case 3 //						//	   a   <X>
+					count += node.parentT.parentT.changeColor(Color.RED); //	      /   \
+					count +=node.parentT.changeColor(Color.BLACK); //		//	     b   <Z>
+					//count += 2; //						//	        /   \
+					//node = node.parentT; //				//	        c   d
+					leftRotate(node.parentT.parentT);
+					//this.print();
+					//System.out.println("tttttt");
+				} else { // Case 1						//	      Y
+					//this.print();
+					//System.out.println("uuuuuu");
+					count += node.parentT.parentT.changeColor(Color.RED); //	    /   \
+					count += node.parentT.changeColor(Color.BLACK); //		//	 <W>     <X>
+					count += uncle.changeColor(Color.BLACK); //				//	/   \   /   \
+					//count += 3; //						//	a   b   c  <Z>
+					node = node.parentT.parentT; //		//	          /   \
+					//this.print();
+					//System.out.println("xxxxxx");
+				} //									//	          d   e
 			}
 		}
-		if (root.isRed()) {
-			root.color = Color.BLACK;
-			cntChanges++;
+		if (node.parentT == this.blank) {
+			this.root = node;
+			count += this.root.changeColor(Color.BLACK);
 		}
-		return cntChanges;
+		return count; //+1?
 	}
+	
 	/**
 	 * private static void leftChild
 	 * 
@@ -551,43 +574,91 @@ public class RBTree_or {
 	 * with key k already exists in the tree.
 	 */
 	public int insert(int k, String v) {
+	int changes = 0;
+	// Insert: Case 1a: z’s uncle w is red, z is a right child
+	// Insert: Case 1b: z’s uncle w is red, z is a left child
+	// Insert: Case 2:  z’s uncle w is black, z is a right child
+	// Insert: Case 3:  z’s uncle w is black, z is a left child
+	/* Abstract data type code:
+	 * 	Insert as RED (always leaf)
+	 * 	Too much RED is extra weight – must be reduced
+	 * 		If imbalanced with brother – solve by re-balancing
+	 * 		Else – push problem upwards
+	 */
+
+	if ( (this.root != this.blank)&&(search(k) != null) ) {
+		return -1;
+	} else {
 		this.array_status = false;
-		RBNode z = new RBNode(k, v, Color.RED, this.blank, this.blank); //Inserting z
-		if (k > max.key)
-			max = z;
-		if (k < min.key)
-			min = z;
-		RBNode x = root;
-		int changes = 0; //Color changes
-		if (empty()) { //If tree is empty - insert as root
-			z.parentT = blank;
-			root = z;
-			z.color = Color.BLACK;
-			changes = 1;
-			min = z;
-			max = z;
-			size++;
-		} else { // Binary tree insert
-			RBNode y = blank;
-			while (x != blank) { //Finding the spot to enter
-				y = x;
-				if (k < x.key) //Should be entered in left subtree
-					x = x.leftT;
-				else if (k > x.key) //Should be entered in right subtree
-					x = x.rightT;
-				else //If node with same key exists in tree
-					return -1;
+		this.size++;
+		RBNode newBaby = new RBNode(k, v, Color.RED, this.blank, this.blank);
+		if (this.root == this.blank) { //First node at the tree
+			this.root = newBaby;
+			this.max = newBaby;
+			this.min = newBaby;
+			changes += this.root.changeColor("switch");
+			return changes;
+		} else {
+			RBNode father = whereToInsert(this.root, newBaby);
+			if (newBaby.key < father.key) {
+				leftChild(father, newBaby);
+			} else {
+				rightChild(father, newBaby);
 			}
-			z.parentT = y;
-			if (z.key < y.key) //Linking z to parent y
-				y.leftT = z;
-			else
-				y.rightT = z;
-			size++;
-			changes += fixInsert(z);
+			//this.print();
+			//System.out.println("llllll");
+			if (father.isRed()) {
+				changes += fixInsert(newBaby);
+				//this.print();
+				//System.out.println("mmmmmm");
+			}
+			upDate(newBaby);
+			/*if (this.size > 6) {
+				this.print();
+				System.out.println("dddddd");
+			}*/
+			return changes;
 		}
-		return changes;
 	}
+}
+//	public int insert1(int k, String v) {
+//		this.array_status = false;
+//		RBNode z = new RBNode(k, v, Color.RED, this.blank, this.blank); //Inserting z
+//		if (k > max.key)
+//			max = z;
+//		if (k < min.key)
+//			min = z;
+//		RBNode x = root;
+//		int changes = 0; //Color changes
+//		if (empty()) { //If tree is empty - insert as root
+//			z.parentT = blank;
+//			root = z;
+//			z.color = Color.BLACK;
+//			changes = 1;
+//			min = z;
+//			max = z;
+//			size++;
+//		} else { // Binary tree insert
+//			RBNode y = blank;
+//			while (x != blank) { //Finding the spot to enter
+//				y = x;
+//				if (k < x.key) //Should be entered in left subtree
+//					x = x.leftT;
+//				else if (k > x.key) //Should be entered in right subtree
+//					x = x.rightT;
+//				else //If node with same key exists in tree
+//					return -1;
+//			}
+//			z.parentT = y;
+//			if (z.key < y.key) //Linking z to parent y
+//				y.leftT = z;
+//			else
+//				y.rightT = z;
+//			size++;
+//			changes += fixInsert(z);
+//		}
+//		return changes;
+//	}
 	/**
 	 * public int delete(int k)
 	 *
@@ -841,6 +912,18 @@ public class RBTree_or {
 		}
 
 	}
-
+	public RBNode whereToInsert(RBNode root ,RBNode node) {
+		RBNode ans = root;
+		if(node.key < root.key) {
+			if(root.leftT != this.blank) {
+				ans = whereToInsert(root.leftT, node);
+			}
+		} else if(node.key > root.key) {
+			if(root.rightT != this.blank) {
+				ans = whereToInsert(root.rightT, node);
+			}
+		}
+		return ans;
+	}
 
 }
