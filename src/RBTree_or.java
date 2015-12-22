@@ -108,37 +108,32 @@ public class RBTree_or {
 					count += node.changeColor("darken");
 				} else if (!brtr.isRed()) { // I have a black brother 8-)
 					if ( (brtr.leftT != this.blank)&&(brtr.leftT.isRed()) ) { // Case 3
-						rightRotate(brtr); //			//	      ?Y?
+						rightRotate(brtr); //							//	      ?Y?
 						count += brtr.changeColor("darken"); //			//	     /   \
 						count += brtr.parentT.changeColor("switch"); //	//	  |X|      W
-						brtr = brtr.parentT; //			//	 /   \   /   \
-										//	?a? ?b? <c> ?d?
-					}
+						brtr = brtr.parentT; //							//	 /   \   /   \
+					} //												//	?a? ?b? <c> ?d?
 					if ( (brtr.rightT != this.blank)&&(brtr.rightT.isRed()) ) { // Case 4
 						leftRotate(node.parentT);
-						count += brtr.changeColor(node.parentT); //				//	      ?Y?
-						count += node.changeColor(Color.BLACK); //					//	     /   \
-						count += node.parentT.changeColor(Color.BLACK); //			//	  |X|      W
+						count += brtr.changeColor(node.parentT); //						//	      ?Y?
+						count += node.changeColor(Color.BLACK); //						//	     /   \
+						count += node.parentT.changeColor(Color.BLACK); //				//	  |X|      W
 						count += node.parentT.parentT.rightT.changeColor("switch"); //	//	 /   \   /   \
-						node = node.parentT.parentT; //					//	?a? ?b? ?c? <d>
+						node = node.parentT.parentT; //									//	?a? ?b? ?c? <d>
 					} else { // Case 2
 						count += node.changeColor(Color.BLACK); //		//	      ?Y?
-						count += node.parentT.changeColor("darken");
-															//			//	     /   \
-						count += brtr.changeColor("switch"); //				//	  |X|      W 
-						count += 3; //						//	 /   \   /   \
-						node = node.parentT; //				//	?a? ?b?  c   d
-						//this.print();
-						//System.out.println("ffffff");
+						count += node.parentT.changeColor("darken"); //	//	     /   \
+						count += brtr.changeColor("switch"); //			//	  |X|      W 
+						count += 3; //									//	 /   \   /   \
+						node = node.parentT; //							//	?a? ?b?  c   d
 					}
 				} else { // Case 1
-					if (node.parentT.parentT == this.blank) {
-						this.root = node.parentT.rightT;
-					} //									//	      Y
-					leftRotate(node.parentT); //			//      /   \
-					count += node.parentT.parentT.changeColor("switch"); //	//   |X|     <W>
-					count += node.parentT.changeColor("switch"); //			//	/   \   /   \
-												//	a   b   c   d
+					if (node.parentT.parentT == this.blank) { //				//	      Y
+						this.root = node.parentT.rightT; //						//      /   \
+					} //														//   |X|     <W>
+					leftRotate(node.parentT); //								//	/   \   /   \
+					count += node.parentT.parentT.changeColor("switch"); //		//	a   b   c   d
+					count += node.parentT.changeColor("switch");
 				}
 			} else {
 				RBNode brtr = node.parentT.leftT;
@@ -146,39 +141,35 @@ public class RBTree_or {
 					count += node.changeColor(Color.BLACK);
 					node = node.parentT;
 					count += node.changeColor("darken");
-					
 				} else if (!brtr.isRed()) { // I have a black brother 8-)
 					if ( (brtr.rightT != this.blank)&&(brtr.rightT.isRed()) ) { // Case 3
-						leftRotate(brtr); //			//	      ?Y?
+						leftRotate(brtr); //							//	      ?Y?
 						count += brtr.changeColor("switch"); //			//	     /   \
 						count += brtr.parentT.changeColor("switch"); //	//	   X      |W|
-											//	 /   \   /   \
-					} //								//	?a? <b> ?c? ?d?
+						brtr = brtr.parentT;							//	 /   \   /   \
+					} //												//	?a? <b> ?c? ?d?
 					if ( (brtr.leftT != this.blank)&&(brtr.leftT.isRed()) ) { // Case 4
 						rightRotate(node.parentT);
 						count += brtr.changeColor(node.parentT.color); //				//	      ?Y?
-						count += node.changeColor(Color.BLACK); //					//	     /   \
-						count += node.parentT.changeColor(Color.BLACK); //			//	   X      |W|
+						count += node.changeColor(Color.BLACK); //						//	     /   \
+						count += node.parentT.changeColor(Color.BLACK); //				//	   X      |W|
 						count += node.parentT.parentT.leftT.changeColor("switch"); //	//	 /   \   /   \
-						node = node.parentT.parentT; //					//	<a> ?b? ?c? ?d?
+						node = node.parentT.parentT; //									//	<a> ?b? ?c? ?d?
 						
 					} else { // Case 2
-						//this.print();
-						//System.out.println("gggggg");
-						count += node.changeColor(Color.BLACK); //		//	      ?Y?
-						count += node.parentT.changeColor("darken"); //			//	     /   \
+						count += node.changeColor(Color.BLACK); //			//	      ?Y?
+						count += node.parentT.changeColor("darken"); //		//	     /   \
 						count += brtr.changeColor("switch"); //				//	   X      |W|
-						 //						//	 /   \   /   \
-						node = node.parentT; //				//	 a   b  ?c? ?d?
+						 //													//	 /   \   /   \
+						node = node.parentT; //								//	 a   b  ?c? ?d?
 					}
 				} else { // Case 1
-					if (node.parentT.parentT == this.blank) {
-						this.root = node.parentT.leftT;
-					} //									//	      Y
-					rightRotate(node.parentT); //			//	    /   \
-					count += node.parentT.parentT.changeColor("switch"); //	//	 <X>     |W|
-					count += node.parentT.changeColor("switch"); //			//	/   \   /   \
-												//	a   b   c   d
+					if (node.parentT.parentT == this.blank) { //			//	      Y
+						this.root = node.parentT.leftT; //					//	    /   \
+					} //													//	 <X>     |W|
+					rightRotate(node.parentT); //							//	/   \   /   \
+					count += node.parentT.parentT.changeColor("switch"); //	//	a   b   c   d
+					count += node.parentT.changeColor("switch");
 				}
 			}
 		}
@@ -197,71 +188,46 @@ public class RBTree_or {
 	public int fixInsert(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != this.blank)&&(node.parentT.isRed()) ) {
-			//this.print();
-			//System.out.println("wwwwww");
 			if (node.parentT == node.parentT.parentT.leftT) {
 				RBNode uncle = node.parentT.parentT.rightT;
-				if ( (uncle == this.blank)||(!uncle.isRed()) ) {
-					if (node == node.parentT.rightT) { // Case 2
-						//this.print();
-						//System.out.println("nnnnnn");
-						node = node.parentT; //			//	      Y
-						leftRotate(node); //			//	    /   \
-						//this.print();
-						//System.out.println("qqqqqq");
-					} // Case 3 //						//	   <X>  d
-					count += node.parentT.parentT.changeColor(Color.RED); //	  /   \
-					count += node.parentT.changeColor(Color.BLACK); //		//	 <Z>  c
-					//count += 2; //						//	/   \
-					//node = node.parentT; //				//	a   b
+				if ( (uncle == this.blank)||(!uncle.isRed()) ) { //			//	      Y
+					if (node == node.parentT.rightT) { // Case 2 //			//	    /   \
+						node = node.parentT; //								//	   <X>  d
+						leftRotate(node); //								//	  /   \
+					} // Case 3 //											//	 <Z>  c
+					count += node.parentT.parentT.changeColor(Color.RED); ////	/   \
+					count += node.parentT.changeColor(Color.BLACK); //		//	a   b
 					rightRotate(node.parentT.parentT);
-					//this.print();
-					//System.out.println("pppppp");
-				} else { // Case 1						//	      Y
-					//this.print();
-					//System.out.println("oooooo");
-					count += node.parentT.parentT.changeColor(Color.RED); //	    /   \
+				} else { // Case 1											//	      Y
+					count += node.parentT.parentT.changeColor(Color.RED); ////	    /   \
 					count += node.parentT.changeColor(Color.BLACK); //		//	 <X>     <W>
 					count += uncle.changeColor(Color.BLACK); //				//	/   \   /   \
-					//count += 3; //						//	a  <Z>  d   e
-					node = node.parentT.parentT; //		//	  /   \
-				} //									//	  b   c
-			} else {
+					node = node.parentT.parentT; //							//	a  <Z>  d   e
+				} //														//	  /   \
+			} else { //														//	  b   c
 				RBNode uncle = node.parentT.parentT.leftT;
-				if ( (uncle == this.blank)||(!uncle.isRed()) ) {
-					if (node == node.parentT.leftT) { // Case 2
-						//this.print();
-						//System.out.println("rrrrrr");
-						node = node.parentT; //			//	      Y
-						rightRotate(node); //			//	    /   \
-						//this.print();
-						//System.out.println("ssssss");
-					} // Case 3 //						//	   a   <X>
-					count += node.parentT.parentT.changeColor(Color.RED); //	      /   \
-					count +=node.parentT.changeColor(Color.BLACK); //		//	     b   <Z>
-					//count += 2; //						//	        /   \
-					//node = node.parentT; //				//	        c   d
+				if ( (uncle == this.blank)||(!uncle.isRed()) ) { //			//	      Y
+					if (node == node.parentT.leftT) { // Case 2 //			//	    /   \
+						node = node.parentT; //								//	   a   <X>
+						rightRotate(node); //								//	      /   \
+					} // Case 3 //											//	     b   <Z>
+					count += node.parentT.parentT.changeColor(Color.RED); ////	        /   \
+					count +=node.parentT.changeColor(Color.BLACK); //		//	        c   d
 					leftRotate(node.parentT.parentT);
-					//this.print();
-					//System.out.println("tttttt");
-				} else { // Case 1						//	      Y
-					//this.print();
-					//System.out.println("uuuuuu");
-					count += node.parentT.parentT.changeColor(Color.RED); //	    /   \
+				} else { // Case 1 //										//	      Y
+					count += node.parentT.parentT.changeColor(Color.RED); ////	    /   \
 					count += node.parentT.changeColor(Color.BLACK); //		//	 <W>     <X>
 					count += uncle.changeColor(Color.BLACK); //				//	/   \   /   \
-					//count += 3; //						//	a   b   c  <Z>
-					node = node.parentT.parentT; //		//	          /   \
-					//this.print();
-					//System.out.println("xxxxxx");
-				} //									//	          d   e
+					//count += 3; //										//	a   b   c  <Z>
+					node = node.parentT.parentT; //							//	          /   \
+				} //														//	          d   e
 			}
 		}
 		if (node.parentT == this.blank) {
 			this.root = node;
 			count += this.root.changeColor(Color.BLACK);
 		}
-		return count; //+1?
+		return count;
 	}
 	/**
 	 * recursive max finder.
