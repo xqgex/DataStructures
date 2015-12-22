@@ -145,38 +145,7 @@ public class RBTree_or {
 	public boolean empty() {
 			return (this.root == this.blank);
 		}
-	/**
-	 * public String search(int k)
-	 *
-	 * returns the value of an item with key k if it exists in the tree
-	 * otherwise, returns null
-	 */
-	public String search(int k){
-		RBNode found = this.searchNode(k); //searching the node with key k
-		if (found == null)
-			return null;
-		return found.value;
-	}
-	/**
-	 * 
-	 * @param k
-	 * returns the node with key k, or null if not in tree
-	 */
-	private RBNode searchNode(int k) {
-		RBNode tmpNode = root;
-		int found = -1; //indicator
-		while (found == -1 && tmpNode != blank) { //binary tree search
-			if (tmpNode.key == k)
-				found = 1;
-			else if (tmpNode.key < k)
-				tmpNode = tmpNode.rightT;
-			else
-				tmpNode = tmpNode.leftT;
-		}
-		if (found == -1) //node NOT FOUND
-			return null;
-		return tmpNode;
-	}
+
 	/**
 	 * public int insert(int k, String v)
 	 *
@@ -234,7 +203,7 @@ public class RBTree_or {
 	public int delete(int k) {
 		int changes = 0; //Color changes
 		RBNode toDelete = this.binSearch(root, k); //Finding the node we want to delete
-		if (toDelete == null) //Key k not in tree
+		if (toDelete == blank) //Key k not in tree
 			return -1;
 		this.array_status = false;
 		if (size == 1){ //Remove the root
@@ -775,7 +744,7 @@ public class RBTree_or {
 		}
 	}
 
-	public String search1(int k) { // envelop function
+	public String search(int k) { // envelop function
 		RBNode node = binSearch(this.root,k);
 		if(node != this.blank){
 			return node.value;

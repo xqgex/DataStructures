@@ -404,7 +404,7 @@ public class Tester {
 			for (int test_num=0; test_num<10; test_num++) {
 				startTime = System.currentTimeMillis();
 				if (test_num==1) {
-					//continue;
+					continue;
 				}
 				TestRun test_runner = new TestRun(test_num);
 				test_runner.run();
