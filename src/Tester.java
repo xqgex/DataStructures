@@ -5,47 +5,36 @@ import java.util.Random;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.swing.text.StyledEditorKit.ForegroundAction;
-
 class MyTree {
 	private TreeSet<Integer> set;
-
 	MyTree() {
 		this.set = new TreeSet<Integer>();
 	}
-
 	public int size() {
 		return this.set.size();
 	}
-
 	public boolean empty() {
 		return this.set.isEmpty();
 	}
-
 	public void insert(int v) {
 		this.set.add((Integer)v);
 	}
-
 	public void delete(int v) {
 		this.set.remove((Integer)v);
 	}
-
 	public int min() {
 		if (this.empty())
 			return -1;
 		return (int)(this.set.first());
 	}
-
 	public int max() {
 		if (this.empty())
 			return -1;
 		return (int)(this.set.last());
 	}
-
 	public boolean contains(int v) {
 		return this.set.contains((Integer)v);
 	}
-
 	public int[] array() {
 		int[] arr = new int[this.size()];
 		Iterator<Integer> itr = this.set.iterator();
@@ -54,16 +43,12 @@ class MyTree {
 		return arr;
 	}
 }
-
-
 class TestRun implements Runnable {
     private int test_num;
     public boolean success = false;
-
     public TestRun(int test_num) {
         this.test_num = test_num;
     }
-
     public void run() {
         try {
         	switch (this.test_num) {
@@ -93,11 +78,8 @@ class TestRun implements Runnable {
         }
     }
 }
-
 public class Tester {
-	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
-	public static int SIZE = 50;//2048 //9+13+14+15 //StaMAX 183 ???
-
+	public static int SIZE = 50;
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
 		for (int j = 0; j < arr.length; j++) {
@@ -106,7 +88,6 @@ public class Tester {
 		Arrays.sort(sortedArr);
 		return sortedArr;
 	}
-
 	public static boolean arraysIdentical(int[] arr1, int[] arr2) {
 		if (arr1.length != arr2.length) {
 			return false;
@@ -118,7 +99,6 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static int[] stringToInt(String[] arr) {
 		int[] arr2 = new int[arr.length];
 		for (int i = 0 ; i < arr2.length ; i++) {
@@ -126,58 +106,40 @@ public class Tester {
 		}
 		return arr2;
 	}
-
 	public static int intValue(String str) {
 		if (str == null)
 			return -1;
 		else
 			return Integer.parseInt(str);
 	}
-
 	public static boolean checkEmpty(RBTree_or rbTree, MyTree myTree) {
 		return rbTree.empty() == myTree.empty();
 	}
-
 	public static boolean checkSize(RBTree_or rbTree, MyTree myTree) {
 		return rbTree.size() == myTree.size();
 	}
-
 	public static boolean checkMin(RBTree_or rbTree, MyTree myTree) {
 		return intValue(rbTree.min()) == myTree.min();
 	}
-
 	public static boolean checkMax(RBTree_or rbTree, MyTree myTree) {
 		return intValue(rbTree.max()) == myTree.max();
 	}
-
 	public static boolean checkKeysArray(RBTree_or rbTree, MyTree myTree) {
 		return arraysIdentical(rbTree.keysToArray(),
 							   sortInts(myTree.array()));
 	}
-
 	public static boolean checkValuesArray(RBTree_or rbTree, MyTree myTree) {
 		return arraysIdentical(stringToInt(rbTree.valuesToArray()),
 							   sortInts(myTree.array()));
 	}
-
 	public static boolean checkSearch(RBTree_or rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
-			int a = intValue(rbTree.search(i));
-			boolean b = myTree.contains(i);
-			/*if ( (a == 8)&&(rbTree.size() == 14) ) {
-				rbTree.printlist();
-				System.out.println("VVVVVV");
-			}*/
 			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i)) {
-				/*rbTree.print();
-				rbTree.printlist();
-				System.out.println("zzzzzz");*/
 				return false;
 			}
 		}
 		return true;
 	}
-
 	public static boolean checkAll(RBTree_or rbTree, MyTree myTree) {
 		return (checkEmpty(rbTree, myTree) &&
 				checkSize(rbTree, myTree) &&
@@ -186,16 +148,12 @@ public class Tester {
 				checkKeysArray(rbTree, myTree) &&
 				checkValuesArray(rbTree, myTree));
 	}
-
 	public static void insert(RBTree_or rbTree, MyTree myTree, int[] keys) {
 		for (int j = 0; j < keys.length; j++) {
 			rbTree.insert(keys[j],(""+keys[j]));
-			//rbTree.print();
-			//System.out.println("111111111");
 			myTree.insert(keys[j]);
 		}
 	}
-
 	public static int[] generateKeys() {
 		int[] arr = new int[SIZE];
 	    for (int i = 0; i < SIZE; i++) {
@@ -220,7 +178,6 @@ public class Tester {
 	    Arrays.sort(arr, SIZE/2, 3*SIZE/4);
 	    return arr;
 	}
-
 	public static boolean emptyTreeTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -230,7 +187,6 @@ public class Tester {
 		//rbTree.delete(1);
 		return checkAll(rbTree, myTree);
 	}
-
 	public static boolean insertAndSearchTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -243,33 +199,20 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static boolean deleteAndSearchTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
-			/*f (j > 9) {
-				System.out.println("HHHHHH Delete " + keys[j]);
-				//rbTree.print();
-				//rbTree.printlist();
-			}*/
-			/*if (keys[j] == 5) {
-				System.out.println("Y?");
-			}*/
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
 			if (!checkSearch(rbTree, myTree)) {
-				System.out.println("JJJJJJ");
-				//rbTree.print();
-				//rbTree.printlist();
 				return false;
 			}
 		}
 		return true;
 	}
-
 	public static boolean insertAndMinMaxTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -282,7 +225,6 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static boolean deleteMinMaxTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -296,7 +238,6 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static boolean insertAndSizeEmptyTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -309,7 +250,6 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static boolean insertAndArraysTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -324,20 +264,13 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static boolean deleteAndArraysTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
-		if (keys.length > 5) {
-			int ss = 0;
-		}
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
-			//rbTree.print();
 			rbTree.delete(keys[j]);
-			//rbTree.print();
-			//System.out.println("ffdf");
 			myTree.delete(keys[j]);
 			if (!checkKeysArray(rbTree, myTree))
 				return false;
@@ -346,7 +279,6 @@ public class Tester {
 		}
 		return true;
 	}
-
 	public static boolean doubleInsertTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -360,7 +292,6 @@ public class Tester {
 		}
 		return checkValuesArray(rbTree, myTree);
 	}
-
 	public static boolean doubleDeleteTest() {
 		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
@@ -375,7 +306,6 @@ public class Tester {
 		}
 		return checkValuesArray(rbTree, myTree);
 	}
-
 	public static int parseArgs(String[] args) {
 		int test_num;
 		if (args.length != 1)
@@ -389,23 +319,28 @@ public class Tester {
 			return -1;
 		return test_num;
 	}
-	
-	public static void main(String[] args) {
-		/*int test_num = parseArgs(args);
-		if (test_num == -1) {
-			System.out.println("USAGE: java Tester <test_num>");
-			System.exit(1);
-		}*/
-		
+	public static void smallTest() {
+		RBTree_or tree = new RBTree_or();
+		int[][] keysSet = new int[2][];
+		keysSet[0] = new int[] {1, 2, 0, 3, 4, 10, 9, 7, 8, 6, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+		keysSet[1] = new int[] {1, 5, 2, 3, 6, 0, 10, 15, 12};
+		for (int[] set : keysSet) {
+			for (int key : set) {
+				tree.insert(key, String.valueOf(key));
+			}
+			for (int key : set) {
+				tree.delete(key);
+				System.out.println("Tree: Delete " + String.valueOf(key));
+			}
+		}
+	}
+	public static void hugeTest() {
 		long startTime;
-		for (int i=0;i<50;i++) {
-			String res = "Check for " + i*8 + " elements";
+		for (int i=0;i<=128;i++) {
+			String res = "Check for " + i*16 + " elements";
 			Tester.SIZE = i*8;
 			for (int test_num=0; test_num<10; test_num++) {
 				startTime = System.currentTimeMillis();
-				if (test_num==1) {
-					//continue;
-				}
 				TestRun test_runner = new TestRun(test_num);
 				test_runner.run();
 				Thread test_thread = new Thread(test_runner);
@@ -425,35 +360,7 @@ public class Tester {
 			System.out.println(res);
 		}
 		System.exit(0);
-		/*
-		RBTree_or tree = new RBTree_or();
-		int[][] keysSet = new int[2][];
-		keysSet[0] = new int[] {1, 2, 0, 3, 4, 10, 9, 7, 8, 6, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
-		keysSet[1] = new int[] {1, 5, 2, 3, 6, 0, 10, 15, 12};
-		for (int[] set : keysSet) {
-			for (int key : set) {
-				tree.insert(key, String.valueOf(key));
-			}
-			System.out.println("Tree:");
-			tree.print();
-			tree.printlist();
-			for (int key : set) {
-				tree.delete(key);
-				System.out.println("Tree: Delete " + String.valueOf(key));
-				tree.print();
-			}
-		}
-		*/
-		/*
-		int times = 10000;
-		for (int i = 1; i <= 10; i++) {
-			times *= i;
-			testRun(times);
-		}
-		*/
 	}
-	
-	
 	public static void shuffleArra (int[] ar) {
 		    Random rnd = ThreadLocalRandom.current();
 		    for (int i = ar.length - 1; i > 0; i--) {
@@ -464,30 +371,40 @@ public class Tester {
 		      ar[i] = a;
 		    }
 		  }
-	public static void testRun(int numberOf) {
-			int[] list = new int[200000];
-			for (int i = 1; i < list.length; i++) {
-				list[i] = i;
+	public static void loopTest() {
+		int numberOf = 10000;
+		for (int i = 1; i <= 10; i++) {
+			numberOf *= i;
+			int[] list = new int[numberOf+1];
+			for (int j = 1; j < list.length; j++) {
+				list[j] = j;
 			}
 			shuffleArra (list);
 			int cnt;
 			int totalI = 0;
 			int totalD = 0;
 			RBTree_or tree = new RBTree_or();
-			for (int i = 0; i <= numberOf; i++) {
-				cnt = tree.insert(list[i], "value");
+			for (int j = 0; j <= numberOf; j++) {
+				cnt = tree.insert(list[j], "value");
 				if (cnt != -1) {
 					totalI += cnt; 
 				}
 			}
-			System.out.println("insert:"+numberOf +"=" + totalI/numberOf);
-			for (int i = 0; i <= numberOf; i++) {
-				cnt = tree.delete(list[i]);
+			System.out.println("insert:" + numberOf + " nodes, Total of " + totalI + " color changes, AVG: " + totalI/numberOf);
+			for (int j = 0; j <= numberOf; j++) {
+				cnt = tree.delete(j);
 				if (cnt != -1) {
 					totalD += cnt; 
 				}
 			}
-			System.out.println("delete:"+numberOf +"=" + totalD/numberOf);
+			System.out.println("delete:" + numberOf + " nodes, Total of " + totalD + " color changes, AVG: " + totalD/numberOf);
 		}
-	
 	}
+
+
+	public static void main(String[] args) {
+		//loopTest();
+		hugeTest();
+		//smallTest();
+	}
+}
