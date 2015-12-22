@@ -302,7 +302,7 @@ public class RBTree_or {
 															//one child
 			y = toDelete; //We now want to delete y
 		else
-			y = this.getsuccessor(toDelete); //We want to delete toDelete's successor
+			y = this.findSccr(toDelete); //We want to delete toDelete's successor
 		if (y.leftT != blank)
 			x = y.leftT;
 		else
@@ -488,26 +488,6 @@ public class RBTree_or {
 	 * @param node
 	 * finding the successor in tree instance of RBNode node
 	 */
-	public RBNode getsuccessor(RBNode node) {
-		RBNode successor = blank;
-		if (node != this.maxNode()){ //Has successor
-			successor = node.rightT;
-			if (successor != blank){ //If node has right child -
-				//then go right and all the way to the left
-				while (successor.leftT != blank)
-					successor = successor.leftT;
-			} else { //Go up to the left, and take the first right
-				successor = node.parentT;
-				if (node == node.parentT.rightT){
-					while (successor == successor.parentT.rightT)
-						successor = successor.parentT;
-					if (successor != root)
-						successor = successor.parentT;
-				}
-			}
-		}
-		return successor; //Successor node
-	}
 	private RBNode[] updateArray(RBNode[] arr, RBNode root, int cnt) {
 		if(root == this.blank) {
 			arr = null;
@@ -589,10 +569,10 @@ public class RBTree_or {
 	private RBNode[] nodesToArray(RBNode minNode){
 		RBNode[] arr = new RBNode[size]; //To be array of all nodes
 		arr[0] = minNode; //Inserting node with smallest key
-		RBNode s = getsuccessor(minNode);
+		RBNode s = findSccr(minNode);
 		for (int i=1; i<size; i++){ //(n = size) n calls for successor
 			arr[i] = s;
-			s = getsuccessor(s);
+			s = findSccr(s);
 		}
 		return arr;
 	}
@@ -868,4 +848,25 @@ public class RBTree_or {
 			return this.blank;
 		}
 	}
+	public RBNode findSccr(RBNode node) {
+		if (node.rightT != this.blank) { // if node has a right sub-tree. 
+			node = node.getRight();
+			while(node.leftT != this.blank) {// has a left Subtree.
+				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
+			}
+			return node;
+		} else { //if node does not have a right sub-tree.
+			if (node.parentT.getLeft() == node) {
+				return node.parentT;	
+			} else {
+				while (node != node.parentT.getLeft()) {// node is a left child.
+					node = node.parentT;
+				}
+			}
+			return node;
+		}
+
+	}
+
+
 }
