@@ -373,8 +373,8 @@ public class RBTree_or {
 	 *  the min and max of the tree, and resets it 
 	 *  to be the new node if needed.
 	 *  
-	 *  type=0 : 
-	 *  type=1 : 
+	 *  type=0 : Insert
+	 *  type=1 : Delete
 	 *  
 	 * @param newBaby
 	 */
