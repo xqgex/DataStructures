@@ -96,7 +96,7 @@ class TestRun implements Runnable {
 
 public class Tester {
 	// False appear when size cross 21 and when size cross 183 there is a stack over flow error
-	public static final int SIZE = 50;//2048 //9+13+14+15 //StaMAX 183 ???
+	public static int SIZE = 50;//2048 //9+13+14+15 //StaMAX 183 ???
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -134,33 +134,33 @@ public class Tester {
 			return Integer.parseInt(str);
 	}
 
-	public static boolean checkEmpty(RBTree rbTree, MyTree myTree) {
+	public static boolean checkEmpty(RBTree_or rbTree, MyTree myTree) {
 		return rbTree.empty() == myTree.empty();
 	}
 
-	public static boolean checkSize(RBTree rbTree, MyTree myTree) {
+	public static boolean checkSize(RBTree_or rbTree, MyTree myTree) {
 		return rbTree.size() == myTree.size();
 	}
 
-	public static boolean checkMin(RBTree rbTree, MyTree myTree) {
+	public static boolean checkMin(RBTree_or rbTree, MyTree myTree) {
 		return intValue(rbTree.min()) == myTree.min();
 	}
 
-	public static boolean checkMax(RBTree rbTree, MyTree myTree) {
+	public static boolean checkMax(RBTree_or rbTree, MyTree myTree) {
 		return intValue(rbTree.max()) == myTree.max();
 	}
 
-	public static boolean checkKeysArray(RBTree rbTree, MyTree myTree) {
+	public static boolean checkKeysArray(RBTree_or rbTree, MyTree myTree) {
 		return arraysIdentical(rbTree.keysToArray(),
 							   sortInts(myTree.array()));
 	}
 
-	public static boolean checkValuesArray(RBTree rbTree, MyTree myTree) {
+	public static boolean checkValuesArray(RBTree_or rbTree, MyTree myTree) {
 		return arraysIdentical(stringToInt(rbTree.valuesToArray()),
 							   sortInts(myTree.array()));
 	}
 
-	public static boolean checkSearch(RBTree rbTree, MyTree myTree) {
+	public static boolean checkSearch(RBTree_or rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
 			int a = intValue(rbTree.search(i));
 			boolean b = myTree.contains(i);
@@ -178,7 +178,7 @@ public class Tester {
 		return true;
 	}
 
-	public static boolean checkAll(RBTree rbTree, MyTree myTree) {
+	public static boolean checkAll(RBTree_or rbTree, MyTree myTree) {
 		return (checkEmpty(rbTree, myTree) &&
 				checkSize(rbTree, myTree) &&
 				checkMin(rbTree, myTree) &&
@@ -187,7 +187,7 @@ public class Tester {
 				checkValuesArray(rbTree, myTree));
 	}
 
-	public static void insert(RBTree rbTree, MyTree myTree, int[] keys) {
+	public static void insert(RBTree_or rbTree, MyTree myTree, int[] keys) {
 		for (int j = 0; j < keys.length; j++) {
 			rbTree.insert(keys[j],(""+keys[j]));
 			//rbTree.print();
@@ -222,7 +222,7 @@ public class Tester {
 	}
 
 	public static boolean emptyTreeTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		if (!checkAll(rbTree, myTree))
 			return false;
@@ -232,7 +232,7 @@ public class Tester {
 	}
 
 	public static boolean insertAndSearchTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -245,19 +245,19 @@ public class Tester {
 	}
 
 	public static boolean deleteAndSearchTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
-			if (j > 4) {
+			/*f (j > 9) {
 				System.out.println("HHHHHH Delete " + keys[j]);
 				//rbTree.print();
 				//rbTree.printlist();
-			}
-			if (keys[j] == 5) {
+			}*/
+			/*if (keys[j] == 5) {
 				System.out.println("Y?");
-			}
+			}*/
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
 			if (!checkSearch(rbTree, myTree)) {
@@ -271,7 +271,7 @@ public class Tester {
 	}
 
 	public static boolean insertAndMinMaxTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -284,7 +284,7 @@ public class Tester {
 	}
 
 	public static boolean deleteMinMaxTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
@@ -298,7 +298,7 @@ public class Tester {
 	}
 
 	public static boolean insertAndSizeEmptyTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -311,7 +311,7 @@ public class Tester {
 	}
 
 	public static boolean insertAndArraysTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -326,9 +326,12 @@ public class Tester {
 	}
 
 	public static boolean deleteAndArraysTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
+		if (keys.length > 5) {
+			int ss = 0;
+		}
 		insert(rbTree, myTree, keys);
 		for (int j = 0; j < keys.length; j++) {
 			//rbTree.print();
@@ -345,7 +348,7 @@ public class Tester {
 	}
 
 	public static boolean doubleInsertTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
@@ -359,7 +362,7 @@ public class Tester {
 	}
 
 	public static boolean doubleDeleteTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_or rbTree = new RBTree_or();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -395,30 +398,35 @@ public class Tester {
 		}*/
 		
 		long startTime;
-		String res = "";
-		for (int test_num=0; test_num<10; test_num++) {
-			startTime = System.currentTimeMillis();
-			if (test_num==1) {
-				continue;
+		for (int i=0;i<50;i++) {
+			String res = "Check for " + i*8 + " elements";
+			Tester.SIZE = i*8;
+			for (int test_num=0; test_num<10; test_num++) {
+				startTime = System.currentTimeMillis();
+				if (test_num==1) {
+					//continue;
+				}
+				TestRun test_runner = new TestRun(test_num);
+				test_runner.run();
+				Thread test_thread = new Thread(test_runner);
+				test_thread.start();
+				try {
+					test_thread.join(100000000);
+					if (test_thread.isAlive())
+						System.out.println("Timeout on Test " + test_num);
+				}
+				catch (Exception e) {
+					System.out.println("Exception on Test " + test_num + " : " + e);
+				}
+				if (!test_runner.success) {
+					res+=("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.\r\n");
+				}
 			}
-			TestRun test_runner = new TestRun(test_num);
-			test_runner.run();
-			Thread test_thread = new Thread(test_runner);
-			test_thread.start();
-			try {
-				test_thread.join(100000000);
-				if (test_thread.isAlive())
-					System.out.println("Timeout on Test " + test_num);
-			}
-			catch (Exception e) {
-				System.out.println("Exception on Test " + test_num + " : " + e);
-			}
-			res+=("Result #" + test_num + ": " + test_runner.success + " ,Execution time: " + (System.currentTimeMillis() - startTime) + " milliseconds.\r\n");
+			System.out.println(res);
 		}
-		System.out.println(res);
 		System.exit(0);
 		/*
-		RBTree tree = new RBTree();
+		RBTree_or tree = new RBTree_or();
 		int[][] keysSet = new int[2][];
 		keysSet[0] = new int[] {1, 2, 0, 3, 4, 10, 9, 7, 8, 6, 5, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
 		keysSet[1] = new int[] {1, 5, 2, 3, 6, 0, 10, 15, 12};
@@ -465,7 +473,7 @@ public class Tester {
 			int cnt;
 			int totalI = 0;
 			int totalD = 0;
-			RBTree tree = new RBTree();
+			RBTree_or tree = new RBTree_or();
 			for (int i = 0; i <= numberOf; i++) {
 				cnt = tree.insert(list[i], "value");
 				if (cnt != -1) {
