@@ -26,6 +26,30 @@ public class RBTree_or {
 	}
 
 	/**
+	 * performs a binary search on the tree
+	 * in attempt to find the node with k key.
+	 * returns the node that has k as key.
+	 * 
+	 * @param root
+	 * @param k
+	 * @return
+	 */
+	private RBNode binSearch(RBNode root, int k) { // an added recursive function
+		if (root == this.blank) {
+			return this.blank;
+		} else if (root.key == k) {
+			return root;
+		} else if ( (root.key < k)&&(root.rightT != this.blank) ) {
+			root = root.rightT;
+			return binSearch(root, k);
+		} else if ( (root.key > k)&&(root.leftT != this.blank) ) {
+			root = root.leftT;
+			return binSearch(root, k);
+		} else {
+			return this.blank;
+		}
+	}
+	/**
 	 * The function find the last element in array that isn't null
 	 * @return
 	 */
@@ -37,19 +61,23 @@ public class RBTree_or {
 		}
 		return -1;
 	}
-	/**
-	 * 
-	 * @param x - the new node
-	 * @param y - x's uncle
-	 * Case 2 of fix insert, coloring y and his sibling (x's father) black and their
-	 * father black, by that maintaining tree's invariants
-	 * @return is the number of color changes in this case
-	 */
-	private int fixColor(RBNode x, RBNode y) {
-		x.parentT.color = Color.BLACK;
-		y.color = Color.BLACK;
-		x.parentT.parentT.color = Color.RED;
-		return 3;
+	private RBNode findSccr(RBNode node) {
+		if (node.rightT != this.blank) { // if node has a right sub-tree. 
+			node = node.getRight();
+			while(node.leftT != this.blank) {// has a left Subtree.
+				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
+			}
+			return node;
+		} else { //if node does not have a right sub-tree.
+			if (node.parentT.getLeft() == node) {
+				return node.parentT;	
+			} else {
+				while (node != node.parentT.getLeft()) {// node is a left child.
+					node = node.parentT;
+				}
+			}
+			return node;
+		}
 	}
 	/**
 	 * 
@@ -58,94 +86,98 @@ public class RBTree_or {
 	 * to maintain tree's invariants
 	 * returns the number of color changes needed to fix the tree
 	 */
-	private int fixDelete(RBNode x) {
-		RBNode w; //x's "uncle"
-		int changes = 0; //Color changes
-		while (x.parentT != blank && x.isBlack()) { //x is not root and RED
-			if (x == x.parentT.leftT) { //If x is left child
-				w = x.parentT.rightT;
-				if (w.isRed()) { // Case 1
-					changes++;
-					w.color = Color.BLACK;
-					if (x.parentT.isBlack())
-						changes++;
-					x.parentT.color = Color.RED;
-					this.leftRotate(x.parentT);
-					w = x.parentT.rightT;
-				}
-				if (w.leftT.isBlack() && w.rightT.isBlack()) { // Case 2
-					if (w.isBlack())
-						changes++;
-					w.color = Color.RED;
-					x = x.parentT;
-				} else {
-					if (w.rightT.isBlack()) { // Case 3
-						if (w.leftT.isRed())
-							changes++;
-						w.leftT.color = Color.BLACK;
-						if (w.isBlack())
-							changes++;
-						w.color = Color.RED;
-						this.rightRotate(w);
-						w = x.parentT.rightT;
-					} // Case 4
-					if (!w.color.equals(x.parentT.color))
-						changes++;
-					w.color = x.parentT.color;
-					if (x.parentT.isRed())
-						changes++;
-					x.parentT.color = Color.BLACK;
-					if (w.rightT.isRed())
-						changes++;
-					w.rightT.color =Color.BLACK;
-					this.leftRotate(x.parentT);
-					x = this.root;
+	public int fixDelete(RBNode node) { // TODO Delete me
+		int count = 0;
+		while ( (node.parentT != this.blank)&&(node.color == Color.DARK_GRAY) ) {
+			//this.print();
+			//System.out.println("dddddd");
+			if (node == node.parentT.leftT) {
+				RBNode brtr = node.parentT.rightT;
+				if (brtr == this.blank) { // Node don't have brothers (Only child)
+					count += node.changeColor(Color.black);
+					node = node.parentT;
+					count += node.changeColor("darken");
+				} else if (!brtr.isRed()) { // I have a black brother 8-)
+					if ( (brtr.leftT != this.blank)&&(brtr.leftT.isRed()) ) { // Case 3
+						rightRotate(brtr); //			//	      ?Y?
+						count += brtr.changeColor("darken"); //			//	     /   \
+						count += brtr.parentT.changeColor("switch"); //	//	  |X|      W
+						brtr = brtr.parentT; //			//	 /   \   /   \
+										//	?a? ?b? <c> ?d?
+					}
+					if ( (brtr.rightT != this.blank)&&(brtr.rightT.isRed()) ) { // Case 4
+						leftRotate(node.parentT);
+						count += brtr.changeColor(node.parentT); //				//	      ?Y?
+						count += node.changeColor(Color.BLACK); //					//	     /   \
+						count += node.parentT.changeColor(Color.BLACK); //			//	  |X|      W
+						count += node.parentT.parentT.rightT.changeColor("switch"); //	//	 /   \   /   \
+						node = node.parentT.parentT; //					//	?a? ?b? ?c? <d>
+					} else { // Case 2
+						count += node.changeColor(Color.BLACK); //		//	      ?Y?
+						count += node.parentT.changeColor("darken");
+															//			//	     /   \
+						count += brtr.changeColor("switch"); //				//	  |X|      W 
+						count += 3; //						//	 /   \   /   \
+						node = node.parentT; //				//	?a? ?b?  c   d
+						//this.print();
+						//System.out.println("ffffff");
+					}
+				} else { // Case 1
+					if (node.parentT.parentT == this.blank) {
+						this.root = node.parentT.rightT;
+					} //									//	      Y
+					leftRotate(node.parentT); //			//      /   \
+					count += node.parentT.parentT.changeColor("switch"); //	//   |X|     <W>
+					count += node.parentT.changeColor("switch"); //			//	/   \   /   \
+												//	a   b   c   d
 				}
 			} else {
-				w = x.parentT.leftT;
-				if (w.isRed()) { // Case 1
-					changes++;
-					w.color = Color.BLACK;
-					if (x.parentT.isBlack())
-						changes++;
-					x.parentT.color = Color.RED;
-					this.rightRotate(x.parentT);
-					w = x.parentT.leftT;
-				}
-				if (w.leftT.isBlack() && w.rightT.isBlack()) { // Case 2
-					if (w.isBlack())
-						changes++;
-					w.color = Color.RED;
-					x = x.parentT;
-				} else {
-					if (w.leftT.isBlack()) { // Case 3
-						if (w.rightT.isRed())
-							changes++;
-						w.rightT.color = Color.BLACK;
-						if (w.isBlack())
-							changes++;
-						w.color = Color.RED;
-						this.leftRotate(w);
-						w = x.parentT.leftT;
-					} // Case 4
-					if (!w.color.equals(x.parentT.color))
-						changes++;
-					w.color = x.parentT.color;
-					if (x.parentT.isRed())
-						changes++;
-					x.parentT.color = Color.BLACK;
-					if (w.leftT.isRed())
-						changes++;
-					w.leftT.color = Color.BLACK;
-					this.rightRotate(x.parentT);
-					x = this.root;
+				RBNode brtr = node.parentT.leftT;
+				if (brtr == this.blank) { // Node don't have brothers (Only child)
+					count += node.changeColor(Color.BLACK);
+					node = node.parentT;
+					count += node.changeColor("darken");
+					
+				} else if (!brtr.isRed()) { // I have a black brother 8-)
+					if ( (brtr.rightT != this.blank)&&(brtr.rightT.isRed()) ) { // Case 3
+						leftRotate(brtr); //			//	      ?Y?
+						count += brtr.changeColor("switch"); //			//	     /   \
+						count += brtr.parentT.changeColor("switch"); //	//	   X      |W|
+											//	 /   \   /   \
+					} //								//	?a? <b> ?c? ?d?
+					if ( (brtr.leftT != this.blank)&&(brtr.leftT.isRed()) ) { // Case 4
+						rightRotate(node.parentT);
+						count += brtr.changeColor(node.parentT.color); //				//	      ?Y?
+						count += node.changeColor(Color.BLACK); //					//	     /   \
+						count += node.parentT.changeColor(Color.BLACK); //			//	   X      |W|
+						count += node.parentT.parentT.leftT.changeColor("switch"); //	//	 /   \   /   \
+						node = node.parentT.parentT; //					//	<a> ?b? ?c? ?d?
+						
+					} else { // Case 2
+						//this.print();
+						//System.out.println("gggggg");
+						count += node.changeColor(Color.BLACK); //		//	      ?Y?
+						count += node.parentT.changeColor("darken"); //			//	     /   \
+						count += brtr.changeColor("switch"); //				//	   X      |W|
+						 //						//	 /   \   /   \
+						node = node.parentT; //				//	 a   b  ?c? ?d?
+					}
+				} else { // Case 1
+					if (node.parentT.parentT == this.blank) {
+						this.root = node.parentT.leftT;
+					} //									//	      Y
+					rightRotate(node.parentT); //			//	    /   \
+					count += node.parentT.parentT.changeColor("switch"); //	//	 <X>     |W|
+					count += node.parentT.changeColor("switch"); //			//	/   \   /   \
+												//	a   b   c   d
 				}
 			}
 		}
-		if (x.isRed()) //If x is root and RED we want to change
-			changes++;
-		x.color = Color.BLACK;
-		return changes;
+		if (node.parentT == this.blank) { // node is the root
+			this.root = node;
+			count += this.root.changeColor(Color.BLACK);
+		}
+		return count;
 	}
 	/**
 	 * 
@@ -846,56 +878,4 @@ public class RBTree_or {
 			return new String[0];
 		}
 	}
-
-
-
-
-
-
-
-
-	/**
-	 * performs a binary search on the tree
-	 * in attempt to find the node with k key.
-	 * returns the node that has k as key.
-	 * 
-	 * @param root
-	 * @param k
-	 * @return
-	 */
-	public RBNode binSearch(RBNode root, int k) { // an added recursive function
-		if (root == this.blank) {
-			return this.blank;
-		} else if (root.key == k) {
-			return root;
-		} else if ( (root.key < k)&&(root.rightT != this.blank) ) {
-			root = root.rightT;
-			return binSearch(root, k);
-		} else if ( (root.key > k)&&(root.leftT != this.blank) ) {
-			root = root.leftT;
-			return binSearch(root, k);
-		} else {
-			return this.blank;
-		}
-	}
-	public RBNode findSccr(RBNode node) {
-		if (node.rightT != this.blank) { // if node has a right sub-tree. 
-			node = node.getRight();
-			while(node.leftT != this.blank) {// has a left Subtree.
-				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
-			}
-			return node;
-		} else { //if node does not have a right sub-tree.
-			if (node.parentT.getLeft() == node) {
-				return node.parentT;	
-			} else {
-				while (node != node.parentT.getLeft()) {// node is a left child.
-					node = node.parentT;
-				}
-			}
-			return node;
-		}
-
-	}
-
 }
