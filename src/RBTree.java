@@ -117,7 +117,24 @@ public class RBTree {
 	 * 
 	 * @param x
 	 */
-	private void leftRotate(RBNode x) {
+	private void leftRotate(RBNode node){
+		RBNode y = node.rightT; //node.right not null
+		node.rightT = y.leftT; //Changing relations
+		if (y.leftT != RBTree.blank)
+			y.leftT.parentT = node;
+		y.parentT = node.parentT; //Linking y to node's father
+		if (node.parentT == RBTree.blank){ //Changing root
+			root = y;
+		}
+		else if (node == node.parentT.leftT)
+			node.parentT.leftT = y;
+		else
+			node.parentT.rightT = y;
+		//Completing links
+		y.leftT = node;
+		node.parentT = y;
+	}
+	private void leftRotateOLD(RBNode x) {
 		RBNode y = x.rightT;
 		if (x.parentT != RBTree.blank) {
 			transplant(x,y);
@@ -139,7 +156,24 @@ public class RBTree {
 	 * 
 	 * @param x
 	 */
-	private void rightRotate(RBNode y) {
+	private void rightRotate(RBNode node){
+		//Comments exactly like in leftRotate
+		RBNode y = node.leftT;//node.left not null
+		node.leftT = y.rightT;
+		if (y.rightT != RBTree.blank)
+			y.rightT.parentT = node;
+		y.parentT = node.parentT;
+		if (node.parentT == RBTree.blank){
+			root = y;
+		}
+		else if (node == node.parentT.rightT)
+			node.parentT.rightT = y;
+		else
+			node.parentT.leftT = y;
+		y.rightT = node;
+		node.parentT = y;
+	}
+	private void rightRotateOLD(RBNode y) {
 		RBNode x = y.leftT;
 		if (y.parentT != RBTree.blank) {
 			transplant(y,x);
@@ -568,10 +602,10 @@ public class RBTree {
 		}
 		return count; //+1?
 	}
-	public int fixDeleteADT(RBNode node) {
+	public int fixDelete(RBNode node) {
 		int count = 0;
 		RBNode brtr;
-		while ( (node.parentT != this.blank)&&(node.color == Color.BLACK) ) {
+		while ( (node.parentT != RBTree.blank)&&(node.color == Color.BLACK) ) {
 			if (node == node.parentT.leftT) {
 				brtr = node.parentT.rightT; // Case 1
 				if (brtr.color == Color.RED) {
@@ -632,7 +666,7 @@ public class RBTree {
 		node.color = Color.BLACK;
 		return count;
 	}
-	public int fixDelete(RBNode node) {
+/*	public int fixDeleteOLDADT(RBNode node) {
 		int count = 0;
 		RBNode brtr;
 		while ( (node!=this.root)&&(node.color == Color.DARK_GRAY) ) {
@@ -696,7 +730,7 @@ public class RBTree {
 		}
 		node.color = Color.BLACK;
 		return count;
-	}
+	}*/
 	/**
 	 * Rebalance the tree after the deletion 
 	 * of the node.
@@ -704,7 +738,7 @@ public class RBTree {
 	 * @param node
 	 * @return color changes count
 	 */
-	public int fixDeleteBackUp(RBNode node) { // TODO Delete me
+/*	public int fixDeleteBackUp(RBNode node) { // TODO Delete me
 		int count = 0;
 		while ( (node.parentT != RBTree.blank)&&(node.color == Color.DARK_GRAY) ) {
 			//this.print();
@@ -796,7 +830,7 @@ public class RBTree {
 			count += this.root.changeColor(Color.BLACK);
 		}
 		return count;
-	}
+	}*/
 	/**
 	 * finds the successor of the node,
 	 * and return it
@@ -895,15 +929,15 @@ public class RBTree {
 			if (centenarian.barren()) { // The centenarian don't have child's
 				if (!centenarian.isRed()) { // i am leaf and I'm black
 					count += centenarian.changeColor("darken");
-					this.print();
-					System.out.println("hhhhhh");
+					//this.print();
+					//System.out.println("hhhhhh");
 					count += fixDelete(centenarian);
 				} // We can safely delete the centenarian
 				if (centenarian.parentT != RBTree.blank) {
 					//centenarian.darken();
 					//changes += fixDelete(centenarian);
-					this.print();
-					System.out.println("jjjjjj");
+					//this.print();
+					//System.out.println("jjjjjj");
 					if (centenarian.mILeftchild()) {
 						centenarian.parentT.leftT = RBTree.blank;
 					} else {
@@ -915,11 +949,11 @@ public class RBTree {
 			} else if ((child = centenarian.oneChild()) != RBTree.blank) { // The centenarian have only one child
 				if (!centenarian.isRed()) { // We can safely bridge the centenarian
 					count += child.changeColor("darken");
-					this.print();
-					System.out.println("aaaaaa");
+					//this.print();
+					//System.out.println("aaaaaa");
 					count += fixDelete(child);
-					this.print();
-					System.out.println("bbbbbb");
+					//this.print();
+					//System.out.println("bbbbbb");
 				}
 				replace(centenarian,child); // This will make the centenarian to disappear because no one is looking at the poor guy
 				if (centenarian.parentT == RBTree.blank) {
@@ -937,8 +971,8 @@ public class RBTree {
 				} else if ( (sccr.rightT != RBTree.blank)&&(centenarian.leftT != RBTree.blank) ) {
 					count += sccr.rightT.changeColor(centenarian.leftT);
 				}
-				this.print();
-				System.out.println("eeeeee");
+				//this.print();
+				//System.out.println("eeeeee");
 				replace(centenarian,sccr); // This will make the centenarian to disappear because no one is looking at the poor guy
 				if (centenarian.parentT == RBTree.blank) {
 					this.root = sccr;
