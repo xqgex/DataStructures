@@ -1,0 +1,51 @@
+public class RBTree {
+OO	public RBTree() {
+
+OO	private int findLast(RBNode[] arr, int lastCount) {
+	private RBNode getMax(RBNode root2) {
+	private RBNode getMin(RBNode root2) {
+OO	private void leftChild(RBNode parent, RBNode child) {
+OO	private void leftRotate(RBNode node){
+OO	private static void printHelper(RBTree.RBNode n, int indent, RBNode blank) {
+	private void replace(RBNode x, RBNode y) {
+OO	private void rightChild(RBNode parent, RBNode child) {
+OO	private void rightRotate(RBNode node){
+OO	private void transplant(RBNode x, RBNode y) {
+	private void upDate(RBNode newBaby) {
+OO	private RBNode[] updateArray(RBNode[] arr, RBNode root, int cnt) {
+	private void upDateDel(RBNode centenarian) {
+
+	public static class RBNode { // is it alive?
+		public RBNode(RBNode leftT, RBNode parentT, RBNode rightT, String info, String key, Color color){
+		public boolean isRed() { // returns true if is red. 
+		public RBNode getLeft() {
+		public RBNode getRight() {
+		public RBNode getParent() {
+		public int getValue() {
+		public String getKey() {
+		public int changeColor(Color color) {
+		public int changeColor(RBNode node) {
+		public int changeColor(String string) {
+		public boolean recognizeBlank(RBNode node) {
+		public boolean barren() {
+		public RBNode oneChild() {
+		public boolean twoChilds() {
+		public boolean mILeftchild() {
+
+	public RBNode binSearch(RBNode root, int k,RBNode ansNode) { // an added recursive function
+	public int delete(int k) {
+NN	public boolean empty() {
+	public int fixInsert(RBNode node) {
+	public int fixDelete(RBNode node) {
+	public RBNode findSccr(RBNode node) {
+	public RBNode getRoot() {
+	public int insert(int k, String v) {
+OO	public int[] keysToArray() { // envelope function
+	public String max() {
+	public String min() {
+OO	public void print() {
+OO	public void printlist() {
+	public String search(int k) { // envelop function
+OO	public int size() {
+OO	public String[] valuesToArray() {
+	public RBNode whereToInsert(RBNode root ,RBNode node) {
