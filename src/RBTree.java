@@ -835,10 +835,14 @@ public class RBTree {
 	*/
 
 	public int delete(int k) {
+		if(binSearch(this.root, k, RBTree.blank) == null){
+			return -1;
+		}
 		RBNode centenarian = binSearch(this.root, k, RBTree.blank); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
-		RBNode sccr = centenarian;
-		RBNode brdr = null;
+		//RBNode sccr = centenarian;
+		//RBNode brdr = null;
 		int count = 0;
+		// what about all the fields if node - this.root
 		Color backupColor = centenarian.color;
 		count += centenarian.changeColor("darken");
 		if (centenarian.leftT == RBTree.blank) {
