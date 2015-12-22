@@ -1,6 +1,5 @@
 import java.awt.Color;
 
-
 public class RBTree_or {
 	private int size; // size of the tree
 	private RBNode root;
@@ -202,6 +201,28 @@ public class RBTree_or {
 		return cntChanges;
 	}
 	/**
+	 * recursive max finder.
+	 * @param root2
+	 * @return
+	 */
+	private RBNode getMax(RBNode root2) {
+		if ( (root2 != this.blank)&&(root2.rightT != this.blank) ) {
+			return getMax(root2.getRight());
+		}
+		return root2;
+	}
+	/**
+	 * recursive min finder.
+	 * @param root2
+	 * @return
+	 */
+	private RBNode getMin(RBNode root2) {
+		if ( (root2 != this.blank)&&(root2.leftT != this.blank) ) {
+			return getMin(root2.getLeft());
+		}
+		return root2;
+	}
+	/**
 	 * private static void leftChild
 	 * 
 	 * sets child to be the parents left child
@@ -324,19 +345,43 @@ public class RBTree_or {
 		}
 		return arr;	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 *  compares the new node that was inserted/Deleted to 
+	 *  the min and max of the tree, and resets it 
+	 *  to be the new node if needed.
+	 *  
+	 * @param newBaby
+	 */
+	private void updateMinMax(RBNode centenarian) {
+		if (centenarian.key >= this.max.key) {
+			this.max = getMax(this.root);
+		}
+		if (centenarian.key <= (this.min.key) {
+			this.min = getMin(this.root);
+		}
+	}
+	/**
+	 * performs a binary search for the correct spot to insert 
+	 * the node.
+	 * 
+	 * @param root
+	 * @param node
+	 * @return new node father
+	 */
+	private RBNode whereToInsert(RBNode root ,RBNode node) {
+		RBNode ans = root;
+		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
+			if(root.leftT != this.blank) {
+				ans = whereToInsert(root.leftT, node);
+			}
+		} else if(Integer.parseInt(node.key) > Integer.parseInt(root.key)) {
+			if(root.rightT != this.blank) {
+				ans = whereToInsert(root.rightT, node);
+			}
+		}
+		return ans;
+	}
+
 	/**
 	 * public class RBNode
 	 */
@@ -347,10 +392,6 @@ public class RBTree_or {
 		RBNode leftT = blank;
 		RBNode rightT = blank;
 		RBNode parentT = blank;
-		/**
-		 * RBNode constructor that creates a node with key k, value v, color c,
-		 * left child l, right child r
-		 */
 		private RBNode(int k, String v, Color c, RBNode l, RBNode r){
 			key = k;
 			value = v;
@@ -364,20 +405,6 @@ public class RBTree_or {
 		 */
 		public Color getColor() {
 			return color;
-		}
-		/**
-		 * 
-		 * @return true if node is RED
-		 */
-		boolean isRed() {
-			return this.color == Color.RED;
-		}
-		/**
-		 * 
-		 * @return true if node is BLACK
-		 */
-		boolean isBlack(){
-			return !isRed();
 		}
 		/**
 		 * 
@@ -401,7 +428,21 @@ public class RBTree_or {
 			return this.key;
 		}
 		/**
-		 * public void changeColor()
+		 * 
+		 * @return true if node is RED
+		 */
+		boolean isRed() {
+			return this.color == Color.RED;
+		}
+		/**
+		 * 
+		 * @return true if node is BLACK
+		 */
+		boolean isBlack(){
+			return !isRed();
+		}
+		/**
+		 * public int changeColor(Color color)
 		 * 
 		 * resets the color of the node from red 
 		 * to black and vise versa.
@@ -424,7 +465,7 @@ public class RBTree_or {
 			}	
 		}
 		/**
-		 * public void darken()
+		 * public int changeColor("darken")
 		 * resets the color of the node from red to 
 		 *  black and from black to dark gray
 		 * (Similar to double black)
@@ -510,7 +551,6 @@ public class RBTree_or {
 		 * returns true if node itself is a left 
 		 * son of an other node.
 		 * 
-		 * 
 		 * @return
 		 */
 		public boolean mILeftchild() {
@@ -521,73 +561,7 @@ public class RBTree_or {
 			}
 		}
 	}
-	/**
-	 * public RBNode getRoot()
-	 *
-	 * returns the root of the red black tree
-	 */
-	public RBNode getRoot() {
-		if (this.root == this.blank) {
-			return null;
-		} else {
-			return this.root;
-		}
-	}
-	/**
-	 * public boolean empty()
-	 *
-	 * returns true if and only if the tree is empty
-	 */
-	public boolean empty() {
-			return (this.root == this.blank);
-		}
 
-	/**
-	 * public int insert(int k, String v)
-	 *
-	 * inserts an item with key k and value v to the red black tree. the tree
-	 * must remain valid (keep its invariants). returns the number of color
-	 * switches, or 0 if no color switches were necessary. returns -1 if an item
-	 * with key k already exists in the tree.
-	 */
-	public int insert(int k, String v) {
-		this.array_status = false;
-		RBNode z = new RBNode(k, v, Color.RED, this.blank, this.blank); //Inserting z
-		if (k > max.key)
-			max = z;
-		if (k < min.key)
-			min = z;
-		RBNode x = root;
-		int changes = 0; //Color changes
-		if (empty()) { //If tree is empty - insert as root
-			z.parentT = blank;
-			root = z;
-			z.color = Color.BLACK;
-			changes = 1;
-			min = z;
-			max = z;
-			size++;
-		} else { // Binary tree insert
-			RBNode y = blank;
-			while (x != blank) { //Finding the spot to enter
-				y = x;
-				if (k < x.key) //Should be entered in left subtree
-					x = x.leftT;
-				else if (k > x.key) //Should be entered in right subtree
-					x = x.rightT;
-				else //If node with same key exists in tree
-					return -1;
-			}
-			z.parentT = y;
-			if (z.key < y.key) //Linking z to parent y
-				y.leftT = z;
-			else
-				y.rightT = z;
-			size++;
-			changes += fixInsert(z);
-		}
-		return changes;
-	}
 	/**
 	 * public int delete(int k)
 	 *
@@ -645,67 +619,78 @@ public class RBTree_or {
 			max = maxNode();
 		return changes;
 	}
-
 	/**
-	* public String min()
-	*
-	* Returns the value of the item with the smallest key in the tree,
-	* or null if the tree is empty
-	* 
-	* @return minimum node at the tree
-	*/
-	public String min(){
-		if (this.min != this.blank){
-			return this.min.value; 
-		} else {
+	 * public boolean empty()
+	 *
+	 * returns true if and only if the tree is empty
+	 */
+	public boolean empty() {
+		return (this.root == this.blank);
+	}
+	/**
+	 * public RBNode getRoot()
+	 *
+	 * returns the root of the red black tree
+	 */
+	public RBNode getRoot() {
+		if (this.root == this.blank) {
 			return null;
+		} else {
+			return this.root;
 		}
 	}
 	/**
-	 * 
-	 * returns the node with the minimal key by iterating all the way to left
+	 * public int insert(int k, String v)
+	 *
+	 * inserts an item with key k and value v to the red black tree. the tree
+	 * must remain valid (keep its invariants). returns the number of color
+	 * switches, or 0 if no color switches were necessary. returns -1 if an item
+	 * with key k already exists in the tree.
 	 */
-	private RBNode minNode() {
-		if (empty())
-			return blank;
-		RBNode tmpNode = root;
-		while (tmpNode.leftT != blank)
-			tmpNode = tmpNode.leftT;
-		return tmpNode; //Min node
-	}
-	/**
-	* public String max()
-	*
-	* Returns the value of the item with the largest key in the tree,
-	* or null if the tree is empty
-	* 
-	* @return maximum node at the tree
-	*/
-	public String max() {
-		if (this.max != this.blank){
-			return this.max.value; 
-		} else {
-			return null;
+	public int insert(int k, String v) {
+		this.array_status = false;
+		RBNode z = new RBNode(k, v, Color.RED, this.blank, this.blank); //Inserting z
+		if (k > max.key)
+			max = z;
+		if (k < min.key)
+			min = z;
+		RBNode x = root;
+		int changes = 0; //Color changes
+		if (empty()) { //If tree is empty - insert as root
+			z.parentT = blank;
+			root = z;
+			z.color = Color.BLACK;
+			changes = 1;
+			min = z;
+			max = z;
+			size++;
+		} else { // Binary tree insert
+			RBNode y = blank;
+			while (x != blank) { //Finding the spot to enter
+				y = x;
+				if (k < x.key) //Should be entered in left subtree
+					x = x.leftT;
+				else if (k > x.key) //Should be entered in right subtree
+					x = x.rightT;
+				else //If node with same key exists in tree
+					return -1;
+			}
+			z.parentT = y;
+			if (z.key < y.key) //Linking z to parent y
+				y.leftT = z;
+			else
+				y.rightT = z;
+			size++;
+			changes += fixInsert(z);
 		}
+		return changes;
 	}
 	/**
-	 * 
-	 * returns the node with max key by iterating all the way to the right
+	 * public int[] keysToArray()
+	 *
+	 * Returns a sorted array which contains all keys in the tree,
+	 * or an empty array if the tree is empty.
 	 */
-	private RBNode maxNode(){
-		if (empty())
-			return blank;
-		RBNode maxNode = root;
-		while (maxNode.rightT != blank)
-			maxNode = maxNode.rightT;
-		return maxNode;
-	}
-	/**
-	* public int[] keysToArray()
-	*
-	* Returns a sorted array which contains all keys in the tree,
-	* or an empty array if the tree is empty.
-	*/
 	public int[] keysToArray() {
 		if (!this.array_status) {
 			RBNode[] arr = new RBNode[this.size]; // new array of nodes
@@ -715,7 +700,7 @@ public class RBTree_or {
 		if(this.tree_array != null){
 			int[] retArray = new int[this.tree_array.length];
 			for (int i=0;i<this.tree_array.length;i++) {
-				retArray[i] = this.tree_array[i].key;//Integer.parseInt(this.tree_array[i].key);
+				retArray[i] = this.tree_array[i].key;
 			}
 			return retArray;
 		} else {
@@ -723,12 +708,85 @@ public class RBTree_or {
 		}
 	}
 	/**
-	* public String[] valuesToArray()
-	*
-	* Returns an array which contains all values in the tree,
-	* sorted by their respective keys,
-	* or an empty array if the tree is empty.
-	*/
+	 * public String max()
+	 *
+	 * Returns the value of the item with the largest key in the tree,
+	 * or null if the tree is empty
+	 * 
+	 * @return maximum node at the tree
+	 */
+	public String max() {
+		if (this.max != this.blank){
+			return this.max.value; 
+		} else {
+			return null;
+		}
+	}
+	/**
+	 * public String min()
+	 *
+	 * Returns the value of the item with the smallest key in the tree,
+	 * or null if the tree is empty
+	 * 
+	 * @return minimum node at the tree
+	 */
+	public String min(){
+		if (this.min != this.blank){
+			return this.min.value; 
+		} else {
+			return null;
+		}
+	}
+	/**
+	 * public void print()
+	 *
+	 * Print the tree.
+	 */
+	public void print() {
+		RBTree_or.printHelper(this.root, 0, this.blank);
+	}
+	public void printlist() {
+		int l;
+		int r;
+		int p;
+		if (!this.array_status) {
+			RBNode[] arr = new RBNode[this.size]; // new array of nodes
+			this.tree_array = updateArray(arr, this.root, 0);
+			this.array_status = true;
+		}
+		for (RBNode node : this.tree_array) {
+			if (node.parentT != this.blank) {p=node.parentT.key;} else {p=-1;}
+			if (node.leftT != this.blank) {l=node.leftT.key;} else {l=-1;}
+			if (node.rightT != this.blank) {r=node.rightT.key;} else {r=-1;}
+			System.out.println("Node " + node.key + "\t parent is " + p + ",\t Left child is: " + l + ",\t Right child is: " + r);
+		}
+	}
+	public String search(int k) { // envelop function
+		RBNode node = binSearch(this.root,k);
+		if(node != this.blank){
+			return node.value;
+		} else {
+			return null;
+		}
+	}
+	/**
+	 * public int size()
+	 *
+	 * Returns the number of nodes in the tree.
+	 *
+	 * precondition: none
+	 * postcondition: none
+	 */
+	public int size() {
+		return size;
+	}
+	/**
+	 * public String[] valuesToArray()
+	 *
+	 * Returns an array which contains all values in the tree,
+	 * sorted by their respective keys,
+	 * or an empty array if the tree is empty.
+	 */
 	public String[] valuesToArray() {
 		if (!this.array_status) {
 			RBNode[] arr = new RBNode[this.size]; // new array of nodes
@@ -746,17 +804,8 @@ public class RBTree_or {
 		}
 	}
 
-	/**
-	* public int size()
-	*
-	* Returns the number of nodes in the tree.
-	*
-	* precondition: none
-	* postcondition: none
-	*/
-	public int size() {
-		return size;
-	}
+
+
 
 
 
@@ -765,38 +814,28 @@ public class RBTree_or {
 
 
 	/**
-	* public void print()
-	*
-	* Print the tree.
-	*/
-	public void print() {
-		RBTree_or.printHelper(this.root, 0, this.blank);
+	 * 
+	 * returns the node with the minimal key by iterating all the way to left
+	 */
+	private RBNode minNode() {
+		if (empty())
+			return blank;
+		RBNode tmpNode = root;
+		while (tmpNode.leftT != blank)
+			tmpNode = tmpNode.leftT;
+		return tmpNode; //Min node
 	}
-
-	public void printlist() {
-		int l;
-		int r;
-		int p;
-		if (!this.array_status) {
-			RBNode[] arr = new RBNode[this.size]; // new array of nodes
-			this.tree_array = updateArray(arr, this.root, 0);
-			this.array_status = true;
-		}
-		for (RBNode node : this.tree_array) {
-			if (node.parentT != this.blank) {p=node.parentT.key;} else {p=-1;}
-			if (node.leftT != this.blank) {l=node.leftT.key;} else {l=-1;}
-			if (node.rightT != this.blank) {r=node.rightT.key;} else {r=-1;}
-			System.out.println("Node " + node.key + "\t parent is " + p + ",\t Left child is: " + l + ",\t Right child is: " + r);
-		}
-	}
-
-	public String search(int k) { // envelop function
-		RBNode node = binSearch(this.root,k);
-		if(node != this.blank){
-			return node.value;
-		} else {
-			return null;
-		}
+	/**
+	 * 
+	 * returns the node with max key by iterating all the way to the right
+	 */
+	private RBNode maxNode(){
+		if (empty())
+			return blank;
+		RBNode maxNode = root;
+		while (maxNode.rightT != blank)
+			maxNode = maxNode.rightT;
+		return maxNode;
 	}
 	/**
 	 * performs a binary search on the tree
@@ -841,6 +880,4 @@ public class RBTree_or {
 		}
 
 	}
-
-
 }
