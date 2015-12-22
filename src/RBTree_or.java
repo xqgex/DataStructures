@@ -378,17 +378,17 @@ public class RBTree_or {
 	 *  
 	 * @param newBaby
 	 */
-	private void updateMinMax(RBNode centenarian, int type) {
-		if (centenarian.key >= this.max.key) {
+	private void updateMinMax(RBNode node, int type) {
+		if (node.key >= this.max.key) {
 			if (type == 0) {
-				this.max = centenarian;
+				this.max = node;
 			} else {
 				this.max = getMax(this.root);
 			}
 		}
-		if (centenarian.key <= this.min.key) {
+		if (node.key <= this.min.key) {
 			if (type == 0) {
-				this.min = centenarian;
+				this.min = node;
 			} else {
 				this.min = getMin(this.root);
 			}
