@@ -222,28 +222,27 @@ public class RBTree_or {
 		}
 		return count; //+1?
 	}
-	
 	/**
 	 * recursive max finder.
 	 * @param root2
 	 * @return
 	 */
-	private RBNode getMax(RBNode root2) {
-		if ( (root2 != this.blank)&&(root2.rightT != this.blank) ) {
-			return getMax(root2.getRight());
+	private RBNode getMax(RBNode root) {
+		if ( (root != this.blank)&&(root.rightT != this.blank) ) {
+			return getMax(root.getRight());
 		}
-		return root2;
+		return root;
 	}
 	/**
 	 * recursive min finder.
-	 * @param root2
+	 * @param root
 	 * @return
 	 */
-	private RBNode getMin(RBNode root2) {
-		if ( (root2 != this.blank)&&(root2.leftT != this.blank) ) {
-			return getMin(root2.getLeft());
+	private RBNode getMin(RBNode root) {
+		if ( (root != this.blank)&&(root.leftT != this.blank) ) {
+			return getMin(root.getLeft());
 		}
-		return root2;
+		return root;
 	}
 	/**
 	 * private static void leftChild
@@ -596,44 +595,6 @@ public class RBTree_or {
 		}
 	}
 
-//	public int insert1(int k, String v) {
-//		this.array_status = false;
-//		RBNode z = new RBNode(k, v, Color.RED, this.blank, this.blank); //Inserting z
-//		if (k > max.key)
-//			max = z;
-//		if (k < min.key)
-//			min = z;
-//		RBNode x = root;
-//		int changes = 0; //Color changes
-//		if (empty()) { //If tree is empty - insert as root
-//			z.parentT = blank;
-//			root = z;
-//			z.color = Color.BLACK;
-//			changes = 1;
-//			min = z;
-//			max = z;
-//			size++;
-//		} else { // Binary tree insert
-//			RBNode y = blank;
-//			while (x != blank) { //Finding the spot to enter
-//				y = x;
-//				if (k < x.key) //Should be entered in left subtree
-//					x = x.leftT;
-//				else if (k > x.key) //Should be entered in right subtree
-//					x = x.rightT;
-//				else //If node with same key exists in tree
-//					return -1;
-//			}
-//			z.parentT = y;
-//			if (z.key < y.key) //Linking z to parent y
-//				y.leftT = z;
-//			else
-//				y.rightT = z;
-//			size++;
-//			changes += fixInsert(z);
-//		}
-//		return changes;
-//	}
 	/**
 	 * public int delete(int k)
 	 *
@@ -686,9 +647,9 @@ public class RBTree_or {
 		}
 		size--; //Updating tree size
 		if (min == toDelete)
-			min = minNode();
+			min = getMin(this.root);
 		if (max == toDelete)
-			max = maxNode();
+			max = getMax(this.root);
 		return changes;
 	}
 	/**
@@ -893,32 +854,6 @@ public class RBTree_or {
 
 
 
-
-
-	/**
-	 * 
-	 * returns the node with the minimal key by iterating all the way to left
-	 */
-	private RBNode minNode() {
-		if (empty())
-			return blank;
-		RBNode tmpNode = root;
-		while (tmpNode.leftT != blank)
-			tmpNode = tmpNode.leftT;
-		return tmpNode; //Min node
-	}
-	/**
-	 * 
-	 * returns the node with max key by iterating all the way to the right
-	 */
-	private RBNode maxNode(){
-		if (empty())
-			return blank;
-		RBNode maxNode = root;
-		while (maxNode.rightT != blank)
-			maxNode = maxNode.rightT;
-		return maxNode;
-	}
 	/**
 	 * performs a binary search on the tree
 	 * in attempt to find the node with k key.
