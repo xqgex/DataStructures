@@ -65,7 +65,7 @@ public class RBTree_or {
 		if (node.rightT != this.blank) { // if node has a right sub-tree. 
 			node = node.getRight();
 			while(node.leftT != this.blank) {// has a left Subtree.
-				node = node.getLeft(); // TODO originally it was node.getRight() => Is this a bug?
+				node = node.getLeft();
 			}
 			return node;
 		} else { //if node does not have a right sub-tree.
@@ -86,11 +86,9 @@ public class RBTree_or {
 	 * to maintain tree's invariants
 	 * returns the number of color changes needed to fix the tree
 	 */
-	public int fixDelete(RBNode node) { // TODO Delete me
+	public int fixDelete(RBNode node) {
 		int count = 0;
 		while ( (node.parentT != this.blank)&&(node.color == Color.DARK_GRAY) ) {
-			//this.print();
-			//System.out.println("dddddd");
 			if (node == node.parentT.leftT) {
 				RBNode brtr = node.parentT.rightT;
 				if (brtr == this.blank) { // Node don't have brothers (Only child)
@@ -457,12 +455,12 @@ public class RBTree_or {
 		RBNode leftT = blank;
 		RBNode rightT = blank;
 		RBNode parentT = blank;
-		private RBNode(int k, String v, Color c, RBNode l, RBNode r){
-			key = k;
-			value = v;
-			color = c;
-			leftT = l;
-			rightT = r;
+		private RBNode(int key, String value, Color color, RBNode leftT, RBNode rightT){
+			this.key = key;
+			this.value = value;
+			this.color = color;
+			this.leftT = leftT;
+			this.rightT = rightT;
 		}
 		/**
 		 * 
@@ -497,14 +495,14 @@ public class RBTree_or {
 		 * @return true if node is RED
 		 */
 		boolean isRed() {
-			return this.color == Color.RED;
+			return (this.color == Color.RED);
 		}
 		/**
 		 * 
 		 * @return true if node is BLACK
 		 */
 		boolean isBlack(){
-			return !isRed();
+			return (this.color == Color.BLACK);
 		}
 		/**
 		 * public int changeColor(Color color)
@@ -635,7 +633,7 @@ public class RBTree_or {
 	 * switches, or 0 if no color switches were needed. returns -1 if an item
 	 * with key k was not found in the tree.
 	 */
-	public int delete(int k) {
+	public int delete(int k) { //TODO
 		int changes = 0; //Color changes
 		RBNode toDelete = this.binSearch(root, k); //Finding the node we want to delete
 		if (toDelete == blank) //Key k not in tree
@@ -724,7 +722,6 @@ public class RBTree_or {
 		 * 		If imbalanced with brother – solve by re-balancing
 		 * 		Else – push problem upwards
 		 */
-
 		if ( (this.root != this.blank)&&(search(k) != null) ) {
 			return -1;
 		} else {
@@ -744,18 +741,10 @@ public class RBTree_or {
 				} else {
 					rightChild(father, newBaby);
 				}
-				//this.print();
-				//System.out.println("llllll");
 				if (father.isRed()) {
 					changes += fixInsert(newBaby);
-					//this.print();
-					//System.out.println("mmmmmm");
 				}
 				updateMinMax(newBaby, 0);
-				/*if (this.size > 6) {
-					this.print();
-					System.out.println("dddddd");
-				}*/
 				return changes;
 			}
 		}
@@ -772,7 +761,7 @@ public class RBTree_or {
 			this.tree_array = updateArray(arr, this.root, 0);
 			this.array_status = true;
 		}
-		if(this.tree_array != null){
+		if (this.tree_array != null) {
 			int[] retArray = new int[this.tree_array.length];
 			for (int i=0;i<this.tree_array.length;i++) {
 				retArray[i] = this.tree_array[i].key;
