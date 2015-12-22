@@ -1,5 +1,13 @@
 import java.awt.Color;
 
+/* TODO
+ * 1) Update color changes
+ * 2) Rewrite all comments
+ * 3) Calculate running time (amortized)
+ * 4) Check tester for 2048 nodes
+ * 5) Write doc file
+*/
+
 public class RBTree_or {
 	private int size; // size of the tree
 	private RBNode root;
@@ -633,54 +641,55 @@ public class RBTree_or {
 	 * switches, or 0 if no color switches were needed. returns -1 if an item
 	 * with key k was not found in the tree.
 	 */
-	public int delete(int k) { //TODO
-		int changes = 0; //Color changes
-		RBNode toDelete = this.binSearch(root, k); //Finding the node we want to delete
-		if (toDelete == blank) //Key k not in tree
+	public int delete(int k) {
+		int changes = 0;
+		RBNode centenarian = binSearch(this.root, k); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
+		if (centenarian == this.blank) { // No such key
 			return -1;
-		this.array_status = false;
-		if (size == 1){ //Remove the root
-			this.root = blank;
-			max = blank;
-			min = blank;
-			this.size = 0;
-			return changes;
-		}
-		RBNode x, y;
-		if (toDelete.leftT == blank || toDelete.rightT == blank) //If toDelete has at most
-															//one child
-			y = toDelete; //We now want to delete y
-		else
-			y = this.findSccr(toDelete); //We want to delete toDelete's successor
-		if (y.leftT != blank)
-			x = y.leftT;
-		else
-			x = y.rightT;
-		x.parentT = y.parentT;
-		if (y.parentT == blank){ //Deleting the root
-			if (x.isRed()){
-				x.color = Color.BLACK;
-				changes++;
+		} else { // There is such key at the tree
+			this.array_status = false;
+			if (this.size == 1) { // The node was the only node at the tree
+				this.root = this.blank;
+				this.max = this.blank;
+				this.min = this.blank;
+				this.size = 0;
+				return changes;
+			} else { // The node have family
+				RBNode node, sccr;
+				if (centenarian.leftT == this.blank || centenarian.rightT == this.blank) {
+					sccr = centenarian;
+				} else {
+					sccr = this.findSccr(centenarian);
+				}
+				if (sccr.leftT != this.blank) {
+					node = sccr.leftT;
+				} else {
+					node = sccr.rightT;
+				}
+				node.parentT = sccr.parentT;
+				if (sccr.parentT == this.blank) {
+					if (node.isRed()) {
+						node.color = Color.BLACK;
+						changes++;
+					}
+					this.root = node;
+				} else if (sccr == sccr.parentT.leftT) {
+					sccr.parentT.leftT = node;
+				} else {
+					sccr.parentT.rightT = node;
+				}
+				if (sccr != centenarian) {
+					centenarian.key = sccr.key;
+					centenarian.value = sccr.value;
+				}
+				if (sccr.isBlack()) {
+					changes += this.fixDelete(node);
+				}
+				size--;
+				updateMinMax(centenarian,1);
+				return changes;
 			}
-			this.root = x; //x is the new root
 		}
-		else if (y == y.parentT.leftT) //Cutting links
-			y.parentT.leftT = x;
-		else
-			y.parentT.rightT = x;
-		if (y != toDelete){ //If we took successor
-			toDelete.key = y.key; //Copying successor's key to his new spot
-			toDelete.value = y.value; //Copying successor's value to his new spot
-		}
-		if (y.isBlack()){ //If we deleted a BLACK node
-			changes += this.fixDelete(x); //Fixing the tree
-		}
-		size--; //Updating tree size
-		if (min == toDelete)
-			min = getMin(this.root);
-		if (max == toDelete)
-			max = getMax(this.root);
-		return changes;
 	}
 	/**
 	 * public boolean empty()
