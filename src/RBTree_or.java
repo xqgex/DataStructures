@@ -1,27 +1,39 @@
 import java.awt.Color;
 
 public class RBTree_or {
-	RBNode root;
-	int size;
-	RBNode min;
-	RBNode max;
-	private RBNode[] tree_array; // an array of all the nods by order.
-	private boolean array_status; // is the array above up to date.
-	private final RBNode blank = new RBNode(-1, null, Color.BLACK, null, null); //NIL node
+	private int size; // size of the tree
+	private RBNode root;
+	private RBNode min;
+	private RBNode max;
+	private RBNode[] tree_array; // An array of all the nods by order.
+	private boolean array_status; // Is the array above up to date.
+	private final RBNode blank = new RBNode(-1, null, Color.BLACK, null, null); // The NIL node
 	private static final int INDENT_STEP = 4;
 	/**
-	
- * Constructs an empty tree with NIL as root, min and max
+	 * public RBTree()
+	 * 
+	 * a builder of the tree
+	 * 
+	 * sets all the fields of tree tree to 
+	 * be empty at start
 	 */
 	public RBTree_or() {
-		root = blank;
-		max = blank;
-		min = blank;
+		this.root = this.blank;
+		this.min = this.blank;
+		this.max = this.blank;
+		this.tree_array = null;
+		this.array_status = false;
 	}
 	/**
 	 * public class RBNode
 	 */
 	public class RBNode {
+		Color color;
+		int key;
+		String value;
+		RBNode leftT = blank;
+		RBNode rightT = blank;
+		RBNode parentT = blank;
 		private RBNode(){}
 		/**
 		 * 
@@ -44,7 +56,6 @@ public class RBTree_or {
 			this.value = value;
 			this.color = color;
 		}
-		
 		/**
 		 * 
 		 * @param k
@@ -62,12 +73,6 @@ public class RBTree_or {
 			leftT = l;
 			rightT = r;
 		}
-		Color color;
-		int key;
-		String value;
-		RBNode leftT = blank;
-		RBNode rightT = blank;
-		RBNode parentT = blank;
 		/**
 		 * 
 		 * @return true if node is internal leaf
@@ -104,7 +109,6 @@ public class RBTree_or {
 		RBNode getLeft() {
 			return leftT;
 		}
-
 		/**
 		 * 
 		 * @return node.right
@@ -112,7 +116,6 @@ public class RBTree_or {
 		RBNode getRight() {
 			return rightT;
 		}
-
 		/**
 		 * 
 		 * @return key of node
@@ -137,7 +140,6 @@ public class RBTree_or {
 	 * public boolean empty()
 	 *
 	 * returns true if and only if the tree is empty
-	 *
 	 */
 	public boolean empty() {
 		return size == 0;
@@ -419,7 +421,7 @@ public class RBTree_or {
 			maxNode = maxNode.rightT;
 		return maxNode;
 	}
-		/**
+	/**
 	 * 
 	 * @param node
 	 * finding the successor in tree instance of RBNode node
@@ -444,17 +446,10 @@ public class RBTree_or {
 		}
 		return successor; //Successor node
 	}
-	/**
-	 * public int[] keysToArray()
-	 *
-	 * Returns a sorted array which contains all keys in the tree, or an empty
-	 * array if the tree is empty.
-	 */
 	private RBNode[] updateArray(RBNode[] arr, RBNode root, int cnt) {
 		if(root == this.blank) {
 			arr = null;
 		} else {
-			//arr[cnt] = root;
 			if(root.leftT != this.blank) {
 				arr = updateArray(arr,root.leftT,cnt);
 				cnt = findLast(arr,cnt+1);
@@ -467,6 +462,10 @@ public class RBTree_or {
 		}
 		return arr;	
 	}
+	/**
+	 * The function find the last element in array that isn't null
+	 * @return
+	 */
 	private int findLast(RBNode[] arr, int lastCount) {
 		for (int i=lastCount; i<arr.length; i++) {
 			if (arr[i] == null) {
@@ -475,6 +474,12 @@ public class RBTree_or {
 		}
 		return -1;
 	}
+	/**
+	* public int[] keysToArray()
+	*
+	* Returns a sorted array which contains all keys in the tree,
+	* or an empty array if the tree is empty.
+	*/
 	public int[] keysToArray() {
 		if (!this.array_status) {
 			RBNode[] arr = new RBNode[this.size]; // new array of nodes
@@ -491,30 +496,28 @@ public class RBTree_or {
 			return new int[0];
 		}
 	}
-	
-//		if (size == 0)
-//			return new int[0];
-//		RBNode[] arr = nodesToArray(minNode); //arr = array of all nodes in tree
-//		int[] keysArr = new int[size]; //To be array of keys
-//		for (int i = 0; i < arr.length; i++) {
-//				keysArr[i] = arr[i].key;
-//		}
-//		return keysArr;
-//	}
 	/**
-	 * public String[] valuesToArray()
-	 *
-	 * Returns an array which contains all values in the tree, sorted by their
-	 * respective keys, or an empty array if the tree is empty.
-	 */
+	* public String[] valuesToArray()
+	*
+	* Returns an array which contains all values in the tree,
+	* sorted by their respective keys,
+	* or an empty array if the tree is empty.
+	*/
 	public String[] valuesToArray() {
-		if (size == 0)
+		if (!this.array_status) {
+			RBNode[] arr = new RBNode[this.size]; // new array of nodes
+			this.tree_array = updateArray(arr, this.root, 0);
+			this.array_status = true;
+		}
+		if(this.tree_array != null){
+			String[] retArray = new String[this.tree_array.length];
+			for (int i=0;i<this.tree_array.length;i++) {
+				retArray[i] = this.tree_array[i].info;
+			}
+			return retArray;
+		} else {
 			return new String[0];
-		RBNode[] arr = nodesToArray(min); //arr = array of all nodes in tree
-		String[] valuesArr = new String[size]; //To be array of values
-		for (int i = 0; i < arr.length; i++)
-			valuesArr[i] = arr[i].value;
-		return valuesArr;
+		}
 	}
 	/**
 	 * 
@@ -532,12 +535,13 @@ public class RBTree_or {
 		return arr;
 	}
 	/**
-	 * public int size()
-	 *
-	 * Returns the number of nodes in the tree.
-	 *
-	 * precondition: none postcondition: none
-	 */
+	* public int size()
+	*
+	* Returns the number of nodes in the tree.
+	*
+	* precondition: none
+	* postcondition: none
+	*/
 	public int size() {
 		return size;
 	}
@@ -608,18 +612,41 @@ public class RBTree_or {
 		x.parentT.parentT.color = Color.RED;
 		return 3;
 	}
+	/**
+	 * private static void leftChild
+	 * 
+	 * sets child to be the parents left child
+	 * 
+	 * @param parent
+	 * @param Child
+	 */
 	private void leftChild(RBNode parent, RBNode child) {
 		parent.leftT = child;
 		if (child != this.blank) {
 			child.parentT = parent;
 		}
 	}
+	/**
+	 * private static void leftChild
+	 * 
+	 * sets child to be the parents right child
+	 * 
+	 * @param parent
+	 * @param Child
+	 */
 	private void rightChild(RBNode parent, RBNode child) {
 		parent.rightT = child;
 		if (child != this.blank) {
 			child.parentT = parent;
 		}
 	}
+	/**
+	 * private static void transplant(RBNode x, RBNode y)
+	 * 
+	 * Update y as a child of x parent instead of x
+	 * @param x
+	 * @param y
+	 */
 	private void transplant(RBNode x, RBNode y) {
 		if(x.parentT.leftT == x) { // x is a left child
 			leftChild(x.parentT,y); // Update y as a left child instead of x
@@ -628,10 +655,11 @@ public class RBTree_or {
 		}
 	}
 	/**
+	 * Performs a left rotation on node x,
+	 * according to the left rotation specifics 
+	 * learned in class   
 	 * 
-	 * @param node
-	 * The method changes the relations between RBNode node, his right child,
-	 * RBNode y (soon be his father) and y's left child
+	 * @param x
 	 */
 	private void leftRotate(RBNode node){
 		RBNode y = node.rightT;
@@ -664,10 +692,11 @@ public class RBTree_or {
 		node.parentT = y;*/
 	}
 	/**
+	 * Performs a right rotation on node x,
+	 * according to the right rotation specifics 
+	 * learned in class   
 	 * 
-	 * @param node
-	 * The method changes the relations between RBNode node, his left child,
-	 * RBNode y (soon be his father) and y's right child
+	 * @param x
 	 */
 	private void rightRotate(RBNode node){
 		RBNode x = node.leftT;
@@ -699,6 +728,11 @@ public class RBTree_or {
 //		y.rightT = node;
 //		node.parentT = y;
 	}
+	/**
+	* public void print()
+	*
+	* Print the tree.
+	*/
 	public void print() {
 		RBTree_or.printHelper(this.root, 0, this.blank);
 	}
@@ -740,5 +774,3 @@ public class RBTree_or {
 		}
 	}
 }
-
-
