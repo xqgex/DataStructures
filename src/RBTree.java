@@ -26,6 +26,9 @@ public class RBTree {
 		this.tree_array = null;
 		this.array_status = false;
 		this.size = 0;
+		/*RBTree.blank.leftT = RBTree.blank;
+		RBTree.blank.rightT = RBTree.blank;
+		RBTree.blank.parentT = RBTree.blank;*/
 	}
 	/**
 	 * private static void leftChild
@@ -117,7 +120,7 @@ public class RBTree {
 	 * 
 	 * @param x
 	 */
-	private void leftRotate(RBNode node){
+	private void leftRotateNEW(RBNode node){
 		RBNode y = node.rightT; //node.right not null
 		node.rightT = y.leftT; //Changing relations
 		if (y.leftT != RBTree.blank)
@@ -134,7 +137,7 @@ public class RBTree {
 		y.leftT = node;
 		node.parentT = y;
 	}
-	private void leftRotateOLD(RBNode x) {
+	private void leftRotate(RBNode x) {
 		RBNode y = x.rightT;
 		if (x.parentT != RBTree.blank) {
 			transplant(x,y);
@@ -156,7 +159,7 @@ public class RBTree {
 	 * 
 	 * @param x
 	 */
-	private void rightRotate(RBNode node){
+	private void rightRotateNEW(RBNode node){
 		//Comments exactly like in leftRotate
 		RBNode y = node.leftT;//node.left not null
 		node.leftT = y.rightT;
@@ -173,7 +176,7 @@ public class RBTree {
 		y.rightT = node;
 		node.parentT = y;
 	}
-	private void rightRotateOLD(RBNode y) {
+	private void rightRotate(RBNode y) {
 		RBNode x = y.leftT;
 		if (y.parentT != RBTree.blank) {
 			transplant(y,x);
@@ -839,6 +842,26 @@ public class RBTree {
 	 * @return node successor
 	 */
 	public RBNode findSccr(RBNode node) {
+		RBNode successor = RBTree.blank;
+		if (node != this.max){ //Has successor
+			successor = node.rightT;
+			if (successor != RBTree.blank){ //If node has right child -
+				//then go right and all the way to the left
+				while (successor.leftT != RBTree.blank)
+					successor = successor.leftT;
+			} else { //Go up to the left, and take the first right
+				successor = node.parentT;
+				if (node == node.parentT.rightT){
+					while (successor == successor.parentT.rightT)
+						successor = successor.parentT;
+					if (successor != root)
+						successor = successor.parentT;
+				}
+			}
+		}
+		return successor; //Successor node
+	}/*
+	public RBNode findSccrOLD(RBNode node) {
 		if (node.rightT != RBTree.blank) { // if node has a right sub-tree. 
 			node = node.getRight();
 			while(node.leftT != RBTree.blank) {// has a left Subtree.
@@ -855,7 +878,7 @@ public class RBTree {
 			}
 			return node;
 		}
-	}
+	}*/
 	/**
 	* public int delete(int k)
 	*
@@ -869,6 +892,54 @@ public class RBTree {
 	*/
 
 	public int delete(int k) {
+		int changes = 0; //Color changes
+		RBNode toDelete = this.binSearch(this.root, k, RBTree.blank); //Finding the node we want to delete
+		if (toDelete == null) //Key k not in tree
+			return -1;
+		if (size == 1){ //Remove the root
+			this.root = RBTree.blank;
+			this.max = RBTree.blank;
+			this.min = RBTree.blank;
+			this.size = 0;
+			return changes;
+		}
+		RBNode x, y;
+		if (toDelete.leftT == RBTree.blank || toDelete.rightT == RBTree.blank) //If toDelete has at most
+															//one child
+			y = toDelete; //We now want to delete y
+		else
+			y = this.findSccr(toDelete); //We want to delete toDelete's successor
+		if (y.leftT != RBTree.blank)
+			x = y.leftT;
+		else
+			x = y.rightT;
+		x.parentT = y.parentT;
+		if (y.parentT == RBTree.blank){ //Deleting the root
+			if (x.isRed()){
+				x.color = Color.BLACK;
+				changes++;
+			}
+			this.root = x; //x is the new root
+		}
+		else if (y == y.parentT.leftT) //Cutting links
+			y.parentT.leftT = x;
+		else
+			y.parentT.rightT = x;
+		if (y != toDelete){ //If we took successor
+			toDelete.key = y.key; //Copying successor's key to his new spot
+			toDelete.info = y.info; //Copying successor's value to his new spot
+		}
+		if (!y.isRed()){ //If we deleted a BLACK node
+			changes += this.fixDelete(x); //Fixing the tree
+		}
+		size--; //Updating tree size
+		upDateDel(toDelete);
+		if ( (RBTree.blank.rightT != RBTree.blank)||(RBTree.blank.leftT != RBTree.blank)||(RBTree.blank.parentT != RBTree.blank) ) {
+			System.out.println("Ah");
+		}
+		return changes;
+	}
+/*	public int deleteOLD(int k) {
 		if(binSearch(this.root, k, RBTree.blank) == null){
 			return -1;
 		}
@@ -905,9 +976,9 @@ public class RBTree {
 			fixDelete(centenarian);
 		}
 		return count;
-	}
+	}*/
 	
-	public int deleteBackUp(int k) {
+/*	public int deleteBackUp(int k) {
 		int count = 0;
 		// Delete: Case 1: x’s sibling w is red
 		// Delete: Case 2: x’s sibling w is black, and both children of w are black
@@ -916,7 +987,7 @@ public class RBTree {
 		/*
 		 *	 If the node to be deleted has two children, we delete its successor from the tree and use it to replace the node to be deleted
 		 *		Deleted node has at most one child!!!
-		 */
+		 *//*
 		//this.print();
 		//System.out.println("kkkkkk");
 		RBNode centenarian = binSearch(this.root, k, RBTree.blank); // "A centenarian is a person who lives to or beyond the age of 100 years" (from Wikipedia)
@@ -981,7 +1052,7 @@ public class RBTree {
 			upDateDel(centenarian);
 			return count;
 		}
-	}
+	}*/
 	private void upDateDel(RBNode centenarian) {
 		if (Integer.parseInt(centenarian.key) >= Integer.parseInt(this.max.key)) {
 			this.max = getMax(this.root);
