@@ -124,7 +124,7 @@ public class RBTree_or {
 						count += node.changeColor(Color.BLACK); //		//	      ?Y?
 						count += node.parentT.changeColor("darken"); //	//	     /   \
 						count += brtr.changeColor("switch"); //			//	  |X|      W 
-						count += 3; //									//	 /   \   /   \
+						//												//	 /   \   /   \
 						node = node.parentT; //							//	?a? ?b?  c   d
 					}
 				} else { // Case 1
@@ -160,7 +160,7 @@ public class RBTree_or {
 						count += node.changeColor(Color.BLACK); //			//	      ?Y?
 						count += node.parentT.changeColor("darken"); //		//	     /   \
 						count += brtr.changeColor("switch"); //				//	   X      |W|
-						 //													//	 /   \   /   \
+						//													//	 /   \   /   \
 						node = node.parentT; //								//	 a   b  ?c? ?d?
 					}
 				} else { // Case 1
