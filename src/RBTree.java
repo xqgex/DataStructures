@@ -82,22 +82,21 @@ public class RBTree {
 		if (y.parentT == x) {
 			father = true;
 		}
-		this.print();
-		System.out.println("cccccc");
+		//this.print();
+		//System.out.println("cccccc");
 		if (x.parentT != RBTree.blank) {
 			transplant(x,y);
 		} else { // x was the root
 			y.parentT = RBTree.blank;
 			this.root = y;
 		}
-
-		this.print();
-		System.out.println("bbbbbb");
+		//this.print();
+		//System.out.println("bbbbbb");
 		if ( (y != x.leftT)&&(x.leftT != RBTree.blank) ) {
 			leftChild(y,x.leftT);
 		}
-		this.print();
-		System.out.println("kkkkkk");
+		//this.print();
+		//System.out.println("kkkkkk");
 		if ( (y != x.rightT)&&(x.rightT != RBTree.blank) ) {
 			rightChild(y,x.rightT);
 		}
@@ -108,8 +107,8 @@ public class RBTree {
 				origFather.rightT = RBTree.blank;
 			}
 		//}
-		this.print();
-		System.out.println("aaaaaa");
+		//this.print();
+		//System.out.println("aaaaaa");
 	}
 	/**
 	 * Performs a left rotation on node x,
@@ -344,7 +343,11 @@ public class RBTree {
 	 * returns the root of the red black tree
 	 */
 	public RBNode getRoot() {
-			return this.root;
+			if (this.root == RBTree.blank) {
+				return null;
+			} else {
+				return this.root;
+			}
 	}
 	/**
 	 * public boolean empty()
@@ -352,10 +355,7 @@ public class RBTree {
 	 * returns true if and only if the tree is empty
 	 */
 	public boolean empty() {
-		if (this.root == RBTree.blank) {
-			return true;
-		}
-		return false;
+		return (this.root == RBTree.blank);
 	}
  	/**
 	 * public String search(int k)
@@ -364,9 +364,7 @@ public class RBTree {
 	 * otherwise, returns null
 	 */
 	public String search(int k) { // envelop function
-		RBNode root = this.root;
-		RBNode ansNode = RBTree.blank;
-		RBNode node = binSearch(root,k,ansNode);
+		RBNode node = binSearch(this.root,k,RBTree.blank);
 		if(node != RBTree.blank){
 			return node.info;
 		} else {
@@ -564,13 +562,11 @@ public class RBTree {
 				} //									//	          d   e
 			}
 		}
-		if (node.parentT != RBTree.blank) {
-			//node.changeColor();
-		} else { // node is the root
+		if (node.parentT == RBTree.blank) {
 			this.root = node;
 			count += this.root.changeColor(Color.BLACK);
 		}
-		return count+1;
+		return count; //+1?
 	}
 	public int fixDeleteADT(RBNode node) {
 		int count = 0;
@@ -989,7 +985,7 @@ public class RBTree {
 	*/
 	public String min() {
 		if (this.min != RBTree.blank){
-			return (this.min).key; 
+			return this.min.key; 
 		} else {
 			return null;
 		}
@@ -1004,7 +1000,7 @@ public class RBTree {
 	*/
 	public String max() {
 		if (this.max != RBTree.blank){
-			return (this.max).key; 
+			return this.max.key; 
 		} else {
 			return null;
 		}
