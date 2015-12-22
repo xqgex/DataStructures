@@ -404,11 +404,11 @@ public class RBTree_or {
 	 */
 	private RBNode whereToInsert(RBNode root ,RBNode node) {
 		RBNode ans = root;
-		if(Integer.parseInt(node.key) < Integer.parseInt(root.key)) {
+		if(node.key < root.key) {
 			if(root.leftT != this.blank) {
 				ans = whereToInsert(root.leftT, node);
 			}
-		} else if(Integer.parseInt(node.key) > Integer.parseInt(root.key)) {
+		} else if(node.key > root.key) {
 			if(root.rightT != this.blank) {
 				ans = whereToInsert(root.rightT, node);
 			}
@@ -758,7 +758,7 @@ public class RBTree_or {
 					//this.print();
 					//System.out.println("mmmmmm");
 				}
-				upDate(newBaby);
+				updateMinMax(newBaby, 0);
 				/*if (this.size > 6) {
 					this.print();
 					System.out.println("dddddd");
