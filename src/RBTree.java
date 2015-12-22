@@ -575,27 +575,33 @@ public class RBTree {
 	public int fixDeleteADT(RBNode node) {
 		int count = 0;
 		RBNode brtr;
-		while ( (node!=this.root)&&(node.color == Color.BLACK) ) {
+		while ( (node.parentT != this.blank)&&(node.color == Color.BLACK) ) {
 			if (node == node.parentT.leftT) {
 				brtr = node.parentT.rightT; // Case 1
 				if (brtr.color == Color.RED) {
 					brtr.color = Color.BLACK;
 					node.parentT.color = Color.RED;
+					count++;
 					leftRotate(node.parentT);
 					brtr = node.parentT.rightT;
 				}
 				if ( (brtr.leftT.color == Color.BLACK)&&(brtr.rightT.color == Color.BLACK) ) {
+					if(node.color == Color.BLACK){
+						count++;
+					}
 					brtr.color = Color.RED; // Case 2
 					node = node.parentT;
+					
 				} else {
 					if (brtr.rightT.color == Color.BLACK) {
 						brtr.leftT.color = Color.BLACK; // Case 3
 						brtr.color = Color.RED;
 						rightRotate(brtr);
 						brtr = node.parentT.rightT;
-						brtr.color = node.parentT.color;
+						//brtr.color = node.parentT.color;
 					}
-					node.parentT.color = Color.BLACK; // Case 4
+					brtr.color = node.parentT.color; // Case 4
+					node.parentT.color = Color.BLACK;
 					brtr.rightT.color = Color.BLACK;
 					leftRotate(node.parentT);
 					node = this.root;
@@ -615,13 +621,14 @@ public class RBTree {
 					if (brtr.leftT.color == Color.BLACK) {
 						brtr.rightT.color = Color.BLACK; // Case 3
 						brtr.color = Color.RED;
-						rightRotate(brtr);
+						leftRotate(brtr);
 						brtr = node.parentT.leftT;
-						brtr.color = node.parentT.color;
+						//brtr.color = node.parentT.color;
 					}
-					node.parentT.color = Color.BLACK; // Case 4
+					node.color = node.parentT.color; // Case 4
+					node.parentT.color = Color.BLACK;
 					brtr.leftT.color = Color.BLACK;
-					leftRotate(node.parentT);
+					rightRotate(node.parentT);
 					node = this.root;
 				}
 			}
