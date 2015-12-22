@@ -252,15 +252,15 @@ public class Tester {
 		for (int j = 0; j < keys.length; j++) {
 			if (j > -1) {
 				System.out.println("HHHHHH Delete " + keys[j]);
-				rbTree.print();
-				rbTree.printlist();
+				//rbTree.print();
+				//rbTree.printlist();
 			}
 			rbTree.delete(keys[j]);
 			myTree.delete(keys[j]);
 			if (!checkSearch(rbTree, myTree)) {
 				System.out.println("JJJJJJ");
-				rbTree.print();
-				rbTree.printlist();
+				//rbTree.print();
+				//rbTree.printlist();
 				return false;
 			}
 		}
@@ -414,8 +414,6 @@ public class Tester {
 		}
 		System.out.println(res);
 		System.exit(0);
-		
-		
 		/*
 		RBTree tree = new RBTree();
 		int[][] keysSet = new int[2][];
@@ -435,11 +433,13 @@ public class Tester {
 			}
 		}
 		*/
+		/*
 		int times = 10000;
 		for (int i = 1; i <= 10; i++) {
 			times *= i;
 			testRun(times);
 		}
+		*/
 	}
 	
 	
